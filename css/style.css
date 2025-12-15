@@ -550,3 +550,75 @@ nav a:hover {
         font-size: 1.3em;
     }
 }
+/* ========================================================= */
+/* --- 10. CSS CHO POP-UP THÔNG BÁO THÀNH CÔNG --- */
+/* ========================================================= */
+
+.popup-overlay {
+    /* Nền đen trong suốt bao phủ toàn bộ màn hình */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none; /* Mặc định ẩn, sẽ được JS bật khi gửi thành công */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Luôn nổi trên mọi thành phần khác */
+}
+
+.popup-content {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success-icon {
+    font-size: 4em;
+    color: var(--secondary-color); /* Màu xanh lá cây */
+    margin-bottom: 15px;
+}
+
+.popup-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.popup-content p {
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

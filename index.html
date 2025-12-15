@@ -125,9 +125,9 @@
                 <input type="tel" name="Số Điện Thoại" placeholder="Số Điện Thoại (*)" required>
                 <select name="Hình Thức Học" required>
                     <option value="">Chọn Hình Thức Mà Bạn Muốn Học (*)</option>
-                    <option value="Giao Tiếp Cơ Bản (A1-A2)">Học Online</option>
-                    <option value="Phản Xạ Nâng Cao (B1)">Học Offline</option>
-                    <option value="Chương Trình Đặc Biệt">Học 1-1</option>
+                    <option value="Học Online">Học Online</option>
+                    <option value="Học Offline">Học Offline</option>
+                    <option value="Học 1-1">Học 1-1</option>
                 </select>
                 <select name="Khóa Học Quan Tâm" required>
                     <option value="">Chọn Khóa Học Bạn Quan Tâm (*)</option>
@@ -137,7 +137,7 @@
                     <option value="Khác">Tư vấn về các khoá khác</option>
                 </select>
 
-                <button type="submit" class="btn btn-secondary">GỬI THÔNG TIN TƯ VẤN</button>
+                <button type="submit" class="btn btn-secondary" id="submit-button">GỬI THÔNG TIN TƯ VẤN</button>
                 <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d; text-align: center;">Chúng tôi sẽ liên hệ lại trong vòng 24 giờ.</p>
             </form>
         </div>
@@ -167,7 +167,7 @@
             <div class="footer-col map-col">
                 <h3>Vị Trí Lớp Học</h3>
                  <iframe 
-                    src="https://maps.app.goo.gl/fWqQnGz4o215KU5p7" 
+                    src="https://www.google.com/maps/place/ivy+English+-+Ti%E1%BA%BFng+Anh+Giao+Ti%E1%BA%BFp/@10.9782897,106.6171217,621m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3174d3b0ce4561e3:0x53f97df55a76a8e3!8m2!3d10.9782897!4d106.6171217!16s%2Fg%2F11xfb1h09m!5m1!1e4?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" 
                     width="100%" 
                     height="200" 
                     style="border:0;" 
@@ -198,10 +198,77 @@
             <i class="fab fa-facebook-messenger"></i>
         </a>
     </div>
+
+    <div id="success-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <i class="fas fa-check-circle success-icon"></i>
+            <h3>ĐĂNG KÝ THÀNH CÔNG!</h3>
+            <p>ivyEnglish đã nhận được thông tin của bạn. Chúng tôi sẽ liên hệ lại trong vòng 24 giờ tới để tư vấn chi tiết về khóa học.</p>
+            <button class="btn btn-primary close-btn">Đóng</button>
+        </div>
+    </div>
+
     <script>
+        // --- 1. Xử lý Form Gửi (Không chuyển hướng) ---
+        const form = document.getElementById('course-registration-form');
+        const submitButton = document.getElementById('submit-button');
+        const successPopup = document.getElementById('success-popup');
+        
+        // Nghe sự kiện submit form
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Ngăn chặn chuyển hướng mặc định
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Đang Gửi...'; 
+
+            // Gửi dữ liệu bằng Fetch API
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Gửi thành công:
+                    successPopup.style.display = 'flex'; // Hiển thị pop-up
+                    form.reset(); // Xóa dữ liệu đã nhập
+                } else {
+                    // Gửi thất bại:
+                    alert('Đã xảy ra lỗi khi gửi thông tin. Vui lòng thử lại sau.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Mất kết nối. Vui lòng kiểm tra mạng và thử lại.');
+            } finally {
+                // Đặt lại trạng thái nút
+                submitButton.disabled = false;
+                submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN'; 
+            }
+        });
+
+        // --- 2. Xử lý Đóng Pop-up ---
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                successPopup.style.display = 'none';
+            });
+        });
+
+        // Đóng pop-up khi click ra ngoài
+        window.addEventListener('click', (e) => {
+            if (e.target === successPopup) {
+                successPopup.style.display = 'none';
+            }
+        });
+
+
+        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
         const scrollToTopButton = document.querySelector('.scroll-to-top');
 
-        // 1. Hiển thị nút khi cuộn xuống
+        // Hiển thị nút khi cuộn xuống
         window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 scrollToTopButton.style.display = "flex";
@@ -210,7 +277,7 @@
             }
         };
 
-        // 2. Xử lý cuộn mượt mà khi click
+        // Xử lý cuộn mượt mà khi click
         scrollToTopButton.addEventListener('click', function(e) {
             e.preventDefault();
             window.scrollTo({
@@ -218,6 +285,7 @@
                 behavior: 'smooth'
             });
         });
+
     </script>
 </body>
 </html>
