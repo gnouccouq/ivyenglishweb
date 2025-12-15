@@ -404,21 +404,34 @@ nav a:hover {
     font-size: 1.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, background-color 0.3s;
-    animation: pulse 1.5s infinite; 
+    cursor: pointer;
 }
 
 /* Màu sắc cụ thể cho từng nút */
 .float-btn.hotline {
     background-color: #e60000;
+    animation: pulse 1.5s infinite; /* Hiệu ứng bong bóng */
 }
 
 .float-btn.zalo {
     background-color: #0088ff;
+    animation: pulse 1.5s infinite;
+    animation-delay: 0.2s;
 }
 
 .float-btn.facebook-messenger {
     background-color: #0084ff;
-    animation-delay: 0.3s;
+    animation: pulse 1.5s infinite;
+    animation-delay: 0.4s;
+}
+
+.float-btn.scroll-to-top {
+    background-color: #343a40; /* Màu xám đậm */
+    display: none; /* Mặc định ẩn, sẽ được hiển thị bằng JS */
+    justify-content: center;
+    opacity: 0.8;
+    order: -1;
+    animation: none; /* Bỏ hiệu ứng pulse */
 }
 
 .float-btn:hover {

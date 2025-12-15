@@ -23,7 +23,6 @@
 
     <section id="hero" class="hero-bg">
         <div class="container hero-content">
-            <div class="hero-teacher-img"></div>
             <h1>Tự Tin Giao Tiếp Trôi Chảy Sau 4 Tháng</h1>
             <p>Phương pháp thực hành 100%, tập trung vào phản xạ và sửa lỗi chi tiết.</p>
             <a href="#contact" class="btn btn-primary">Bắt Đầu Ngay</a>
@@ -186,6 +185,9 @@
     </footer>
 
     <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
         <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
             <i class="fas fa-phone-alt"></i>
         </a>
@@ -196,6 +198,26 @@
             <i class="fab fa-facebook-messenger"></i>
         </a>
     </div>
+    <script>
+        const scrollToTopButton = document.querySelector('.scroll-to-top');
 
+        // 1. Hiển thị nút khi cuộn xuống
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        // 2. Xử lý cuộn mượt mà khi click
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>
