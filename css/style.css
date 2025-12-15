@@ -15,7 +15,7 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif; /* Thay đổi nếu dùng font khác */
+    font-family: 'Roboto', sans-serif;
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -89,7 +89,7 @@ nav a:hover {
 /* --- 3. HERO SECTION --- */
 #hero {
     height: 500px;
-    background-color: #34495e; /* Màu nền dự phòng */
+    background-color: #34495e;
     background: url('../images/background.jpg') no-repeat center center/cover;
     color: var(--white);
     display: flex;
@@ -98,13 +98,12 @@ nav a:hover {
 }
 
 .hero-teacher-img {
-    width: 200px; /* Điều chỉnh kích thước */
+    width: 200px;
     height: 200px; 
-    border-radius: 50%; /* Có thể làm ảnh tròn */
-    border: 5px solid var(--white); /* Thêm viền nổi bật */
+    border-radius: 50%;
+    border: 5px solid var(--white);
     margin-bottom: 20px;
     background: url('../images/avatar.jpg') no-repeat center center/cover;
-    /* Nếu muốn đặt ảnh ở vị trí cụ thể, bạn cần dùng position: absolute */
 }
 
 .hero-content {
@@ -151,15 +150,25 @@ nav a:hover {
     background-color: #0056b3;
 }
 
+.duration {
+    font-style: italic;
+    color: #6c757d;
+    margin-bottom: 15px;
+    display: block;
+}
+
 /* --- 4. ABOUT SECTION --- */
 .about-grid {
     display: flex;
     gap: 30px;
     text-align: center;
+    flex-wrap: wrap; 
+    justify-content: center;
 }
 
 .about-item {
     flex: 1;
+    min-width: 280px; /* Thêm min-width để kiểm soát việc wrap */
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -181,6 +190,7 @@ nav a:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
+    justify-content: center;
 }
 
 .course-card {
@@ -195,16 +205,13 @@ nav a:hover {
     margin-bottom: 10px;
 }
 
-.course-card .duration {
-    font-style: italic;
-    color: #6c757d;
-    margin-bottom: 15px;
-}
-
 .course-card .features {
     list-style: none;
     padding-left: 0;
     margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .course-card .features li::before {
@@ -222,6 +229,7 @@ nav a:hover {
     justify-content: center;
     gap: 40px;
     text-align: center;
+    flex-wrap: wrap; /* Quan trọng cho responsive */
 }
 
 .teacher-card {
@@ -232,7 +240,7 @@ nav a:hover {
 .teacher-card img {
     width: 100%;
     height: auto;
-    border-radius: 50%; /* Làm ảnh tròn */
+    border-radius: 50%;
     margin-bottom: 15px;
 }
 
@@ -249,19 +257,18 @@ nav a:hover {
 /* --- 7. CONTACT SECTION & FORM --- */
 .contact-flex {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
     gap: 50px;
+    flex-wrap: wrap; /* Quan trọng cho responsive */
+    width: 100%;
 }
 
 .contact-form {
     flex: 2;
     display: flex;
     flex-direction: column;
-}
-
-.contact-info {
-    flex: 1;
+    max-width: 700px;
 }
 
 .contact-form input, .contact-form select, .contact-form button {
@@ -269,6 +276,7 @@ nav a:hover {
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    width: 100%;
 }
 
 .contact-form button {
@@ -285,21 +293,23 @@ nav a:hover {
 
 /* --- 8. FOOTER MỚI --- */
 #main-footer {
-    background-color: #343a40; /* Màu nền tối cho footer */
+    background-color: #343a40;
     color: var(--white);
-    padding: 40px 0 20px 0; /* Giảm padding trên dưới */
+    padding: 40px 0 20px 0;
+    text-align: center;
+    display: block;
 }
 
 .footer-grid {
     display: grid;
-    /* Chia thành 3 cột, Bản đồ rộng hơn 2 cột còn lại */
     grid-template-columns: 1fr 2fr 1fr; 
     gap: 30px;
     align-items: flex-start;
+    text-align: left; /* Đặt lại căn lề cho desktop */
 }
 
 .footer-col h3 {
-    color: var(--primary-color); /* Sử dụng màu xanh nổi bật cho tiêu đề */
+    color: var(--primary-color);
     margin-bottom: 15px;
     font-size: 1.2em;
 }
@@ -314,89 +324,26 @@ nav a:hover {
     width: 100%;
     height: 200px;
     border-radius: 5px;
+    border: none !important;
 }
 
 .copyright-col {
-    text-align: right;
+    text-align: right; /* Căn phải cho desktop */
     font-size: 0.8em;
     padding-top: 15px;
 }
 
-/* --- MEDIA QUERIES (Responsive cho Footer) --- */
-@media (max-width: 768px) {
-    .footer-grid {
-        /* Chuyển thành 1 cột trên thiết bị di động */
-        grid-template-columns: 1fr; 
-        text-align: center;
-    }
-    .copyright-col {
-        text-align: center;
-        margin-top: 20px;
-    }
-    .footer-col {
-        margin-bottom: 20px;
-    }
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    nav {
-        margin-top: 10px;
-    }
-    nav a {
-        /* Cho các nút menu giãn ra */
-        margin: 0 8px; 
-        display: inline-block;
-        padding: 5px;
-    }
-    /* Tăng kích thước chữ tiêu đề chính */
-    #hero h1 {
-        font-size: 2.5em; 
-    }
-    
-    /* Bổ sung: Điều chỉnh padding trên mobile */
-    .section-padding {
-        padding: 40px 0;
-    }
-    .about-grid, 
-    .course-grid, 
-    .teacher-grid {
-        flex-direction: column; /* Đối với Flexbox */
-        grid-template-columns: 1fr; /* Đối với Grid */
-        gap: 20px;
-    }
-    
-    /* Căn giữa tiêu đề của các section */
-    h2 {
-        font-size: 1.8em;
-    }
-    .footer-grid {
-        grid-template-columns: 1fr; 
-        text-align: center; /* Căn giữa nội dung trong footer */
-    }
-    .copyright-col {
-        text-align: center;
-        margin-top: 20px;
-    }
-    .footer-col {
-        margin-bottom: 30px; /* Thêm khoảng cách giữa các cột cũ */
-    }
-    
-    /* Căn giữa các liên kết xã hội */
-    .social-links {
-        text-align: center;
-    }
-}
-
+/* --- Social Media Icons --- */
 .social-links {
     margin-top: 15px;
+    text-align: left; /* Đặt lại căn lề cho desktop */
 }
 
 .social-icon {
     display: inline-block;
     width: 35px;
     height: 35px;
-    line-height: 35px; /* Giúp căn giữa biểu tượng */
+    line-height: 35px; 
     text-align: center;
     border-radius: 50%;
     margin-right: 10px;
@@ -409,17 +356,170 @@ nav a:hover {
     opacity: 0.8;
 }
 
-/* Định dạng màu cụ thể cho Facebook */
+.social-icon i {
+    color: var(--white);
+}
+
 .social-icon.facebook {
-    background-color: #3b5998; /* Màu xanh Facebook */
-    /* Nếu bạn dùng Font Awesome, chữ F sẽ là biểu tượng */
+    background-color: #3b5998;
 }
 
 .social-icon.zalo {
-    background-color: #0088ff; /* Màu xanh Zalo (hoặc #0068ff) */
+    background-color: #0088ff;
 }
 
-/* Định dạng khi dùng Font Awesome */
-.social-links i {
-    color: var(--white);
+/* ========================================================= */
+/* --- 9. NÚT LIÊN HỆ NỔI (FLOATING CONTACT) --- */
+/* ========================================================= */
+.floating-contact {
+    position: fixed; /* Giúp nút luôn hiển thị */
+    bottom: 20px;    /* Khoảng cách từ đáy */
+    right: 20px;     /* Khoảng cách từ bên phải */
+    z-index: 999;    /* Đảm bảo nút nằm trên cùng */
+    display: flex;
+    flex-direction: column; /* Xếp các nút theo chiều dọc */
+    align-items: flex-end; /* Căn phải các nút */
+    gap: 15px; /* Khoảng cách giữa các nút */
+}
+
+.float-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-size: 1.5em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s;
+    /* Hiệu ứng bong bóng */
+    animation: pulse 1.5s infinite; 
+}
+
+/* Màu sắc cụ thể cho từng nút */
+.float-btn.hotline {
+    background-color: #e60000; /* Màu đỏ cho Hotline */
+}
+
+.float-btn.zalo {
+    background-color: #0088ff; /* Màu Zalo */
+}
+
+.float-btn.facebook-messenger {
+    background-color: #0084ff; /* Màu Messenger */
+    animation-delay: 0.3s; /* Tạo độ trễ hiệu ứng cho nút này */
+}
+
+.float-btn:hover {
+    transform: scale(1.1); /* Phóng to khi rê chuột */
+    opacity: 0.9;
+    animation: none; /* Tắt hiệu ứng pulse khi hover */
+}
+
+/* Hiệu ứng nhấp nháy (Pulse) */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 132, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 132, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 132, 255, 0);
+    }
+}
+
+/* ========================================================= */
+/* --- MEDIA QUERIES (Responsive cho Mobile) --- */
+/* ========================================================= */
+@media (max-width: 768px) {
+    
+    .container {
+        width: 90%; /* Tăng độ rộng container trên mobile */
+    }
+
+    /* 1. Header */
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    nav {
+        margin-top: 10px;
+    }
+    nav a {
+        margin: 0 5px; 
+        padding: 5px;
+        font-size: 0.9em;
+    }
+    .cta-nav {
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* 2. Hero Section */
+    #hero {
+        height: 400px; 
+    }
+    #hero h1 {
+        font-size: 2.2em; 
+    }
+    #hero p {
+        font-size: 1em; 
+        padding: 0 10px;
+    }
+    
+    /* 3. Tiêu đề và Padding Section */
+    .section-padding {
+        padding: 40px 0; 
+    }
+    h2 {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+    }
+    
+    /* 4. Nội dung dạng Grid/Flex (About, Teachers) */
+    .about-grid, 
+    .teacher-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+    /* Courses là Grid, cần đặt lại template */
+    .course-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* 5. Contact Section */
+    .contact-flex {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    /* 6. Footer */
+    .footer-grid {
+        grid-template-columns: 1fr; 
+        text-align: center;
+        gap: 30px; 
+    }
+    .footer-col {
+        margin-bottom: 10px;
+    }
+    .footer-col h3, .footer-col p, .social-links {
+        text-align: center;
+    }
+    .copyright-col {
+        text-align: center;
+        padding-top: 10px;
+    }
+    .floating-contact {
+        bottom: 15px;
+        right: 15px;
+        gap: 10px;
+    }
+    .float-btn {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        font-size: 1.3em;
+    }
 }
