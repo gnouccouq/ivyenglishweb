@@ -102,7 +102,7 @@ nav a:hover {
     height: 200px; 
     border-radius: 50%;
     border: 5px solid var(--white);
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto; /* Căn giữa ảnh giáo viên */
     background: url('../images/avatar.jpg') no-repeat center center/cover;
 }
 
@@ -168,7 +168,7 @@ nav a:hover {
 
 .about-item {
     flex: 1;
-    min-width: 280px; /* Thêm min-width để kiểm soát việc wrap */
+    min-width: 280px; 
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -226,10 +226,10 @@ nav a:hover {
 /* --- 6. TEACHERS SECTION --- */
 .teacher-grid {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* CĂN GIỮA */
     gap: 40px;
     text-align: center;
-    flex-wrap: wrap; /* Quan trọng cho responsive */
+    flex-wrap: wrap; 
 }
 
 .teacher-card {
@@ -254,35 +254,43 @@ nav a:hover {
     margin-bottom: 10px;
 }
 
-/* --- 7. CONTACT SECTION & FORM --- */
+/* --- 7. CONTACT SECTION & FORM (ĐÃ CẬP NHẬT BỐ CỤC DỌC) --- */
 .contact-flex {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 50px;
-    flex-wrap: wrap; /* Quan trọng cho responsive */
-    width: 100%;
-}
-
-.contact-form {
-    flex: 2;
+    /* Giữ nguyên để căn giữa nội dung */
     display: flex;
     flex-direction: column;
-    max-width: 700px;
+    align-items: center;
+    justify-content: center;
 }
 
-.contact-form input, .contact-form select, .contact-form button {
+/* Quy tắc mới cho Form hiển thị dọc trên mọi thiết bị */
+.vertical-contact-form {
+    /* Đảm bảo form căn giữa và có độ rộng tối đa cho desktop */
+    max-width: 500px; 
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Quan trọng: Xếp dọc các phần tử con */
+    gap: 10px; /* Thêm khoảng cách giữa các trường */
+}
+
+/* Áp dụng cho các trường input, select, button bên trong form mới */
+.vertical-contact-form input, 
+.vertical-contact-form select, 
+.vertical-contact-form button {
     padding: 12px;
-    margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    width: 100%;
+    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng của form */
+    margin: 0; 
+    box-sizing: border-box; 
 }
 
-.contact-form button {
+.vertical-contact-form button {
     border: none;
     cursor: pointer;
     font-size: 1em;
+    margin-top: 5px;
 }
 
 .contact-info h3 {
@@ -305,7 +313,7 @@ nav a:hover {
     grid-template-columns: 1fr 2fr 1fr; 
     gap: 30px;
     align-items: flex-start;
-    text-align: left; /* Đặt lại căn lề cho desktop */
+    text-align: left;
 }
 
 .footer-col h3 {
@@ -328,15 +336,15 @@ nav a:hover {
 }
 
 .copyright-col {
-    text-align: right; /* Căn phải cho desktop */
+    text-align: right; 
     font-size: 0.8em;
     padding-top: 15px;
 }
 
-/* --- Social Media Icons --- */
+/* --- Social Media Icons trong Footer --- */
 .social-links {
     margin-top: 15px;
-    text-align: left; /* Đặt lại căn lề cho desktop */
+    text-align: left;
 }
 
 .social-icon {
@@ -368,18 +376,22 @@ nav a:hover {
     background-color: #0088ff;
 }
 
+.social-icon.telephone {
+    background-color: #e60000;
+}
+
 /* ========================================================= */
 /* --- 9. NÚT LIÊN HỆ NỔI (FLOATING CONTACT) --- */
 /* ========================================================= */
 .floating-contact {
-    position: fixed; /* Giúp nút luôn hiển thị */
-    bottom: 20px;    /* Khoảng cách từ đáy */
-    right: 20px;     /* Khoảng cách từ bên phải */
-    z-index: 999;    /* Đảm bảo nút nằm trên cùng */
+    position: fixed; 
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
     display: flex;
-    flex-direction: column; /* Xếp các nút theo chiều dọc */
-    align-items: flex-end; /* Căn phải các nút */
-    gap: 15px; /* Khoảng cách giữa các nút */
+    flex-direction: column; 
+    align-items: flex-end;
+    gap: 15px;
 }
 
 .float-btn {
@@ -392,28 +404,27 @@ nav a:hover {
     font-size: 1.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, background-color 0.3s;
-    /* Hiệu ứng bong bóng */
     animation: pulse 1.5s infinite; 
 }
 
 /* Màu sắc cụ thể cho từng nút */
 .float-btn.hotline {
-    background-color: #e60000; /* Màu đỏ cho Hotline */
+    background-color: #e60000;
 }
 
 .float-btn.zalo {
-    background-color: #0088ff; /* Màu Zalo */
+    background-color: #0088ff;
 }
 
 .float-btn.facebook-messenger {
-    background-color: #0084ff; /* Màu Messenger */
-    animation-delay: 0.3s; /* Tạo độ trễ hiệu ứng cho nút này */
+    background-color: #0084ff;
+    animation-delay: 0.3s;
 }
 
 .float-btn:hover {
-    transform: scale(1.1); /* Phóng to khi rê chuột */
+    transform: scale(1.1);
     opacity: 0.9;
-    animation: none; /* Tắt hiệu ứng pulse khi hover */
+    animation: none;
 }
 
 /* Hiệu ứng nhấp nháy (Pulse) */
@@ -429,13 +440,14 @@ nav a:hover {
     }
 }
 
+
 /* ========================================================= */
 /* --- MEDIA QUERIES (Responsive cho Mobile) --- */
 /* ========================================================= */
 @media (max-width: 768px) {
     
     .container {
-        width: 90%; /* Tăng độ rộng container trên mobile */
+        width: 90%; 
     }
 
     /* 1. Header */
@@ -491,9 +503,11 @@ nav a:hover {
     
     /* 5. Contact Section */
     .contact-flex {
-        flex-direction: column;
-        gap: 30px;
+        /* Giữ nguyên: flex-direction: column; */
+        gap: 20px;
     }
+
+    /* Form trên mobile sẽ tự động xếp dọc nhờ quy tắc chung của .vertical-contact-form */
     
     /* 6. Footer */
     .footer-grid {
