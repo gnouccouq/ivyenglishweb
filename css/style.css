@@ -1,0 +1,316 @@
+/* --- 1. Thiết lập Chung (Reset & Fonts) --- */
+:root {
+    --primary-color: #007bff; /* Màu xanh chính */
+    --secondary-color: #28a745; /* Màu xanh phụ (CTA) */
+    --text-color: #333;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --padding-section: 60px 0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Thay đổi nếu dùng font khác */
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-padding {
+    padding: var(--padding-section);
+}
+
+.bg-light {
+    background-color: var(--light-bg);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+    color: var(--primary-color);
+}
+
+/* --- 2. HEADER & NAVIGATION --- */
+header {
+    background-color: var(--white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+nav a {
+    color: var(--text-color);
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--primary-color);
+}
+
+.cta-nav {
+    background-color: var(--primary-color);
+    color: var(--white) !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+/* --- 3. HERO SECTION --- */
+#hero {
+    height: 500px;
+    background-color: #34495e; /* Màu nền dự phòng */
+    background: url('../images/background.jpg') no-repeat center center/cover;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-teacher-img {
+    width: 200px; /* Điều chỉnh kích thước */
+    height: 200px; 
+    border-radius: 50%; /* Có thể làm ảnh tròn */
+    border: 5px solid var(--white); /* Thêm viền nổi bật */
+    margin-bottom: 20px;
+    background: url('../images/avatar.jpg') no-repeat center center/cover;
+    /* Nếu muốn đặt ảnh ở vị trí cụ thể, bạn cần dùng position: absolute */
+}
+
+.hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+#hero h1 {
+    font-size: 3.2em;
+    margin-bottom: 15px;
+}
+
+#hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* Các nút chung */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: #1e7e34;
+}
+
+.btn-secondary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background-color: #0056b3;
+}
+
+/* --- 4. ABOUT SECTION --- */
+.about-grid {
+    display: flex;
+    gap: 30px;
+    text-align: center;
+}
+
+.about-item {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.about-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* --- 5. COURSES SECTION --- */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.course-card h3 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.course-card .duration {
+    font-style: italic;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.course-card .features {
+    list-style: none;
+    padding-left: 0;
+    margin: 15px 0;
+}
+
+.course-card .features li::before {
+    content: '✓';
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* --- 6. TEACHERS SECTION --- */
+.teacher-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    text-align: center;
+}
+
+.teacher-card {
+    max-width: 250px;
+    padding: 20px;
+}
+
+.teacher-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%; /* Làm ảnh tròn */
+    margin-bottom: 15px;
+}
+
+.teacher-card h3 {
+    margin-bottom: 5px;
+}
+
+.teacher-card .role {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* --- 7. CONTACT SECTION & FORM --- */
+.contact-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px;
+}
+
+.contact-form {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-form input, .contact-form select, .contact-form button {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.contact-form button {
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.contact-info h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* --- 8. FOOTER --- */
+footer {
+    background-color: var(--text-color);
+    color: var(--white);
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* --- 9. MEDIA QUERIES (Thiết kế Responsive) --- */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    nav {
+        margin-top: 10px;
+    }
+    nav a {
+        margin: 0 8px;
+    }
+    #hero h1 {
+        font-size: 2.5em;
+    }
+    .about-grid, .contact-flex, .teacher-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .contact-form, .contact-info {
+        width: 100%;
+    }
+}
