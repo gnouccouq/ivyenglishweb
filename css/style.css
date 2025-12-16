@@ -69,7 +69,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 0;
+    padding: 10px 0;
 }
 
 .logo {
@@ -81,6 +81,11 @@ header {
     height: 40px;
     width: auto;
     display: block;
+}
+
+nav {
+    display: flex;
+    align-items: center;
 }
 
 nav a {
@@ -100,10 +105,23 @@ nav a:hover {
     padding: 10px 22px;
     border-radius: var(--border-radius-lg); 
     font-weight: 700;
+    display: inline-block;
 }
 
 .cta-nav:hover {
     background-color: #26a864;
+}
+
+.menu-toggle {
+    color: var(--white); 
+    display: none !important;
+    font-size: 1.8em;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-toggle:hover {
+    color: var(--primary-color);
 }
 
 /* --- 3. HERO SECTION --- */
@@ -850,27 +868,63 @@ nav a:hover {
         width: 90%; 
     }
 
+    .no-scroll {
+        overflow: hidden;
+    }
+
     /* 1. Header */
     .header-content {
         flex-direction: row; 
         justify-content: space-between; 
         align-items: center;
-        padding: 0;
+        padding: 10px 0;
     }
     .header-logo-img {
         height: 35px;
     }
     nav {
-        display: none;
-        margin-top: 0px;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 60px); 
+        background-color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 50px;
+        
+        transform: translateX(100%); 
+        transition: transform 0.3s ease-in-out;
+        z-index: 999;
+    }
+    nav.nav-open {
+        transform: translateX(0);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     }
     nav a {
-        margin: 0; 
-        padding: 0;
-        font-size: 1em;
+        color: var(--white);
+        margin: 15px 0; 
+        padding: 15px 25px;
+        font-size: 1.4em;
+        width: 80%;
+        text-align: center;
+        border-radius: var(--border-radius-lg);
     }
     .cta-nav {
-        display: none !important;
+        background-color: var(--secondary-color);
+        color: var(--white) !important;
+        margin-top: 20px;
+        font-weight: 700;
+        padding: 15px 40px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--primary-color);
+    }
+    .menu-toggle {
+        display: block; 
     }
 
     /* 2. Hero Section */
@@ -965,10 +1019,4 @@ nav a:hover {
     .contact-banner.image-banner {
         order: 1;
     }
-
-    .menu-toggle {
-    display: block;
-    font-size: 1.8em;
-    cursor: pointer;
-}
 }

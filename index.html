@@ -18,14 +18,13 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="Logo ivyEnglish - Tiếng Anh Giao Tiếp" class="header-logo-img">
+                <a href="#" class="logo">
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="header-logo-img">
                 </a>
-                <nav>
-                    <a href="#hero">Trang Chủ</a>
+                <nav id="main-nav"> <a href="#hero">Trang Chủ</a>
                     <a href="#courses">Khóa Học</a>
                     <a href="#teachers">Giáo Viên</a>
-                    <a href="#faq">FAQ</a>
+                    <a href="#faq">Hỏi Đáp</a>
                     <a href="#contact" class="cta-nav">Đăng Ký Ngay</a>
                 </nav>
                 <i class="fas fa-bars menu-toggle"></i>
@@ -421,6 +420,52 @@
             }
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const header = document.querySelector('header');
+
+            menuToggle.addEventListener('click', function() {
+                // Thêm/Xóa class 'nav-open' cho thẻ nav
+                nav.classList.toggle('nav-open'); 
+                // Thêm/Xóa class 'menu-active' cho icon toggle để đổi biểu tượng
+                menuToggle.classList.toggle('menu-active'); 
+                
+                // Đổi icon từ bars (☰) sang times (X) và ngược lại
+                if (menuToggle.classList.contains('menu-active')) {
+                    menuToggle.classList.remove('fa-bars');
+                    menuToggle.classList.add('fa-times');
+                } else {
+                    menuToggle.classList.remove('fa-times');
+                    menuToggle.classList.add('fa-bars');
+                }
+
+                // Ngăn chặn cuộn trang khi menu đang mở
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            // Đóng menu khi click vào một liên kết
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('nav-open')) {
+                        nav.classList.remove('nav-open');
+                        menuToggle.classList.remove('menu-active', 'fa-times');
+                        menuToggle.classList.add('fa-bars');
+                        document.body.classList.remove('no-scroll');
+                    }
+                });
+            });
+            
+            // Xử lý khi resize (chuyển từ mobile sang desktop)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    nav.classList.remove('nav-open');
+                    menuToggle.classList.remove('menu-active', 'fa-times');
+                    menuToggle.classList.add('fa-bars');
+                    document.body.classList.remove('no-scroll');
+                }
+            });
+        });
     </script>
 </body>
 </html>
