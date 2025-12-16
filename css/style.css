@@ -114,7 +114,6 @@ nav a:hover {
 
 .menu-toggle {
     color: var(--white); 
-    display: none !important;
     font-size: 1.8em;
     cursor: pointer;
     transition: color 0.3s;
@@ -858,6 +857,17 @@ nav a:hover {
     }
 }
 
+/* ========================================================= */
+/* --- FIX LỖI ẨN NÚT 3 GẠCH TRÊN DESKTOP --- */
+/* ========================================================= */
+
+/* [ĐÃ SỬA] Ẩn nút 3 gạch khi chiều rộng màn hình lớn hơn 768px (Desktop/Tablet ngang) */
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none !important;
+    }
+}
+
 
 /* ========================================================= */
 /* --- MEDIA QUERIES (Responsive cho Mobile) --- */
@@ -923,8 +933,11 @@ nav a:hover {
         background-color: rgba(255, 255, 255, 0.1);
         color: var(--primary-color);
     }
+    /* Hiển thị nút 3 gạch trên Mobile */
     .menu-toggle {
         display: block; 
+        order: 2;
+        margin-left: auto;
     }
 
     /* 2. Hero Section */
