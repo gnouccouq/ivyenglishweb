@@ -9,26 +9,37 @@
     <link rel="canonical" href="https://gnouccouq.github.io/ivyenglishweb/" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <div class="container header-content">
-            <a href="index.html" class="logo">ivyEnglish</a>
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Logo ivyEnglish - Tiếng Anh Giao Tiếp" class="header-logo-img">
+            </a>
             <nav>
                 <a href="#about">Về lớp học</a>
                 <a href="#courses">Khóa học</a>
                 <a href="#teachers">Giáo viên</a>
+                <a href="#faq">FAQ</a>
                 <a href="#contact" class="cta-nav">Đăng Ký Ngay</a>
             </nav>
         </div>
     </header>
 
-    <section id="hero" class="hero-bg">
-        <div class="container hero-content">
-            <h1>Tự Tin Giao Tiếp Trôi Chảy Sau 4 Tháng</h1>
-            <p>Phương pháp thực hành 100%, tập trung vào khả năng giao tiếp và sửa lỗi chi tiết.</p>
-            <a href="#contact" class="btn btn-primary">ĐĂNG KÝ HỌC</a>
-            <p class="small-text">Cam kết đầu ra B1 (theo khung CEFR)</p>
+    <section id="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>Tự Tin Giao Tiếp Trôi Chảy Sau 4 Tháng</h1>
+                <p>Phương pháp thực hành 100%, tập trung vào khả năng giao tiếp và sửa lỗi chi tiết.</p>
+                <a href="#contact" class="btn btn-primary">ĐĂNG KÝ HỌC</a>
+                <p class="small-text">Cam kết đầu ra B1 (theo khung CEFR)</p>
+            </div>
+            <div class="hero-image-col">
+                </div>
         </div>
     </section>
 
@@ -83,53 +94,67 @@
     <section id="courses" class="section-padding bg-light">
         <div class="container">
             <h2>Các Khóa Học Chính</h2>
-            <div class="course-grid">
-                <div class="course-card">
-                    <h3>Khóa A1 (Beginner - Căn bản)</h3>
-                    <p class="duration">12 Unit - 12 Tuần - 2 buổi/tuần</p>
-                    <p>Dành cho người mất gốc hoặc mới bắt đầu. Tập trung xây dựng từ vựng, ngữ pháp nền tảng và phát âm chuẩn. Hiểu và sử dụng các cụm từ, câu đơn giản trong tình huống quen thuộc</p>
-                    <ul class="features">
-                        <li>Học phát âm IPA</li>
-                        <li>Giao tiếp tình huống đơn giản</li>
-                        <li>Sửa lỗi 1-1</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+            
+            <div class="swiper-container course-slider">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa A1 (Beginner - Căn bản)</h3>
+                        <p class="duration">12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p>Dành cho người mất gốc hoặc mới bắt đầu. Tập trung xây dựng từ vựng, ngữ pháp nền tảng và phát âm chuẩn. Hiểu và sử dụng các cụm từ, câu đơn giản trong tình huống quen thuộc</p>
+                        <ul class="features">
+                            <li>Học phát âm IPA</li>
+                            <li>Giao tiếp tình huống đơn giản</li>
+                            <li>Sửa lỗi 1-1</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa A2 (Elementary - Sơ cấp)</h3>
+                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p>Dành cho người đã có nền tảng, Giao tiếp cơ bản về các chủ đề quen thuộc, hiểu ý chính.</p>
+                        <ul class="features">
+                            <li>Thảo luận chuyên sâu</li>
+                            <li>Luyện ngữ điệu tự nhiên</li>
+                            <li>Học thuật ngữ chuyên ngành</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+                    
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa B1 (Intermediate - Trung cấp)</h3>
+                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p>Dành cho người đã có nền tảng. Luyện phản xạ nhanh, tranh luận, và thuyết trình bằng tiếng Anh. Xử lý tình huống du lịch, công việc cơ bản, diễn đạt ý kiến cá nhân. </p>
+                        <ul class="features">
+                            <li>Thảo luận chuyên sâu</li>
+                            <li>Luyện ngữ điệu tự nhiên</li>
+                            <li>Học thuật ngữ chuyên ngành</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</h3>
+                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p>Hiểu sâu, sử dụng tiếng Anh linh hoạt cho mục đích học thuật, chuyên môn; giao tiếp phức tạp. </p>
+                        <ul class="features">
+                            <li>Thảo luận chuyên sâu</li>
+                            <li>Luyện ngữ điệu tự nhiên</li>
+                            <li>Học thuật ngữ chuyên ngành</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+                    
                 </div>
-                <div class="course-card">
-                    <h3>Khóa A2 (Elementary - Sơ cấp)</h3>
-                    <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                    <p>Dành cho người đã có nền tảng, Giao tiếp cơ bản về các chủ đề quen thuộc, hiểu ý chính.</p>
-                    <ul class="features">
-                        <li>Thảo luận chuyên sâu</li>
-                        <li>Luyện ngữ điệu tự nhiên</li>
-                        <li>Học thuật ngữ chuyên ngành</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
-                </div>
-                <div class="course-card">
-                    <h3>Khóa B1 (Intermediate - Trung cấp)</h3>
-                    <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                    <p>Dành cho người đã có nền tảng. Luyện phản xạ nhanh, tranh luận, và thuyết trình bằng tiếng Anh. Xử lý tình huống du lịch, công việc cơ bản, diễn đạt ý kiến cá nhân. </p>
-                    <ul class="features">
-                        <li>Thảo luận chuyên sâu</li>
-                        <li>Luyện ngữ điệu tự nhiên</li>
-                        <li>Học thuật ngữ chuyên ngành</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
-                </div>
-                <div class="course-card">
-                    <h3>Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</h3>
-                    <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                    <p>Hiểu sâu, sử dụng tiếng Anh linh hoạt cho mục đích học thuật, chuyên môn; giao tiếp phức tạp. </p>
-                    <ul class="features">
-                        <li>Thảo luận chuyên sâu</li>
-                        <li>Luyện ngữ điệu tự nhiên</li>
-                        <li>Học thuật ngữ chuyên ngành</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
-                </div>
+                
+                <div class="swiper-pagination"></div>
+                
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                
             </div>
-        </div>
+            </div>
     </section>
 
     <section id="teachers" class="section-padding">
@@ -145,31 +170,75 @@
             </div>
         </div>
     </section>
+    
+    <section id="faq" class="section-padding bg-light">
+        <div class="container">
+            <h2>💡 Câu Hỏi Thường Gặp (FAQ)</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>1. Học phí cụ thể cho khóa học là bao nhiêu?</h3>
+                    <p>Học phí dao động từ **600.000 VNĐ** cho khóa 3 tháng, tùy thuộc vào cấp độ (A1, A2, B1...) và hình thức học (ONLINE/OFFLINE/1-1). Vui lòng điền form đăng ký để nhận báo giá chính xác nhất.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>2. Lớp học tối đa bao nhiêu học viên?</h3>
+                    <p>ivyEnglish cam kết lớp học **Cực Nhỏ**, tối đa chỉ **5 học viên/lớp**. Điều này nhằm đảm bảo 100% thời gian nói và tương tác trực tiếp với giáo viên, giúp tiến bộ nhanh nhất.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>3. Chính sách học lại miễn phí là gì?</h3>
+                    <p>Chúng tôi cam kết đầu ra chuẩn B1 (CEFR) sau khóa Trung cấp. Nếu bạn tham gia đầy đủ 90% số buổi học mà không đạt chuẩn đầu ra, bạn sẽ được **học lại miễn phí** toàn bộ khóa đó.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section id="contact" class="section-padding bg-light">
-        <div class="container contact-flex">
+        <div class="container">
             <h2>Đăng Ký Khóa Học & Tư Vấn</h2>
-            <form action="https://formspree.io/f/xqaropqe" method="POST" id="course-registration-form" class="vertical-contact-form">
-                <input type="text" name="Họ & Tên" placeholder="Họ và Tên (*)" required>
-                <input type="email" name="Email" placeholder="Email (*)" required>
-                <input type="tel" name="Số Điện Thoại" placeholder="Số Điện Thoại (*)" required>
-                <select name="Hình Thức Học" required>
-                    <option value="">Chọn Hình Thức Mà Bạn Muốn Học (*)</option>
-                    <option value="Học ONLINE">Học ONLINE</option>
-                    <option value="Học OFFLINE">Học OFFLINE</option>
-                    <option value="Học 1-1">Học 1-1</option>
-                </select>
-                <select name="Khóa Học Quan Tâm" required>
-                    <option value="">Chọn Khóa Học Bạn Quan Tâm (*)</option>
-                    <option value="Khóa A1 (Beginner - Căn bản)">Khóa A1 (Beginner - Căn bản)</option>
-                    <option value="Khóa A2 (Elementary - Sơ cấp)">Khóa A2 (Elementary - Sơ cấp)</option>
-                    <option value="Khóa B1 (Intermediate - Trung cấp)">Khóa B1 (Intermediate - Trung cấp)</option>
-                    <option value="Khóa B2 (Upper-Intermediate - Trung-Cao cấp)">Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</option>
-                </select>
-
-                <button type="submit" class="btn btn-primary" id="submit-button">GỬI THÔNG TIN TƯ VẤN</button>
-                <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d; text-align: center;">Chúng tôi sẽ liên hệ lại trong vòng 24 giờ.</p>
-            </form>
+            
+            <div class="contact-grid"> 
+                
+                <form action="https://formspree.io/f/xqaropqe" method="POST" id="course-registration-form" class="vertical-contact-form">
+                    <input type="text" name="Họ & Tên" placeholder="Họ và Tên (*)" required>
+                    <input type="email" name="Email" placeholder="Email (*)" required>
+                    <input type="tel" name="Số Điện Thoại" placeholder="Số Điện Thoại(*)" 
+                            required 
+                            pattern="^0[0-9]{9}$" 
+                            title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số (VD: 0987654321)">
+                    <select name="Hình Thức Học" required>
+                        <option value="">Chọn Hình Thức Mà Bạn Muốn Học (*)</option>
+                        <option value="Học ONLINE">Học ONLINE</option>
+                        <option value="Học OFFLINE">Học OFFLINE</option>
+                        <option value="Học 1-1">Học 1-1</option>
+                    </select>
+                    <select name="Khóa Học Quan Tâm" required>
+                        <option value="">Chọn Khóa Học Bạn Quan Tâm (*)</option>
+                        <option value="Khóa A1 (Beginner - Căn bản)">Khóa A1 (Beginner - Căn bản)</option>
+                        <option value="Khóa A2 (Elementary - Sơ cấp)">Khóa A2 (Elementary - Sơ cấp)</option>
+                        <option value="Khóa B1 (Intermediate - Trung cấp)">Khóa B1 (Intermediate - Trung cấp)</option>
+                        <option value="Khóa B2 (Upper-Intermediate - Trung-Cao cấp)">Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</option>
+                    </select>
+                    <div class="privacy-consent">
+                        <input type="checkbox" id="privacy-check" name="Đồng ý Chính sách" required>
+                        <label for="privacy-check">
+                            Bằng việc đăng ký thông tin, bạn xác nhận đã đọc và đồng ý với 
+                            <a href="#privacy-policy" target="_blank">Chính sách bảo mật</a> và 
+                            <a href="#terms-of-service" target="_blank">Điều khoản sử dụng</a> của chúng tôi. Cho phép ivyEnglish sử dụng thông tin mà bạn đã cung cấp nhằm mục đích tư vấn, tiếp thị sản phẩm và nghiên cứu thị trường.
+                            <span style="color: red;">*</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submit-button">GỬI THÔNG TIN TƯ VẤN</button>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d; text-align: center;">Chúng tôi sẽ liên hệ lại trong vòng 24 giờ.</p>
+                </form>
+                
+                <div class="contact-banner image-banner"> 
+                    <img 
+                        src="images/banner-khuyen-mai.jpg" 
+                        alt="Hình ảnh ưu đãi đặc biệt đăng ký khóa học tiếng Anh" 
+                        loading="lazy"
+                    >
+                </div>
+                
+            </div>
         </div>
     </section>
 
@@ -208,7 +277,7 @@
             </div>
 
              <div class="footer-col copyright-col">
-                 <p>&copy; 2024 ivyEnglish. Bảo lưu mọi quyền.</p>
+                 <p>© 2024 ivyEnglish. Bảo lưu mọi quyền.</p>
                  <p class="small-text">Thiết kế bởi Cường Nguyễn</p>
             </div>
         </div>
@@ -231,7 +300,7 @@
 
     <div id="success-popup" class="popup-overlay">
         <div class="popup-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn">×</span>
             <i class="fas fa-check-circle success-icon"></i>
             <h3>ĐĂNG KÝ THÀNH CÔNG!</h3>
             <p>ivyEnglish đã nhận được thông tin của bạn. Chúng tôi sẽ liên hệ lại trong vòng 24 giờ tới để tư vấn chi tiết về khóa học.</p>
@@ -239,20 +308,20 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
     <script>
         // --- 1. Xử lý Form Gửi (Không chuyển hướng) ---
         const form = document.getElementById('course-registration-form');
         const submitButton = document.getElementById('submit-button');
         const successPopup = document.getElementById('success-popup');
         
-        // Nghe sự kiện submit form
         form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // Ngăn chặn chuyển hướng mặc định
+            e.preventDefault();
             
             submitButton.disabled = true;
             submitButton.textContent = 'Đang Gửi...'; 
 
-            // Gửi dữ liệu bằng Fetch API
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -263,18 +332,15 @@
                 });
 
                 if (response.ok) {
-                    // Gửi thành công:
-                    successPopup.style.display = 'flex'; // Hiển thị pop-up
-                    form.reset(); // Xóa dữ liệu đã nhập
+                    successPopup.style.display = 'flex';
+                    form.reset();
                 } else {
-                    // Gửi thất bại:
                     alert('Đã xảy ra lỗi khi gửi thông tin. Vui lòng thử lại sau.');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Mất kết nối. Vui lòng kiểm tra mạng và thử lại.');
             } finally {
-                // Đặt lại trạng thái nút
                 submitButton.disabled = false;
                 submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN'; 
             }
@@ -287,7 +353,6 @@
             });
         });
 
-        // Đóng pop-up khi click ra ngoài
         window.addEventListener('click', (e) => {
             if (e.target === successPopup) {
                 successPopup.style.display = 'none';
@@ -298,7 +363,6 @@
         // --- 3. Xử lý Cuộn Trang (Back to Top) ---
         const scrollToTopButton = document.querySelector('.scroll-to-top');
 
-        // Hiển thị nút khi cuộn xuống
         window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 scrollToTopButton.style.display = "flex";
@@ -314,6 +378,44 @@
                 top: 0,
                 behavior: 'smooth'
             });
+        });
+        
+        // --- 4. Khởi tạo Course Slider (Swiper.js) ---
+        document.addEventListener('DOMContentLoaded', function() {
+
+            if (typeof Swiper !== 'undefined') { 
+                const courseSwiper = new Swiper('.course-slider', {
+                    spaceBetween: 30,
+                    
+                    watchOverflow: true, 
+                    
+                    slidesPerView: 1,
+                    
+                    breakpoints: {
+                        768: {
+                            slidesPerView: 2, 
+                            spaceBetween: 40,
+                        },
+                        1024: {
+                            slidesPerView: 3, 
+                            spaceBetween: 50,
+                        },
+                    },
+                    
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                        disabledClass: 'swiper-button-disabled',
+                    },
+                });
+            } else {
+                 console.error("Lỗi: Không tìm thấy thư viện Swiper.js. Đảm bảo đã tải file swiper-bundle.min.js.");
+            }
         });
 
     </script>

@@ -1,26 +1,25 @@
 /* --- 1. Thiết lập Chung (Reset & Fonts) --- */
 :root {
-    --primary-color: #1a73e8;
+    --primary-color: #5b8cff;
     --secondary-color: #2ECC71;
-    --text-color: #2c3e50;
-    --light-bg: #f4f6f8;
+    --text-color: #334155;
+    --light-bg: #f0f4f8;
     --white: #ffffff;
-    --padding-section: 80px 0;
-    --shadow-light: 0 8px 30px rgba(0, 0, 0, 0.05);
-    --border-radius-lg: 12px;
-    --border-radius-md: 8px;
-    --border-radius-card: 12px;
-    --border-radius-btn: 6px;
+    --padding-section: 90px 0;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --border-radius-xl: 16px;
+    --border-radius-lg: 10px;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: inherit; 
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif; 
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -50,36 +49,43 @@ a {
 
 h2 {
     text-align: center;
-    margin-bottom: 40px;
-    font-size: 2em;
-    color: var(--primary-color);
+    margin-bottom: 45px; 
+    font-size: 2.4em;
+    color: var(--text-color);
+    font-weight: 900;
 }
 
 /* --- 2. HEADER & NAVIGATION --- */
 header {
-    background-color: var(--white);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--text-color); 
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 0;
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 0;
+    padding: 18px 0;
 }
 
 .logo {
-    font-size: 1.8em;
-    font-weight: 700;
-    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.header-logo-img {
+    height: 40px;
+    width: auto;
+    display: block;
 }
 
 nav a {
-    color: var(--text-color);
-    margin-left: 20px;
+    color: var(--white);
+    margin-left: 25px;
     font-weight: 500;
     transition: color 0.3s;
 }
@@ -89,21 +95,34 @@ nav a:hover {
 }
 
 .cta-nav {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: var(--white) !important;
-    padding: 8px 15px;
-    border-radius: 6px;
+    padding: 10px 22px;
+    border-radius: var(--border-radius-lg); 
+    font-weight: 700;
+}
+
+.cta-nav:hover {
+    background-color: #26a864;
 }
 
 /* --- 3. HERO SECTION --- */
 #hero {
-    height: 550px;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('../images/background.jpg') no-repeat center center/cover;
-    color: var(--white);
-    display: flex;
+    background:
+                url('../images/background2.jpg') no-repeat center center/cover;
+    padding: 100px 0;
+    color: var(--text-color);
+    position: relative;
+    overflow: hidden;
+    min-height: 650px;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; 
     align-items: center;
-    text-align: center;
+    gap: 40px;
+    min-height: 450px;
 }
 
 .hero-teacher-img {
@@ -116,54 +135,83 @@ nav a:hover {
 }
 
 .hero-content {
-    max-width: 700px;
-    margin: 0 auto;
+    max-width: none; 
+    margin: 0;
+    text-align: left;
+    z-index: 2;
 }
 
 #hero h1 {
-    font-size: 3.8em;
+    font-size: 3.5em;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: var(--primary-color);
+    text-shadow: none;
+    font-weight: 900;
 }
 
 #hero p {
-    font-size: 1.3em;
-    margin-bottom: 40px;
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+.hero-content .small-text {
+    margin-top: 15px;
+    font-size: 1em;
+    font-style: italic;
+    color: #6c757d;
+}
+
+.hero-image-col {
+    content: '';
+    width: 400px; 
+    height: 400px;
+    background: url('../images/avatar.jpg') no-repeat center center; 
+    background-size: cover;
+    border-radius: 50%; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 8px solid var(--white);
+    z-index: 1;
 }
 
 /* Các nút chung */
 .btn {
     display: inline-block;
     padding: 12px 25px;
-    border-radius: var(--border-radius-md);
+    border-radius: 20px;
     font-weight: 700;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
     cursor: pointer;
     border: none;
+    font-family: 'Roboto', sans-serif; 
 }
 
 .btn-primary {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); 
     color: var(--white);
-    padding: 14px 30px;
-    font-size: 1.1em;
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
+    padding: 18px 40px; 
+    font-size: 1.2em;
+    font-weight: 800;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6); 
 }
 
 .btn-primary:hover {
-    background-color: #24A261;
-    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.6);
+    background-color: #26a864;
+    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.8);
+    transform: translateY(-3px);
 }
 
 .btn-secondary {
     background-color: var(--primary-color);
     color: var(--white);
     padding: 16px 30px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .btn-secondary:hover {
-    background-color: #0056b3;
+    background-color: #4a75e0;
+    transform: translateY(-2px);
 }
 
 .duration {
@@ -182,20 +230,20 @@ nav a:hover {
 }
 
 .usp-item {
-    padding: 30px;
+    padding: 35px 20px;
     background: var(--white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-soft);
     transition: all 0.3s ease;
 }
 
 .usp-item:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); 
+    transform: translateY(-8px);
 }
 
 .icon-usp {
-    font-size: 3em;
+    font-size: 3.5em;
     color: var(--primary-color);
     margin-bottom: 15px;
     display: block;
@@ -204,7 +252,7 @@ nav a:hover {
 .usp-item h3 {
     color: var(--text-color);
     margin-bottom: 10px;
-    font-size: 1.3em;
+    font-size: 1.4em;
 }
 
 @media (max-width: 768px) {
@@ -225,17 +273,16 @@ nav a:hover {
 .about-item {
     flex: 1;
     min-width: 280px; 
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius-lg);
+    padding: 30px;
+    border-radius: var(--border-radius-xl);
     transition: transform 0.3s;
-    box-shadow: var(--shadow-light);
-    border: none;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #e0e6f0; 
 }
 
 .about-item:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 .about-item h3 {
@@ -245,29 +292,40 @@ nav a:hover {
 
 /* --- 5. COURSES SECTION --- */
 .course-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    justify-content: center;
+    display: block; /* Vô hiệu hóa Grid cũ */
 }
 
+/* Định dạng Swiper Container */
+.course-slider {
+    padding-bottom: 50px; 
+    overflow: hidden;
+    position: relative;
+    max-width: 1000px; 
+    margin: 0 auto;
+}
+
+/* Định dạng chung cho Course Card (Slide) */
 .course-card {
+    min-height: 480px;
     background-color: var(--white);
     padding: 30px;
-    border-radius: var(--border-radius-lg);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    box-shadow: var(--shadow-light);
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
     transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #e0e6f0;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .course-card h3 {
-    color: var(--secondary-color);
+    color: var(--primary-color); 
     margin-bottom: 10px;
 }
 
 .course-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .course-card .features {
@@ -276,16 +334,62 @@ nav a:hover {
     margin: 15px 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    text-align: left;
+}
+
+.course-card .features li {
+    padding-left: 1.5em;
+    position: relative;
 }
 
 .course-card .features li::before {
-    content: '✓';
+    content: '★';
     color: var(--secondary-color);
     font-weight: bold;
     display: inline-block;
-    width: 1em;
-    margin-left: -1em;
+    width: 1.2em;
+    margin-left: -1.5em;
+    position: absolute;
+    left: 0;
+}
+
+.course-card .btn-secondary {
+    margin-top: auto; 
+    align-self: flex-start; 
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary-color) !important;
+    transform: scale(1);
+    transition: transform 0.3s;
+    font-size: 20px !important; 
+    top: 50%;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    transform: scale(1.2);
+}
+
+@media (min-width: 1024px) {
+    .swiper-button-prev {
+        left: -50px !important;
+    }
+    .swiper-button-next {
+        right: -50px !important;
+    }
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--primary-color) !important;
+}
+
+.swiper-button-disabled {
+    opacity: 0.3 !important;
+    pointer-events: none;
+    cursor: default;
 }
 
 /* --- 6. TEACHERS SECTION --- */
@@ -298,7 +402,7 @@ nav a:hover {
 }
 
 .teacher-card {
-    max-width: 250px;
+    max-width: 280px;
     padding: 20px;
 }
 
@@ -307,60 +411,76 @@ nav a:hover {
     height: auto;
     border-radius: 50%;
     margin-bottom: 15px;
+    border: 6px solid var(--primary-color); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .teacher-card h3 {
     margin-bottom: 5px;
+    color: var(--text-color);
 }
 
 .teacher-card .role {
-    color: var(--primary-color);
+    color: var(--secondary-color);
     font-weight: 700;
     margin-bottom: 10px;
 }
 
-/* --- 7. CONTACT SECTION & FORM (ĐÃ CẬP NHẬT BỐ CỤC DỌC) --- */
+/* --- 7. CONTACT SECTION & FORM --- */
 .contact-flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: none; /* Vô hiệu hóa .contact-flex cũ */
 }
 
-#submit-button {
-    margin-top: 15px;
-    padding: 18px;
-    font-size: 1.2em;
-    animation: subtlePulse 2s infinite ease-out; 
-}
-
-#submit-button:disabled {
-    background-color: #A9A9A9;
-    cursor: not-allowed;
-    animation: none;
-}
-
-/* Quy tắc mới cho Form hiển thị dọc trên mọi thiết bị */
-.vertical-contact-form {
-    max-width: 500px; 
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; 
+    gap: 40px;
+    align-items: center; 
+    max-width: 1000px;
     margin: 0 auto;
+    padding: 30px;
+    background: var(--white);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-soft);
+}
+
+.vertical-contact-form {
+    max-width: none;
+    margin: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 25px;
 }
 
-/* Áp dụng cho các trường input, select, button bên trong form mới */
+.contact-banner.image-banner {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.contact-banner.image-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: var(--border-radius-lg);
+}
+
 .vertical-contact-form input, 
 .vertical-contact-form select, 
 .vertical-contact-form button {
     padding: 16px;
     border-radius: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #c7d1e0;
     width: 100%;
     margin: 0; 
     box-sizing: border-box;
     font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: 'Roboto', sans-serif;
 }
 
 .vertical-contact-form button {
@@ -370,24 +490,81 @@ nav a:hover {
     margin-top: 5px;
 }
 
-.contact-info h3 {
-    color: var(--primary-color);
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
 .vertical-contact-form input:focus, 
 .vertical-contact-form select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
+    box-shadow: 0 0 10px rgba(91, 140, 255, 0.3);
     outline: none;
+}
+
+.vertical-contact-form input:invalid:not(:focus):not(:placeholder-shown) {
+    border: 2px solid #dc3545; /* Viền đỏ cảnh báo */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+/* SUBMIT BUTTON */
+#submit-button {
+    margin-top: 25px; 
+    padding: 18px; 
+    font-size: 1.2em; 
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    animation: subtlePulse 2.5s infinite ease-out; 
+}
+
+#submit-button:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
+    animation: none;
+    box-shadow: none;
+}
+
+/* --- CSS Cho Checkbox Xác Nhận Đồng Ý (Privacy Consent) --- */
+.privacy-consent {
+    margin-top: 5px; 
+    margin-bottom: 5px;
+    padding: 0 5px;
+    text-align: left;
+    max-width: 100%;
+    font-size: 0.95em;
+    color: var(--text-color);
+}
+
+.privacy-consent input[type="checkbox"] {
+    width: auto !important; 
+    height: auto;
+    padding: 0;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 0; 
+}
+
+.privacy-consent label {
+    display: inline;
+    vertical-align: middle;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.privacy-consent a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .privacy-consent {
+        font-size: 0.9em;
+        padding: 0 10px;
+    }
 }
 
 /* --- 8. FOOTER MỚI --- */
 #main-footer {
-    background-color: #1c3144;
+    background-color: var(--text-color);
     color: var(--white);
-    padding: 40px 0 20px 0;
+    padding: 50px 0 25px 0;
     text-align: center;
     display: block;
 }
@@ -403,7 +580,7 @@ nav a:hover {
 .footer-col h3 {
     color: var(--secondary-color);
     margin-bottom: 15px;
-    font-size: 1.2em;
+    font-size: 1.3em;
 }
 
 .footer-col p {
@@ -415,13 +592,19 @@ nav a:hover {
     display: block;
     width: 100%;
     height: 200px;
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg); 
     border: none !important;
+    filter: grayscale(80%) brightness(105%);
+    transition: filter 0.5s ease-in-out;
+}
+
+.map-col iframe:hover {
+    filter: grayscale(0%) brightness(100%);
 }
 
 .copyright-col {
     text-align: right; 
-    font-size: 0.8em;
+    font-size: 0.9em;
     padding-top: 15px;
 }
 
@@ -433,23 +616,19 @@ nav a:hover {
 
 .social-icon {
     display: inline-block;
-    width: 35px;
-    height: 35px;
-    line-height: 35px; 
+    width: 40px;
+    height: 40px;
+    line-height: 40px; 
     text-align: center;
     border-radius: 50%;
     margin-right: 10px;
-    font-size: 1.1em;
+    font-size: 1.3em;
     color: var(--white);
     transition: opacity 0.3s;
 }
 
 .social-icon:hover {
     opacity: 0.8;
-}
-
-.social-icon i {
-    color: var(--white);
 }
 
 .social-icon.facebook {
@@ -469,8 +648,8 @@ nav a:hover {
 /* ========================================================= */
 .floating-contact {
     position: fixed; 
-    bottom: 20px;
-    right: 20px;
+    bottom: 25px;
+    right: 25px;
     z-index: 999;
     display: flex;
     flex-direction: column; 
@@ -479,14 +658,14 @@ nav a:hover {
 }
 
 .float-btn {
-    width: 50px;
-    height: 50px;
+    width: 55px; 
+    height: 55px;
     border-radius: 50%;
     text-align: center;
-    line-height: 50px;
+    line-height: 55px;
     color: white;
-    font-size: 1.5em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 1.6em;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, background-color 0.3s;
     cursor: pointer;
     display: flex; 
@@ -501,7 +680,7 @@ nav a:hover {
 }
 
 .float-btn.zalo {
-    background-color: #0088ff;
+    background-color: var(--primary-color);
     animation: pulse 1.5s infinite;
     animation-delay: 0.2s;
 }
@@ -513,7 +692,7 @@ nav a:hover {
 }
 
 .float-btn.scroll-to-top {
-    background-color: #343a40;
+    background-color: var(--text-color);
     display: none;
     justify-content: center;
     opacity: 0.8;
@@ -527,115 +706,6 @@ nav a:hover {
     animation: none;
 }
 
-/* Hiệu ứng nhấp nháy (Pulse) */
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(0, 132, 255, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(0, 132, 255, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 132, 255, 0);
-    }
-}
-
-
-/* ========================================================= */
-/* --- MEDIA QUERIES (Responsive cho Mobile) --- */
-/* ========================================================= */
-@media (max-width: 768px) {
-    
-    .container {
-        width: 90%; 
-    }
-
-    /* 1. Header */
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    nav {
-        margin-top: 10px;
-    }
-    nav a {
-        margin: 0 5px; 
-        padding: 5px;
-        font-size: 0.9em;
-    }
-    .cta-nav {
-        margin-top: 5px;
-        display: block;
-    }
-
-    /* 2. Hero Section */
-    #hero {
-        height: 400px; 
-    }
-    #hero h1 {
-        font-size: 2.2em; 
-    }
-    #hero p {
-        font-size: 1em; 
-        padding: 0 10px;
-    }
-    
-    /* 3. Tiêu đề và Padding Section */
-    .section-padding {
-        padding: 40px 0; 
-    }
-    h2 {
-        font-size: 1.8em;
-        margin-bottom: 25px;
-    }
-    
-    /* 4. Nội dung dạng Grid/Flex (About, Teachers) */
-    .about-grid, 
-    .teacher-grid {
-        flex-direction: column;
-        gap: 20px;
-    }
-    /* Courses là Grid, cần đặt lại template */
-    .course-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    /* 5. Contact Section */
-    .contact-flex {
-        gap: 20px;
-    }
-
-    /* Form trên mobile sẽ tự động xếp dọc nhờ quy tắc chung của .vertical-contact-form */
-    
-    /* 6. Footer */
-    .footer-grid {
-        grid-template-columns: 1fr; 
-        text-align: center;
-        gap: 30px; 
-    }
-    .footer-col {
-        margin-bottom: 10px;
-    }
-    .footer-col h3, .footer-col p, .social-links {
-        text-align: center;
-    }
-    .copyright-col {
-        text-align: center;
-        padding-top: 10px;
-    }
-    .floating-contact {
-        bottom: 15px;
-        right: 15px;
-        gap: 10px;
-    }
-    .float-btn {
-        width: 45px;
-        height: 45px;
-        line-height: 45px;
-        font-size: 1.3em;
-    }
-}
 /* ========================================================= */
 /* --- 10. CSS CHO POP-UP THÔNG BÁO THÀNH CÔNG --- */
 /* ========================================================= */
@@ -655,8 +725,8 @@ nav a:hover {
 
 .popup-content {
     background-color: var(--white);
-    padding: 30px;
-    border-radius: var(--border-radius-lg);
+    padding: 35px;
+    border-radius: 20px;
     max-width: 400px;
     width: 90%;
     text-align: center;
@@ -666,14 +736,15 @@ nav a:hover {
 }
 
 .success-icon {
-    font-size: 4em;
+    font-size: 4.5em; 
     color: var(--secondary-color);
     margin-bottom: 15px;
 }
 
 .popup-content h3 {
-    color: var(--primary-color);
+    color: var(--text-color);
     margin-bottom: 15px;
+    font-size: 1.4em;
 }
 
 .popup-content p {
@@ -682,9 +753,9 @@ nav a:hover {
 
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5em;
+    top: 15px;
+    right: 15px;
+    font-size: 1.8em;
     color: #aaa;
     cursor: pointer;
     line-height: 1;
@@ -708,17 +779,195 @@ nav a:hover {
     }
 }
 
+/* --- 11. FAQ SECTION --- */
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faq-item {
+    background: var(--white);
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.faq-item h3 {
+    font-size: 1.25em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.faq-item p {
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* ========================================================= */
+/* --- KEYFRAMES --- */
+/* ========================================================= */
+
+/* Animation Pulse cho nút GỬI - Dùng màu Xanh Lá mới */
 @keyframes subtlePulse {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(40, 206, 40, 0.7);
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); 
     }
     70% {
         transform: scale(1.02);
-        box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+        box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
     }
     100% {
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
     }
+}
+
+/* Animation Pulse cho nút Floating Contact - Dùng màu Xanh Pastel */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(91, 140, 255, 0.7); 
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(91, 140, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(91, 140, 255, 0);
+    }
+}
+
+
+/* ========================================================= */
+/* --- MEDIA QUERIES (Responsive cho Mobile) --- */
+/* ========================================================= */
+@media (max-width: 768px) {
+    
+    .container {
+        width: 90%; 
+    }
+
+    /* 1. Header */
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .header-logo-img {
+        height: 35px;
+    }
+    nav {
+        margin-top: 10px;
+    }
+    nav a {
+        margin: 0 8px; 
+        padding: 5px;
+        font-size: 1em;
+    }
+    .cta-nav {
+        margin-top: 5px;
+        display: inline-block; 
+    }
+
+    /* 2. Hero Section */
+    #hero {
+        padding: 50px 0;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        gap: 20px; 
+    }
+    
+    .hero-content {
+        text-align: center;
+    }
+
+    #hero h1 {
+        font-size: 2.5em; 
+        color: var(--primary-color);
+        font-weight: 800;
+    }
+    
+    #hero p {
+        font-size: 1.1em; 
+        padding: 0;
+    }
+
+    .hero-image-col {
+        display: none; 
+    }
+    
+    /* 3. Tiêu đề và Padding Section */
+    .section-padding {
+        padding: 50px 0; 
+    }
+    h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+    
+    /* 4. Nội dung dạng Grid/Flex (About, Teachers) */
+    .about-grid, 
+    .teacher-grid {
+        flex-direction: column;
+        gap: 25px;
+    }
+    /* Courses là Grid, cần đặt lại template */
+    .course-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    /* 5. Contact Section */
+    .contact-flex {
+        gap: 20px;
+    }
+    
+    /* 6. Footer */
+    .footer-grid {
+        grid-template-columns: 1fr; 
+        text-align: center;
+        gap: 30px; 
+    }
+    .footer-col {
+        margin-bottom: 10px;
+    }
+    .footer-col h3, .footer-col p, .social-links {
+        text-align: center;
+    }
+    .copyright-col {
+        text-align: center;
+        padding-top: 10px;
+    }
+    .floating-contact {
+        bottom: 15px;
+        right: 15px;
+        gap: 10px;
+    }
+    .float-btn {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 1.4em;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 30px; 
+        padding: 20px;
+    }
+    .contact-banner.image-banner {
+        order: 1;
+    }
+}
+
+.menu-toggle {
+    color: var(--white); 
+    display: none;
+    font-size: 1.8em;
+    cursor: pointer;
 }
