@@ -1,11 +1,16 @@
 /* --- 1. Thiết lập Chung (Reset & Fonts) --- */
 :root {
-    --primary-color: #007bff; /* Màu xanh chính */
-    --secondary-color: #28a745; /* Màu xanh phụ (CTA) */
-    --text-color: #333;
-    --light-bg: #f8f9fa;
+    --primary-color: #1a73e8;
+    --secondary-color: #2ECC71;
+    --text-color: #2c3e50;
+    --light-bg: #f4f6f8;
     --white: #ffffff;
-    --padding-section: 60px 0;
+    --padding-section: 80px 0;
+    --shadow-light: 0 8px 30px rgba(0, 0, 0, 0.05);
+    --border-radius-lg: 12px;
+    --border-radius-md: 8px;
+    --border-radius-card: 12px;
+    --border-radius-btn: 6px;
 }
 
 * {
@@ -37,6 +42,10 @@ a {
 
 .bg-light {
     background-color: var(--light-bg);
+    background-image: 
+        linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0.2)),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0.2));
+    background-size: 20px 20px;
 }
 
 h2 {
@@ -83,14 +92,14 @@ nav a:hover {
     background-color: var(--primary-color);
     color: var(--white) !important;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: 6px;
 }
 
 /* --- 3. HERO SECTION --- */
 #hero {
-    height: 500px;
-    background-color: #34495e;
-    background: url('../images/background.jpg') no-repeat center center/cover;
+    height: 550px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('../images/background.jpg') no-repeat center center/cover;
     color: var(--white);
     display: flex;
     align-items: center;
@@ -102,7 +111,7 @@ nav a:hover {
     height: 200px; 
     border-radius: 50%;
     border: 5px solid var(--white);
-    margin: 0 auto 20px auto; /* Căn giữa ảnh giáo viên */
+    margin: 0 auto 20px auto;
     background: url('../images/avatar.jpg') no-repeat center center/cover;
 }
 
@@ -112,20 +121,21 @@ nav a:hover {
 }
 
 #hero h1 {
-    font-size: 3.2em;
-    margin-bottom: 15px;
+    font-size: 3.8em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 #hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
+    font-size: 1.3em;
+    margin-bottom: 40px;
 }
 
 /* Các nút chung */
 .btn {
     display: inline-block;
     padding: 12px 25px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-md);
     font-weight: 700;
     transition: background-color 0.3s;
     cursor: pointer;
@@ -135,15 +145,21 @@ nav a:hover {
 .btn-primary {
     background-color: var(--secondary-color);
     color: var(--white);
+    padding: 14px 30px;
+    font-size: 1.1em;
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
 }
 
 .btn-primary:hover {
-    background-color: #1e7e34;
+    background-color: #24A261;
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.6);
 }
 
 .btn-secondary {
     background-color: var(--primary-color);
     color: var(--white);
+    padding: 16px 30px;
+    border-radius: 10px;
 }
 
 .btn-secondary:hover {
@@ -155,6 +171,46 @@ nav a:hover {
     color: #6c757d;
     margin-bottom: 15px;
     display: block;
+}
+
+/* --- CSS CHO PHẦN "TẠI SAO CHỌN CHÚNG TÔI" (USP) --- */
+.usp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.usp-item {
+    padding: 30px;
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.usp-item:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+}
+
+.icon-usp {
+    font-size: 3em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.usp-item h3 {
+    color: var(--text-color);
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+@media (max-width: 768px) {
+    .usp-grid {
+        grid-template-columns: 1fr; 
+    }
 }
 
 /* --- 4. ABOUT SECTION --- */
@@ -171,13 +227,15 @@ nav a:hover {
     min-width: 280px; 
     padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg);
     transition: transform 0.3s;
+    box-shadow: var(--shadow-light);
+    border: none;
 }
 
 .about-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .about-item h3 {
@@ -196,13 +254,20 @@ nav a:hover {
 .course-card {
     background-color: var(--white);
     padding: 30px;
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .course-card h3 {
     color: var(--secondary-color);
     margin-bottom: 10px;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 .course-card .features {
@@ -226,7 +291,7 @@ nav a:hover {
 /* --- 6. TEACHERS SECTION --- */
 .teacher-grid {
     display: flex;
-    justify-content: center; /* CĂN GIỮA */
+    justify-content: center;
     gap: 40px;
     text-align: center;
     flex-wrap: wrap; 
@@ -256,34 +321,46 @@ nav a:hover {
 
 /* --- 7. CONTACT SECTION & FORM (ĐÃ CẬP NHẬT BỐ CỤC DỌC) --- */
 .contact-flex {
-    /* Giữ nguyên để căn giữa nội dung */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
+#submit-button {
+    margin-top: 15px;
+    padding: 18px;
+    font-size: 1.2em;
+    animation: subtlePulse 2s infinite ease-out; 
+}
+
+#submit-button:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
+    animation: none;
+}
+
 /* Quy tắc mới cho Form hiển thị dọc trên mọi thiết bị */
 .vertical-contact-form {
-    /* Đảm bảo form căn giữa và có độ rộng tối đa cho desktop */
     max-width: 500px; 
     margin: 0 auto;
     width: 100%;
     display: flex;
-    flex-direction: column; /* Quan trọng: Xếp dọc các phần tử con */
-    gap: 10px; /* Thêm khoảng cách giữa các trường */
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* Áp dụng cho các trường input, select, button bên trong form mới */
 .vertical-contact-form input, 
 .vertical-contact-form select, 
 .vertical-contact-form button {
-    padding: 12px;
-    border-radius: 5px;
+    padding: 16px;
+    border-radius: 20px;
     border: 1px solid #ccc;
-    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng của form */
+    width: 100%;
     margin: 0; 
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    font-size: 1em;
 }
 
 .vertical-contact-form button {
@@ -299,9 +376,16 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
+.vertical-contact-form input:focus, 
+.vertical-contact-form select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
+    outline: none;
+}
+
 /* --- 8. FOOTER MỚI --- */
 #main-footer {
-    background-color: #343a40;
+    background-color: #1c3144;
     color: var(--white);
     padding: 40px 0 20px 0;
     text-align: center;
@@ -317,7 +401,7 @@ nav a:hover {
 }
 
 .footer-col h3 {
-    color: var(--primary-color);
+    color: var(--secondary-color);
     margin-bottom: 15px;
     font-size: 1.2em;
 }
@@ -331,7 +415,7 @@ nav a:hover {
     display: block;
     width: 100%;
     height: 200px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: none !important;
 }
 
@@ -406,14 +490,14 @@ nav a:hover {
     transition: transform 0.3s ease, background-color 0.3s;
     cursor: pointer;
     display: flex; 
-    justify-content: center; /* Căn ngang icon */
-    align-items: center; /* Căn dọc icon */
+    justify-content: center;
+    align-items: center;
 }
 
 /* Màu sắc cụ thể cho từng nút */
 .float-btn.hotline {
     background-color: #e60000;
-    animation: pulse 1.5s infinite; /* Hiệu ứng bong bóng */
+    animation: pulse 1.5s infinite;
 }
 
 .float-btn.zalo {
@@ -429,12 +513,12 @@ nav a:hover {
 }
 
 .float-btn.scroll-to-top {
-    background-color: #343a40; /* Màu xám đậm */
-    display: none; /* Mặc định ẩn, sẽ được hiển thị bằng JS */
+    background-color: #343a40;
+    display: none;
     justify-content: center;
     opacity: 0.8;
     order: -1;
-    animation: none; /* Bỏ hiệu ứng pulse */
+    animation: none;
 }
 
 .float-btn:hover {
@@ -519,7 +603,6 @@ nav a:hover {
     
     /* 5. Contact Section */
     .contact-flex {
-        /* Giữ nguyên: flex-direction: column; */
         gap: 20px;
     }
 
@@ -558,23 +641,22 @@ nav a:hover {
 /* ========================================================= */
 
 .popup-overlay {
-    /* Nền đen trong suốt bao phủ toàn bộ màn hình */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    display: none; /* Mặc định ẩn, sẽ được JS bật khi gửi thành công */
+    display: none;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Luôn nổi trên mọi thành phần khác */
+    z-index: 1000;
 }
 
 .popup-content {
     background-color: var(--white);
     padding: 30px;
-    border-radius: 10px;
+    border-radius: var(--border-radius-lg);
     max-width: 400px;
     width: 90%;
     text-align: center;
@@ -585,7 +667,7 @@ nav a:hover {
 
 .success-icon {
     font-size: 4em;
-    color: var(--secondary-color); /* Màu xanh lá cây */
+    color: var(--secondary-color);
     margin-bottom: 15px;
 }
 
@@ -623,5 +705,20 @@ nav a:hover {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes subtlePulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 206, 40, 0.7);
+    }
+    70% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
     }
 }
