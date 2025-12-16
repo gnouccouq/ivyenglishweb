@@ -852,23 +852,25 @@ nav a:hover {
 
     /* 1. Header */
     .header-content {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 0;
     }
     .header-logo-img {
         height: 35px;
     }
     nav {
-        margin-top: 10px;
+        display: none;
+        margin-top: 0px;
     }
     nav a {
-        margin: 0 8px; 
-        padding: 5px;
+        margin: 0; 
+        padding: 0;
         font-size: 1em;
     }
     .cta-nav {
-        margin-top: 5px;
-        display: inline-block; 
+        display: none !important;
     }
 
     /* 2. Hero Section */
@@ -963,11 +965,10 @@ nav a:hover {
     .contact-banner.image-banner {
         order: 1;
     }
-}
 
-.menu-toggle {
-    color: var(--white); 
-    display: none;
+    .menu-toggle {
+    display: block;
     font-size: 1.8em;
     cursor: pointer;
+}
 }
