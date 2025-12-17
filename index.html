@@ -102,48 +102,40 @@
                     
                     <div class="swiper-slide course-card">
                         <h3>Khóa A1 (Beginner - Căn bản)</h3>
-                        <p class="duration">12 Unit - 12 Tuần - 2 buổi/tuần</p>
-                        <p>Dành cho người mất gốc hoặc mới bắt đầu. Tập trung xây dựng từ vựng, ngữ pháp nền tảng và phát âm chuẩn. Hiểu và sử dụng các cụm từ, câu đơn giản trong tình huống quen thuộc</p>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Xây dựng nền tảng từ số 0. Tập trung chuẩn hóa phát âm 44 âm IPA và các mẫu câu giao tiếp cơ bản nhất.</p>
                         <ul class="features">
-                            <li>Học phát âm IPA</li>
-                            <li>Giao tiếp tình huống đơn giản</li>
-                            <li>Sửa lỗi 1-1</li>
+                            <p><strong>Đối tượng:</strong> Người mất gốc, người mới bắt đầu hoặc sợ nói tiếng Anh.</p>
                         </ul>
                         <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
                     </div>
 
                     <div class="swiper-slide course-card">
                         <h3>Khóa A2 (Elementary - Sơ cấp)</h3>
-                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                        <p>Dành cho người đã có nền tảng, Giao tiếp cơ bản về các chủ đề quen thuộc, hiểu ý chính.</p>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Nâng cấp từ vựng và ngữ pháp. Học cách nối câu, tăng tốc độ phản xạ và nghe hiểu các hội thoại thông thường.</p>
                         <ul class="features">
-                            <li>Thảo luận chuyên sâu</li>
-                            <li>Luyện ngữ điệu tự nhiên</li>
-                            <li>Học thuật ngữ chuyên ngành</li>
+                            <p><strong>Đối tượng:</strong> Người đã biết cơ bản nhưng nói còn chậm, ngắt quãng.</p>
                         </ul>
                         <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
                     </div>
                     
                     <div class="swiper-slide course-card">
-                        <h3>Khóa B1 (Intermediate - Trung cấp)</h3>
-                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                        <p>Dành cho người đã có nền tảng. Luyện phản xạ nhanh, tranh luận, và thuyết trình bằng tiếng Anh. Xử lý tình huống du lịch, công việc cơ bản, diễn đạt ý kiến cá nhân. </p>
+                        <h3>Khóa B1 (Pre-Intermediate - Trung cấp)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Luyện tư duy tiếng Anh trực tiếp. Tập trung vào kỹ năng thuyết trình, tranh luận và xử lý tình huống thực tế.</p>
                         <ul class="features">
-                            <li>Thảo luận chuyên sâu</li>
-                            <li>Luyện ngữ điệu tự nhiên</li>
-                            <li>Học thuật ngữ chuyên ngành</li>
+                            <p><strong>Đối tượng:</strong> Người muốn giao tiếp trôi chảy để làm việc hoặc đi du lịch.</p>
                         </ul>
                         <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
                     </div>
 
                     <div class="swiper-slide course-card">
-                        <h3>Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</h3>
-                        <p class="duration">12Unit - 12 Tuần - 2 buổi/tuần</p>
-                        <p>Hiểu sâu, sử dụng tiếng Anh linh hoạt cho mục đích học thuật, chuyên môn; giao tiếp phức tạp. </p>
+                        <h3>Khóa B2 (Intermediate - Cao cấp)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Hoàn thiện kỹ năng giao tiếp chuyên nghiệp. Sử dụng từ vựng học thuật và thành ngữ để nói chuyện tự nhiên như người bản xứ.</p>
                         <ul class="features">
-                            <li>Thảo luận chuyên sâu</li>
-                            <li>Luyện ngữ điệu tự nhiên</li>
-                            <li>Học thuật ngữ chuyên ngành</li>
+                            <p><strong>Đối tượng:</strong> Người cần tiếng Anh để đàm phán, làm việc trong môi trường quốc tế.</p>
                         </ul>
                         <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
                     </div>
@@ -348,12 +340,13 @@
                 submitButton.textContent = 'ĐANG GỬI...';
 
                 const formData = new FormData(form);
-                const uniqueID = Date.now();
+                const randomID = Math.floor(Math.random() * 1000000000);
                 const currentTime = new Date().toLocaleString('vi-VN');
                 
-                formData.append("ID", uniqueID);
-                formData.append("Thời Gian", currentTime);
                 const data = Object.fromEntries(formData.entries());
+
+                data["ID"] = randomID; 
+                data["Thời Gian"] = currentTime;
 
                 if (data["Số Điện Thoại"]) {
                     data["Số Điện Thoại"] = "'" + data["Số Điện Thoại"];

@@ -29,15 +29,34 @@
 
     <div class="admin-section">
         <div class="container">
-            <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <h2>Danh Sách Đăng Ký - ivyEnglish</h2>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="searchInput" placeholder="Tìm tên hoặc SĐT..." 
-                        style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; width: 250px;">
-                    <button onclick="loadData()" class="btn btn-secondary">Làm mới dữ liệu</button>
+            <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <h2 style="margin:0;">Bảng Điều Khiển Quản Trị</h2>
+                <div style="display: flex; gap: 10px; flex-grow: 1; justify-content: flex-end;">
+                    <div style="position: relative;">
+                        <input type="text" id="searchInput" placeholder="Tìm tên hoặc SĐT học viên..." 
+                            style="padding: 16px 15px; border-radius: 20px; border: 1px solid #ccc; width: 300px; outline: none; transition: 0.3s;">
+                    </div>
+                    <button onclick="loadData()" class="btn btn-secondary" style="border-radius: 20px;">Làm mới</button>
                 </div>
             </div>
-            
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #5b8cff;">
+                    <h4 style="color: #888; font-size: 0.8em; margin-bottom: 5px;">TỔNG HỌC VIÊN</h4>
+                    <p id="stat-total" style="font-size: 1.6em; font-weight: 900; color: #5b8cff; margin: 0;">0</p>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #f39c12;">
+                    <h4 style="color: #888; font-size: 0.8em; margin-bottom: 5px;">HỌC OFFLINE</h4>
+                    <p id="stat-offline" style="font-size: 1.6em; font-weight: 900; color: #f39c12; margin: 0;">0</p>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #2ECC71;">
+                    <h4 style="color: #888; font-size: 0.8em; margin-bottom: 5px;">HỌC ONLINE</h4>
+                    <p id="stat-online" style="font-size: 1.6em; font-weight: 900; color: #2ECC71; margin: 0;">0</p>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #e74c3c;">
+                    <h4 style="color: #888; font-size: 0.8em; margin-bottom: 5px;">HỌC 1-1</h4>
+                    <p id="stat-solo" style="font-size: 1.6em; font-weight: 900; color: #e74c3c; margin: 0;">0</p>
+                </div>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -104,121 +123,32 @@
         const API_URL = "https://sheetdb.io/api/v1/qvitsb1q8evc9";
         let currentData = [];
 
+        // Hàm tải dữ liệu chính
         async function loadData() {
             const tbody = document.getElementById('student-data');
-            tbody.innerHTML = "<tr><td colspan='8'>Đang tải...</td></tr>";
+            tbody.innerHTML = "<tr><td colspan='8'>Đang kết nối đến máy chủ...</td></tr>";
+            
             try {
                 const res = await fetch(API_URL);
-                currentData = await res.json();
-                tbody.innerHTML = "";
+                if (!res.ok) throw new Error("Không thể kết nối API");
                 
-                // Hiển thị dữ liệu (Không dùng reverse để tránh lệch hàng)
-                currentData.forEach((item, index) => {
-                    const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
-                    const displayID = item["ID"] || "Chưa có ID"; 
-
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${displayID}</td>
-                            <td>${item["Thời Gian"] || '---'}</td>
-                            <td><strong>${item["Họ & Tên"]}</strong></td>
-                            <td>${phoneDisplay}</td>
-                            <td>${item["Email"] || ''}</td>
-                            <td>${item["Khóa Học Quan Tâm"]}</td>
-                            <td>${item["Hình Thức Học"] || '---'}</td>
-                            <td>
-                                <button class="btn-edit" onclick="openEditModal(${index})">Sửa</button>
-                                <button class="btn-delete" onclick="safeDelete('${item["ID"]}', ${index + 1})">Xoá</button>
-                            </td>
-                        </tr>`;
-                });
-            } catch (e) { alert("Lỗi tải dữ liệu!"); }
-        }
-
-        // HÀM XOÁ AN TOÀN TUYỆT ĐỐI
-        async function safeDelete(id, rowIndex) {
-            // Kiểm tra nếu ID không tồn tại (dữ liệu cũ)
-            if (!id || id === "undefined" || id === "Chưa có ID") {
-                alert("Dòng này chưa có ID định danh. Để tránh xoá nhầm cả bảng, bạn hãy vào Google Sheet gõ tay 1 con số bất kỳ vào cột ID của dòng này rồi nhấn F5 lại nhé!");
-                return;
-            }
-
-            if (confirm(`CẢNH BÁO: Bạn đang xoá học viên có ID là ${id}. Chắc chắn chứ?`)) {
-                try {
-                    // CHỈ XOÁ KHI KHỚP CẢ ID VÀ ROW_INDEX (Bảo mật 2 lớp)
-                    const res = await fetch(`${API_URL}/ID/${id}`, {
-                        method: 'DELETE'
-                    });
-                    const result = await res.json();
-                    
-                    if (result.deleted >= 1) {
-                        alert("Đã xoá thành công 1 học viên!");
-                        loadData();
-                    } else {
-                        alert("Không tìm thấy học viên để xoá!");
-                    }
-                } catch (e) {
-                    alert("Lỗi kết nối API!");
-                }
+                currentData = await res.json();
+                
+                // Xóa ô tìm kiếm và vẽ lại bảng
+                document.getElementById('searchInput').value = "";
+                renderData(); 
+                updateStats();
+            } catch (e) { 
+                console.error(e);
+                tbody.innerHTML = `<tr><td colspan='8' style="color:red;">Lỗi: ${e.message}. Hãy kiểm tra lại link SheetDB!</td></tr>`; 
             }
         }
 
-        // Hàm Sửa (PATCH) - Sử dụng ID làm khóa chính
-        document.getElementById('editForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const index = document.getElementById('currentRowIndex').value;
-            const student = currentData[index];
-            
-            if (!student["ID"]) {
-                alert("Dòng này không có ID nên không thể sửa từ web. Hãy thêm ID trên Google Sheet trước!");
-                return;
-            }
-
-            const updatedInfo = {
-                "Họ & Tên": document.getElementById('editName').value,
-                "Số Điện Thoại": "'" + document.getElementById('editPhone').value,
-                "Email": document.getElementById('editEmail').value,
-                "Khóa Học Quan Tâm": document.getElementById('editCourse').value,
-                "Hình Thức Học": document.getElementById('editMode').value
-            };
-
-            try {
-                const res = await fetch(`${API_URL}/ID/${student["ID"]}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: updatedInfo })
-                });
-                if (res.ok) {
-                    alert("Cập nhật thành công!");
-                    closeModal();
-                    loadData();
-                }
-            } catch (e) { alert("Lỗi khi lưu!"); }
-        });
-
-        // Các hàm phụ giữ nguyên
-        function openEditModal(index) {
-            const student = currentData[index];
-            document.getElementById('currentRowIndex').value = index;
-            document.getElementById('editName').value = student["Họ & Tên"];
-            document.getElementById('editPhone').value = (student["Số Điện Thoại"] || "").toString().replace(/'/g, "");
-            document.getElementById('editEmail').value = student["Email"] || "";
-            document.getElementById('editCourse').value = student["Khóa Học Quan Tâm"];
-            document.getElementById('editMode').value = student["Hình Thức Học"];
-            document.getElementById('editModal').style.display = 'flex';
-        }
-        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
-
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            renderData(searchTerm);
-        });
-
+        // Hàm vẽ bảng dữ liệu
         function renderData(filter = "") {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "";
             
-            // Lọc dữ liệu dựa trên từ khóa tìm kiếm
             const filteredData = currentData.filter(item => {
                 const name = (item["Họ & Tên"] || "").toLowerCase();
                 const phone = (item["Số Điện Thoại"] || "").toString();
@@ -226,15 +156,14 @@
             });
 
             if (filteredData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Không tìm thấy kết quả nào.</td></tr>`;
+                tbody.innerHTML = "<tr><td colspan='8'>Không tìm thấy dữ liệu phù hợp.</td></tr>";
                 return;
             }
 
             filteredData.forEach((item) => {
-                // Tìm lại index gốc trong mảng currentData để Sửa/Xoá đúng dòng
                 const originalIndex = currentData.indexOf(item);
                 const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
-
+                
                 tbody.innerHTML += `
                     <tr>
                         <td>${item["ID"] || (originalIndex + 1)}</td>
@@ -251,19 +180,53 @@
                     </tr>`;
             });
         }
-        async function loadData() {
-            const tbody = document.getElementById('student-data');
-            tbody.innerHTML = "<tr><td colspan='8'>Đang tải...</td></tr>";
-            try {
-                const res = await fetch(API_URL);
-                currentData = await res.json();
-                // Xóa nội dung ô tìm kiếm khi làm mới dữ liệu
-                document.getElementById('searchInput').value = "";
-                renderData(); 
-            } catch (e) { 
-                tbody.innerHTML = "<tr><td colspan='8'>Lỗi tải dữ liệu!</td></tr>"; 
-            }
+
+        // Hàm cập nhật thống kê (Dashboard)
+        function updateStats() {
+            if (!currentData || currentData.length === 0) return;
+
+            const total = currentData.length;
+            
+            // Sử dụng toUpperCase để so sánh không phân biệt chữ hoa chữ thường
+            const online = currentData.filter(item => 
+                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("ONLINE")
+            ).length;
+
+            const offline = currentData.filter(item => 
+                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("OFFLINE")
+            ).length;
+
+            const solo = currentData.filter(item => 
+                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("1-1")
+            ).length;
+
+            // Kiểm tra phần tử tồn tại trước khi gán để tránh lỗi
+            if(document.getElementById('stat-total')) document.getElementById('stat-total').innerText = total;
+            if(document.getElementById('stat-offline')) document.getElementById('stat-offline').innerText = offline;
+            if(document.getElementById('stat-online')) document.getElementById('stat-online').innerText = online;
+            if(document.getElementById('stat-solo')) document.getElementById('stat-solo').innerText = solo;
         }
+
+        // Sự kiện tìm kiếm
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderData(e.target.value.toLowerCase());
+        });
+
+        // Các hàm modal (Giữ nguyên như bản cũ của bạn)
+        function openEditModal(index) {
+            const student = currentData[index];
+            document.getElementById('currentRowIndex').value = index;
+            document.getElementById('editName').value = student["Họ & Tên"];
+            document.getElementById('editPhone').value = (student["Số Điện Thoại"] || "").toString().replace(/'/g, "");
+            document.getElementById('editEmail').value = student["Email"] || "";
+            document.getElementById('editCourse').value = student["Khóa Học Quan Tâm"];
+            document.getElementById('editMode').value = student["Hình Thức Học"];
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        loadData();
     </script>
 </body>
 </html>

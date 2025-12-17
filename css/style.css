@@ -309,7 +309,7 @@ nav a:hover {
 
 /* --- 5. COURSES SECTION --- */
 .course-grid {
-    display: block; /* Vô hiệu hóa Grid cũ */
+    display: block;
 }
 
 /* Định dạng Swiper Container */
@@ -323,58 +323,112 @@ nav a:hover {
 
 /* Định dạng chung cho Course Card (Slide) */
 .course-card {
-    min-height: 480px;
-    background-color: var(--white);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: var(--shadow-soft);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #e0e6f0;
-
+    background: var(--white);
+    padding: 25px 35px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #edf2f7;
     display: flex;
     flex-direction: column;
-}
-
-.course-card h3 {
-    color: var(--primary-color); 
-    margin-bottom: 10px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(91, 140, 255, 0.15);
+    border-color: var(--primary-color);
 }
 
-.course-card .features {
-    list-style: none;
-    padding-left: 0;
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-align: left;
-}
-
-.course-card .features li {
-    padding-left: 1.5em;
-    position: relative;
-}
-
-.course-card .features li::before {
-    content: '★';
-    color: var(--secondary-color);
-    font-weight: bold;
-    display: inline-block;
-    width: 1.2em;
-    margin-left: -1.5em;
+.course-card::before {
+    content: '';
     position: absolute;
-    left: 0;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, transparent 50%, rgba(91, 140, 255, 0.05) 50%);
 }
 
-.course-card .btn-secondary {
-    margin-top: auto; 
-    align-self: flex-start; 
+.course-card h3 {
+    font-size: 1.5em;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 800;
 }
+
+.course-card .price {
+    display: inline-block;
+    font-size: 1.8em;
+    font-weight: 900;
+    color: #ef4444;
+    margin: 15px 0 20px 0;
+    padding: 8px 16px;
+    background: #fff1f2;
+    border-radius: 12px;
+    border: 1px dashed #fecaca;
+    width: fit-content;
+}
+.course-card .duration {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.course-card p {
+    font-size: 0.95em;
+    color: #475569;
+    margin-bottom: 20px;
+    flex-grow: 1; /* Đẩy phần list và nút xuống dưới cùng */
+}
+
+/* Danh sách đặc điểm */
+.course-card ul.features {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+    margin-bottom: 25px;
+}
+
+.course-card ul li {
+    font-size: 0.9em;
+    margin-bottom: 12px;
+    color: #334155;
+    display: flex;
+    align-items: center;
+}
+
+.course-card ul li i {
+    color: var(--secondary-color);
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+/* Nút bấm trong card */
+.course-card .btn-secondary {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 1em;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.course-card .btn-secondary:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.fa-star { color: #f1c40f; }
+.fa-calendar { color: #3498db; } 
+.fa-book { color: #2ecc71; }
 
 .swiper-button-next,
 .swiper-button-prev {
