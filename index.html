@@ -3,37 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đang Bảo Trì - ivyEnglish</title>
+    <title>ivyEnglish - Đang Bảo Trì Nâng Cấp</title>
     <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #5b8cff;
+            --secondary: #2ECC71;
+            --text: #334155;
+            --bg: #f8fafc;
+        }
+
         body {
+            margin: 0;
+            padding: 0;
             font-family: 'Roboto', sans-serif;
-            background: #f0f4f8;
+            background: var(--bg);
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
+            overflow: hidden;
+            color: var(--text);
         }
-        .container {
+
+        /* Hiệu ứng nền Gradient động cho thêm phần sinh động */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(91, 140, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .maintenance-card {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 400px;
+            padding: 50px 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        h1 { color: #5b8cff; margin-bottom: 10px; }
-        p { color: #64748b; line-height: 1.6; }
-        .icon { font-size: 50px; margin-bottom: 20px; }
+
+        .icon-box {
+            font-size: 70px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .quote-box {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #quote {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(91, 140, 255, 0.2);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(91, 140, 255, 0.3);
+            background: #4a7ae6;
+        }
+
+        /* Responsive cho Mobile */
+        @media (max-width: 480px) {
+            .maintenance-card { padding: 40px 20px; }
+            h1 { font-size: 24px; }
+        }
+
+        #quote {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 1.5;
+            display: block;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">🛠️</div>
-        <h1>Đang Bảo Trì</h1>
-        <p>ivyEnglish đang cập nhật nội dung các khóa học mới để phục vụ bạn tốt hơn.</p>
-        <p>Chúng tôi sẽ quay trở lại trong ít giờ tới. Xin lỗi vì sự bất tiện này!</p>
+
+    <div class="maintenance-card">
+        <div class="icon-box">🛠️</div>
+        <h1>Hệ Thống Đang Nâng Cấp</h1>
+        <p>Chào bạn, <strong>ivyEnglish</strong> đang cập nhật thêm các khóa học và tính năng mới để bạn có trải nghiệm tốt nhất.</p>
+        
+        <div class="quote-box">
+            <span id="quote">Đang tải thông điệp...</span>
+        </div>
+
+        <a href="https://zalo.me/0969730433" class="btn-contact">
+            <span>💬 Liên hệ hỗ trợ nhanh</span>
+        </a>
     </div>
+
+    <script>
+        // Danh sách các câu quote tiếng Anh hoặc lời nhắn bớt chán
+        const messages = [
+            "“A different language is a different vision of life.”",
+            "“Learning is a treasure that will follow its owner everywhere.”",
+            "“Đừng lo, chúng mình sẽ quay lại sớm thôi!”",
+            "“Dành 15 phút ôn từ vựng cũ trong lúc chờ bạn nhé!”",
+            "“Hệ thống đang được làm mới để phục vụ bạn tốt hơn.”",
+            "“The limits of my language mean the limits of my world.” – Ludwig Wittgenstein",
+            "“English is not just a language, it's a bridge to the world.”",
+            "“Don’t stop until you’re proud.”",
+            "“Mistakes are proof that you are trying. Keep speaking!”",
+            
+            // Mẹo học tập (Study Tips)
+            "💡 Tip: Try thinking in English for 5 minutes every day.",
+            "💡 Tip: Learn 5 new words today and try to use them in a sentence.",
+            "💡 Tip: Watching movies with English subtitles helps improve your listening.",
+            "💡 Tip: Don't be afraid to make mistakes. That's how you learn!",
+            
+            // Thông báo hệ thống
+            "🚀 ivyEnglish is getting a makeover. We'll be back stronger!",
+            "☕ Take a coffee break, we are updating the best courses for you.",
+            "🔧 We are fine-tuning the system to give you a smoother experience."
+        ];
+
+        // Hàm lấy ngẫu nhiên một thông điệp
+        function getRandomMessage() {
+            const quoteElement = document.getElementById('quote');
+            
+            // Tạo hiệu ứng biến mất (Fade out)
+            quoteElement.style.opacity = 0;
+            quoteElement.style.transform = "translateY(10px)";
+
+            setTimeout(() => {
+                // Đổi nội dung
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                quoteElement.innerText = messages[randomIndex];
+                
+                // Hiện hình trở lại (Fade in)
+                quoteElement.style.opacity = 1;
+                quoteElement.style.transform = "translateY(0)";
+            }, 500);
+        }
+
+        window.onload = () => {
+            getRandomMessage();
+            setInterval(getRandomMessage, 4000); 
+        };
+    </script>
+
 </body>
 </html>
