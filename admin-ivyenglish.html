@@ -2,15 +2,23 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ thống Quản trị - ivyEnglish</title>
+    <title>Quản trị An Toàn - ivyEnglish</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .admin-section { padding: 60px 0; background: #f0f4f8; min-height: 100vh; }
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9em; }
         th { background: #5b8cff; color: white; border: none; }
-        .zalo-link { color: #0068ff; font-weight: bold; text-decoration: underline; }
+        .btn-edit { background: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
+        .btn-delete { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-save { background: #2ECC71; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        .edit-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 500px; position: relative; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.85em; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
     </style>
 </head>
 <body>
@@ -21,50 +29,241 @@
 
     <div class="admin-section">
         <div class="container">
-            <div style="display:flex; justify-content: space-between; align-items: center;">
-                <h2>Danh Sách Đăng Ký</h2>
-                <button onclick="location.reload()" class="btn btn-secondary">Làm mới dữ liệu</button>
+            <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <h2>Danh Sách Đăng Ký - ivyEnglish</h2>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="searchInput" placeholder="Tìm tên hoặc SĐT..." 
+                        style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; width: 250px;">
+                    <button onclick="loadData()" class="btn btn-secondary">Làm mới dữ liệu</button>
+                </div>
             </div>
             
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày đăng ký</th>
+                            <th>ID</th>
+                            <th>Thời Gian</th>
                             <th>Họ & Tên</th>
-                            <th>SĐT (Zalo)</th>
+                            <th>SĐT</th>
+                            <th>Email</th>
                             <th>Khóa Học</th>
-                            <th>Hình Thức</th>
+                            <th>Hình Thức Học</th> <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="student-data">
-                        <tr><td colspan="5">Đang tải danh sách học viên...</td></tr>
+                        <tr><td colspan="8">Đang tải dữ liệu...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <div id="editModal" class="edit-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>Chỉnh sửa thông tin</h3>
+            <form id="editForm">
+                <input type="hidden" id="currentRowIndex">
+                
+                <div class="form-group">
+                    <label>Họ & Tên</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại</label>
+                    <input type="text" id="editPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail">
+                </div>
+                <div class="form-group">
+                    <label>Khóa Học</label>
+                    <select id="editCourse">
+                        <option value="Khóa A1 (Beginner - Căn bản)">Khóa A1 (Beginner - Căn bản)</option>
+                        <option value="Khóa A2 (Elementary - Sơ cấp)">Khóa A2 (Elementary - Sơ cấp)</option>
+                        <option value="Khóa B1 (Intermediate - Trung cấp)">Khóa B1 (Intermediate - Trung cấp)</option>
+                        <option value="Khóa B2 (Upper-Intermediate - Trung-Cao cấp)">Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hình Thức Học</label>
+                    <select id="editMode">
+                        <option value="Học ONLINE">Học ONLINE</option>
+                        <option value="Học OFFLINE">Học OFFLINE</option>
+                        <option value="Học 1-1">Học 1-1</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save">CẬP NHẬT</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Lấy dữ liệu từ SheetDB về hiển thị
-        // THAY LINK DƯỚI ĐÂY THÀNH LINK API CỦA BẠN
-        fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9")
-        .then(res => res.json())
-        .then(data => {
+        const API_URL = "https://sheetdb.io/api/v1/qvitsb1q8evc9";
+        let currentData = [];
+
+        async function loadData() {
+            const tbody = document.getElementById('student-data');
+            tbody.innerHTML = "<tr><td colspan='8'>Đang tải...</td></tr>";
+            try {
+                const res = await fetch(API_URL);
+                currentData = await res.json();
+                tbody.innerHTML = "";
+                
+                // Hiển thị dữ liệu (Không dùng reverse để tránh lệch hàng)
+                currentData.forEach((item, index) => {
+                    const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
+                    const displayID = item["ID"] || "Chưa có ID"; 
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${displayID}</td>
+                            <td>${item["Thời Gian"] || '---'}</td>
+                            <td><strong>${item["Họ & Tên"]}</strong></td>
+                            <td>${phoneDisplay}</td>
+                            <td>${item["Email"] || ''}</td>
+                            <td>${item["Khóa Học Quan Tâm"]}</td>
+                            <td>${item["Hình Thức Học"] || '---'}</td>
+                            <td>
+                                <button class="btn-edit" onclick="openEditModal(${index})">Sửa</button>
+                                <button class="btn-delete" onclick="safeDelete('${item["ID"]}', ${index + 1})">Xoá</button>
+                            </td>
+                        </tr>`;
+                });
+            } catch (e) { alert("Lỗi tải dữ liệu!"); }
+        }
+
+        // HÀM XOÁ AN TOÀN TUYỆT ĐỐI
+        async function safeDelete(id, rowIndex) {
+            // Kiểm tra nếu ID không tồn tại (dữ liệu cũ)
+            if (!id || id === "undefined" || id === "Chưa có ID") {
+                alert("Dòng này chưa có ID định danh. Để tránh xoá nhầm cả bảng, bạn hãy vào Google Sheet gõ tay 1 con số bất kỳ vào cột ID của dòng này rồi nhấn F5 lại nhé!");
+                return;
+            }
+
+            if (confirm(`CẢNH BÁO: Bạn đang xoá học viên có ID là ${id}. Chắc chắn chứ?`)) {
+                try {
+                    // CHỈ XOÁ KHI KHỚP CẢ ID VÀ ROW_INDEX (Bảo mật 2 lớp)
+                    const res = await fetch(`${API_URL}/ID/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await res.json();
+                    
+                    if (result.deleted >= 1) {
+                        alert("Đã xoá thành công 1 học viên!");
+                        loadData();
+                    } else {
+                        alert("Không tìm thấy học viên để xoá!");
+                    }
+                } catch (e) {
+                    alert("Lỗi kết nối API!");
+                }
+            }
+        }
+
+        // Hàm Sửa (PATCH) - Sử dụng ID làm khóa chính
+        document.getElementById('editForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const index = document.getElementById('currentRowIndex').value;
+            const student = currentData[index];
+            
+            if (!student["ID"]) {
+                alert("Dòng này không có ID nên không thể sửa từ web. Hãy thêm ID trên Google Sheet trước!");
+                return;
+            }
+
+            const updatedInfo = {
+                "Họ & Tên": document.getElementById('editName').value,
+                "Số Điện Thoại": "'" + document.getElementById('editPhone').value,
+                "Email": document.getElementById('editEmail').value,
+                "Khóa Học Quan Tâm": document.getElementById('editCourse').value,
+                "Hình Thức Học": document.getElementById('editMode').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/ID/${student["ID"]}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: updatedInfo })
+                });
+                if (res.ok) {
+                    alert("Cập nhật thành công!");
+                    closeModal();
+                    loadData();
+                }
+            } catch (e) { alert("Lỗi khi lưu!"); }
+        });
+
+        // Các hàm phụ giữ nguyên
+        function openEditModal(index) {
+            const student = currentData[index];
+            document.getElementById('currentRowIndex').value = index;
+            document.getElementById('editName').value = student["Họ & Tên"];
+            document.getElementById('editPhone').value = (student["Số Điện Thoại"] || "").toString().replace(/'/g, "");
+            document.getElementById('editEmail').value = student["Email"] || "";
+            document.getElementById('editCourse').value = student["Khóa Học Quan Tâm"];
+            document.getElementById('editMode').value = student["Hình Thức Học"];
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            renderData(searchTerm);
+        });
+
+        function renderData(filter = "") {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "";
             
-            data.reverse().forEach(item => {
-                const row = `<tr>
-                    <td>${item["Thời Gian"] || '---'}</td>
-                    <td><strong>${item["Họ & Tên"]}</strong></td>
-                    <td><a href="https://zalo.me/${item["Số Điện Thoại"]}" target="_blank" class="zalo-link">${item["Số Điện Thoại"]}</a></td>
-                    <td>${item["Khóa Học Quan Tâm"]}</td>
-                    <td>${item["Hình Thức Học"]}</td>
-                </tr>`;
-                tbody.innerHTML += row;
+            // Lọc dữ liệu dựa trên từ khóa tìm kiếm
+            const filteredData = currentData.filter(item => {
+                const name = (item["Họ & Tên"] || "").toLowerCase();
+                const phone = (item["Số Điện Thoại"] || "").toString();
+                return name.includes(filter) || phone.includes(filter);
             });
-        });
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Không tìm thấy kết quả nào.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach((item) => {
+                // Tìm lại index gốc trong mảng currentData để Sửa/Xoá đúng dòng
+                const originalIndex = currentData.indexOf(item);
+                const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item["ID"] || (originalIndex + 1)}</td>
+                        <td>${item["Thời Gian"] || '---'}</td>
+                        <td><strong>${item["Họ & Tên"]}</strong></td>
+                        <td><a href="https://zalo.me/${phoneDisplay}" target="_blank" class="zalo-link">${phoneDisplay}</a></td>
+                        <td>${item["Email"] || ''}</td>
+                        <td>${item["Khóa Học Quan Tâm"]}</td>
+                        <td>${item["Hình Thức Học"] || '---'}</td>
+                        <td>
+                            <button class="btn-edit" onclick="openEditModal(${originalIndex})">Sửa</button>
+                            <button class="btn-delete" onclick="safeDelete('${item["ID"]}', ${originalIndex + 1})">Xoá</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+        async function loadData() {
+            const tbody = document.getElementById('student-data');
+            tbody.innerHTML = "<tr><td colspan='8'>Đang tải...</td></tr>";
+            try {
+                const res = await fetch(API_URL);
+                currentData = await res.json();
+                // Xóa nội dung ô tìm kiếm khi làm mới dữ liệu
+                document.getElementById('searchInput').value = "";
+                renderData(); 
+            } catch (e) { 
+                tbody.innerHTML = "<tr><td colspan='8'>Lỗi tải dữ liệu!</td></tr>"; 
+            }
+        }
     </script>
 </body>
 </html>

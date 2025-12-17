@@ -302,11 +302,15 @@
 
     <div id="success-popup" class="popup-overlay">
         <div class="popup-content">
-            <span class="close-btn">×</span>
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>ĐĂNG KÝ THÀNH CÔNG!</h3>
-            <p>ivyEnglish đã nhận được thông tin của bạn. Chúng tôi sẽ liên hệ lại trong vòng 24 giờ tới để tư vấn chi tiết về khóa học.</p>
-            <button class="btn btn-primary close-btn">Đóng</button>
+            <button class="close-btn">&times;</button> 
+            
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Đăng ký thành công!</h3>
+            <p>Cảm ơn bạn đã quan tâm. ivyEnglish sẽ liên hệ với bạn trong vòng 24h tới.</p>
+            
+            <button id="close-popup" class="btn btn-primary">Đóng</button>
         </div>
     </div>
 
@@ -314,70 +318,75 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các phần tử cần thiết
         const form = document.getElementById('course-registration-form');
         const submitButton = document.getElementById('submit-button');
         const successPopup = document.getElementById('success-popup');
+        
+        // Lấy tất cả các nút có khả năng đóng popup
+        const closeBtns = document.querySelectorAll('.close-btn, #close-popup');
 
+        // --- 1. CODE FIX LỖI NÚT ĐÓNG ---
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                successPopup.style.display = 'none'; // Ẩn popup đi
+            });
+        });
+
+        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
+        window.addEventListener('click', function(event) {
+            if (event.target === successPopup) {
+                successPopup.style.display = 'none';
+            }
+        });
+
+        // --- 2. CODE GỬI DỮ LIỆU ĐI 2 NƠI (FORMSPREE & SHEETDB) ---
         if (form) {
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
                 submitButton.disabled = true;
-                submitButton.textContent = 'Đang gửi dữ liệu...';
+                submitButton.textContent = 'ĐANG GỬI...';
 
                 const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
+                const uniqueID = Date.now();
+                const currentTime = new Date().toLocaleString('vi-VN');
                 
-                data["Thời Gian"] = new Date().toLocaleString('vi-VN');
+                formData.append("ID", uniqueID);
+                formData.append("Thời Gian", currentTime);
+                const data = Object.fromEntries(formData.entries());
+
+                if (data["Số Điện Thoại"]) {
+                    data["Số Điện Thoại"] = "'" + data["Số Điện Thoại"];
+                }
 
                 try {
-                    // 1. GỬI ĐI FORMSPREE (Giữ nguyên link action hiện tại của form)
+                    // Gửi đi Formspree (để nhận mail)
                     const promiseFormspree = fetch(form.action, {
                         method: 'POST',
                         body: formData,
                         headers: { 'Accept': 'application/json' }
                     });
 
-                    // 2. GỬI ĐI GOOGLE SHEETS (Dùng SheetDB)
+                    // Gửi đi SheetDB (để lưu vào Google Sheet) - Gửi biến "data" đã có ID
                     const promiseSheetDB = fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: [data] })
+                        body: JSON.stringify({ data: [data] }) 
                     });
 
-                    const [resFormspree, resSheetDB] = await Promise.all([promiseFormspree, promiseSheetDB]);
-
-                    if (resFormspree.ok) {
-                        successPopup.style.display = 'flex';
-                        form.reset();
-                    } else {
-                        alert('Gửi mail gặp sự cố, nhưng dữ liệu có thể đã lưu vào Sheet. Admin sẽ kiểm tra lại!');
-                    }
-
+                    await Promise.all([promiseFormspree, promiseSheetDB]);
+                    successPopup.style.display = 'flex';
+                    form.reset();
                 } catch (error) {
-                    console.error('Lỗi:', error);
-                    alert('Không thể kết nối máy chủ. Vui lòng thử lại sau.');
+                    alert('Có lỗi xảy ra, vui lòng thử lại!');
                 } finally {
                     submitButton.disabled = false;
                     submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN';
                 }
             });
         }
-    });
-
-        // --- 2. Xử lý Đóng Pop-up ---
-        document.querySelectorAll('.close-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                successPopup.style.display = 'none';
-            });
+        
         });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === successPopup) {
-                successPopup.style.display = 'none';
-            }
-        });
-
 
         // --- 3. Xử lý Cuộn Trang (Back to Top) ---
         const scrollToTopButton = document.querySelector('.scroll-to-top');
