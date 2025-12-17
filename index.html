@@ -137,6 +137,35 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .time-box {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 12px;
+            min-width: 70px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-box span {
+            font-size: 24px;
+            font-weight: 900;
+            color: #5b8cff;
+        }
+
+        .time-box label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -146,6 +175,25 @@
         <h1>Hệ Thống Đang Nâng Cấp</h1>
         <p>Chào bạn, <strong>ivyEnglish</strong> đang cập nhật thêm các khóa học và tính năng mới để bạn có trải nghiệm tốt nhất.</p>
         
+        <div class="countdown-container">
+            <div class="time-box">
+                <span id="days">00</span>
+                <label>Ngày</label>
+            </div>
+            <div class="time-box">
+                <span id="hours">00</span>
+                <label>Giờ</label>
+            </div>
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <label>Phút</label>
+            </div>
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <label>Giây</label>
+            </div>
+        </div>
+
         <div class="quote-box">
             <span id="quote">Đang tải thông điệp...</span>
         </div>
@@ -156,6 +204,32 @@
     </div>
 
     <script>
+        // 1. Cấu hình thời gian kết thúc (Năm, Tháng-1, Ngày, Giờ, Phút)
+        // Ví dụ: 20:00 tối nay (Giả sử hôm nay là ngày 7 tháng 9 năm 2025)
+        const targetTime = new Date(2025, 11, 20, 10, 0, 0).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+
+            if (diff > 0) {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+                document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+                document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+                document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+            } else {
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại!</p>";
+            }
+        }
+
+        // Cập nhật mỗi giây
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
         // Danh sách các câu quote tiếng Anh hoặc lời nhắn bớt chán
         const messages = [
             "“A different language is a different vision of life.”",
