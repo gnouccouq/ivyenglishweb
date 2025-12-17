@@ -180,20 +180,15 @@
             "🔧 We are fine-tuning the system to give you a smoother experience."
         ];
 
-        // Hàm lấy ngẫu nhiên một thông điệp
         function getRandomMessage() {
             const quoteElement = document.getElementById('quote');
             
-            // Tạo hiệu ứng biến mất (Fade out)
             quoteElement.style.opacity = 0;
             quoteElement.style.transform = "translateY(10px)";
 
             setTimeout(() => {
-                // Đổi nội dung
                 const randomIndex = Math.floor(Math.random() * messages.length);
                 quoteElement.innerText = messages[randomIndex];
-                
-                // Hiện hình trở lại (Fade in)
                 quoteElement.style.opacity = 1;
                 quoteElement.style.transform = "translateY(0)";
             }, 500);
