@@ -313,40 +313,57 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     
     <script>
-        // --- 1. Xử lý Form Gửi (Không chuyển hướng) ---
+        document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('course-registration-form');
         const submitButton = document.getElementById('submit-button');
         const successPopup = document.getElementById('success-popup');
-        
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            submitButton.disabled = true;
-            submitButton.textContent = 'Đang Gửi...'; 
 
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: {
-                        'Accept': 'application/json'
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                submitButton.disabled = true;
+                submitButton.textContent = 'Đang gửi dữ liệu...';
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                data["Thời Gian"] = new Date().toLocaleString('vi-VN');
+
+                try {
+                    // 1. GỬI ĐI FORMSPREE (Giữ nguyên link action hiện tại của form)
+                    const promiseFormspree = fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    // 2. GỬI ĐI GOOGLE SHEETS (Dùng SheetDB)
+                    const promiseSheetDB = fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: [data] })
+                    });
+
+                    const [resFormspree, resSheetDB] = await Promise.all([promiseFormspree, promiseSheetDB]);
+
+                    if (resFormspree.ok) {
+                        successPopup.style.display = 'flex';
+                        form.reset();
+                    } else {
+                        alert('Gửi mail gặp sự cố, nhưng dữ liệu có thể đã lưu vào Sheet. Admin sẽ kiểm tra lại!');
                     }
-                });
 
-                if (response.ok) {
-                    successPopup.style.display = 'flex';
-                    form.reset();
-                } else {
-                    alert('Đã xảy ra lỗi khi gửi thông tin. Vui lòng thử lại sau.');
+                } catch (error) {
+                    console.error('Lỗi:', error);
+                    alert('Không thể kết nối máy chủ. Vui lòng thử lại sau.');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN';
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Mất kết nối. Vui lòng kiểm tra mạng và thử lại.');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN'; 
-            }
-        });
+            });
+        }
+    });
 
         // --- 2. Xử lý Đóng Pop-up ---
         document.querySelectorAll('.close-btn').forEach(btn => {
@@ -373,7 +390,6 @@
             }
         };
 
-        // Xử lý cuộn mượt mà khi click
         scrollToTopButton.addEventListener('click', function(e) {
             e.preventDefault();
             window.scrollTo({
@@ -426,12 +442,9 @@
             const header = document.querySelector('header');
 
             menuToggle.addEventListener('click', function() {
-                // Thêm/Xóa class 'nav-open' cho thẻ nav
                 nav.classList.toggle('nav-open'); 
-                // Thêm/Xóa class 'menu-active' cho icon toggle để đổi biểu tượng
                 menuToggle.classList.toggle('menu-active'); 
                 
-                // Đổi icon từ bars (☰) sang times (X) và ngược lại
                 if (menuToggle.classList.contains('menu-active')) {
                     menuToggle.classList.remove('fa-bars');
                     menuToggle.classList.add('fa-times');
@@ -440,11 +453,9 @@
                     menuToggle.classList.add('fa-bars');
                 }
 
-                // Ngăn chặn cuộn trang khi menu đang mở
                 document.body.classList.toggle('no-scroll');
             });
             
-            // Đóng menu khi click vào một liên kết
             nav.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (nav.classList.contains('nav-open')) {
@@ -456,7 +467,6 @@
                 });
             });
             
-            // Xử lý khi resize (chuyển từ mobile sang desktop)
             window.addEventListener('resize', function() {
                 if (window.innerWidth > 768) {
                     nav.classList.remove('nav-open');

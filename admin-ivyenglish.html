@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hệ thống Quản trị - ivyEnglish</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-section { padding: 60px 0; background: #f0f4f8; min-height: 100vh; }
+        .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #5b8cff; color: white; border: none; }
+        .zalo-link { color: #0068ff; font-weight: bold; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <script>
+        const pin = prompt("Mã truy cập quản trị:");
+        if (pin !== "2025") { window.location.href = "index.html"; }
+    </script>
+
+    <div class="admin-section">
+        <div class="container">
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <h2>Danh Sách Đăng Ký</h2>
+                <button onclick="location.reload()" class="btn btn-secondary">Làm mới dữ liệu</button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ngày đăng ký</th>
+                            <th>Họ & Tên</th>
+                            <th>SĐT (Zalo)</th>
+                            <th>Khóa Học</th>
+                            <th>Hình Thức</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-data">
+                        <tr><td colspan="5">Đang tải danh sách học viên...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lấy dữ liệu từ SheetDB về hiển thị
+        // THAY LINK DƯỚI ĐÂY THÀNH LINK API CỦA BẠN
+        fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9")
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('student-data');
+            tbody.innerHTML = "";
+            
+            data.reverse().forEach(item => {
+                const row = `<tr>
+                    <td>${item["Thời Gian"] || '---'}</td>
+                    <td><strong>${item["Họ & Tên"]}</strong></td>
+                    <td><a href="https://zalo.me/${item["Số Điện Thoại"]}" target="_blank" class="zalo-link">${item["Số Điện Thoại"]}</a></td>
+                    <td>${item["Khóa Học Quan Tâm"]}</td>
+                    <td>${item["Hình Thức Học"]}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        });
+    </script>
+</body>
+</html>
