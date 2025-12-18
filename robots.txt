@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin-ivyenglish.html
+Disallow: /index-error.html
+
+Sitemap: https://ivyenglish.io.vn/sitemap.xml
