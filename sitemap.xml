@@ -9,17 +9,22 @@
 
 <url>
   <loc>https://ivyenglish.io.vn/</loc>
-  <lastmod>2025-12-18T10:57:43+00:00</lastmod>
+  <lastmod>2025-12-18T20:02:12+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://ivyenglish.io.vn/leveltest.html</loc>
-  <lastmod>2025-12-18T10:57:43+00:00</lastmod>
+  <loc>https://ivyenglish.io.vn/ivyenglish-blog.html</loc>
+  <lastmod>2025-12-18T20:02:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ivyenglish.io.vn/ivyenglish-level-test.html</loc>
+  <lastmod>2025-12-18T20:02:12+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://ivyenglish.io.vn/index.html</loc>
-  <lastmod>2025-12-18T10:57:43+00:00</lastmod>
+  <lastmod>2025-12-18T20:02:12+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 
