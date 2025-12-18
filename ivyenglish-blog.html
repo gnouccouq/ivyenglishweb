@@ -6,7 +6,7 @@
     <meta name="google-site-verification" content="SIO0aKLY9cZk8-k09UBuQ6r3zaNIMu_pswgELE3FVWw" />
     <title>ivyEnglish - Blog</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="canonical" href="https://ivyenglish.io.vn/" />
+    <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-blog.html" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
                 <nav id="main-nav"> <a href="index.html#why-choose-us">Giới Thiệu</a>
                     <a href="index.html#courses">Khóa Học</a>
                     <a href="index.html#teachers">Giáo Viên</a>
-                    <a href="ivyenglish-blog.html">Blog</a>
+                    <a href="ivyenglish-blog.html">Tin Tức</a>
                     <a href="index.html#faq">Hỏi Đáp</a>
                     <a href="index.html#contact" class="cta-nav">Đăng Ký Ngay</a>
                 </nav>
@@ -205,22 +205,34 @@
         // CÁC HÀM NÀY PHẢI ĐỂ NGOÀI CÙNG
       function viewPost(encodedData) {
             const post = JSON.parse(decodeURIComponent(encodedData));
+            const shareLink = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(post.title)}`;
             document.getElementById('modal-content').innerHTML = `
                 <div class="post-header">
                     <span style="color:#5b8cff; font-weight:bold; font-size:0.8em; text-transform:uppercase;">${post.category}</span>
                     <h1 style="font-size:1.6em; margin:10px 0; line-height:1.3;">${post.title}</h1>
                     <p style="color:#888; font-size:0.85em;">📅 ${post.time}</p>
+                    <button onclick="copyToClipboard('${shareLink}')" style="background:#5b8cff; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                        <i class="fas fa-share-alt"></i> Sao chép link
+                    </button>
                 </div>
                 <hr style="border:0; border-top:1px dashed #eee; margin:20px 0;">
                 <div class="post-full-content">${post.content}</div>
             `;
             document.getElementById('postModal').style.display = 'block';
             document.body.style.overflow = 'hidden'; // Chống cuộn trang chính khi đang xem bài
+            window.history.pushState({}, '', `?id=${encodeURIComponent(post.title)}`);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Đã sao chép liên kết bài viết!");
+            });
         }
 
         function closePost() {
             document.getElementById('postModal').style.display = 'none';
             document.body.style.overflow = 'auto'; // Mở lại cuộn
+            window.history.pushState({}, '', window.location.pathname);
         }
 
         function stripHtml(html) {
@@ -242,6 +254,15 @@
                             <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(p))}')" style="color:#5b8cff; font-weight:bold; text-decoration:none;">Đọc thêm →</a>
                         </div>
                     </div>`).join('');
+                const urlParams = new URLSearchParams(window.location.search);
+                const postId = urlParams.get('id');
+                
+                if (postId) {
+                    const targetPost = data.find(p => p.title === postId);
+                    if (targetPost) {
+                        viewPost(encodeURIComponent(JSON.stringify(targetPost)));
+                    }
+                }
             }
             loadPosts();
         });
