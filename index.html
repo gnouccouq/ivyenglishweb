@@ -3,276 +3,579 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ivyEnglish - Đang Bảo Trì Nâng Cấp</title>
+    <meta name="google-site-verification" content="SIO0aKLY9cZk8-k09UBuQ6r3zaNIMu_pswgELE3FVWw" />
+    <title>ivyEnglish | Học Tiếng Anh Giao Tiếp Củ Chi - Chỉ 600K/3 Tháng</title>
+    <meta name="description" content="Khóa học tiếng Anh giao tiếp 3 tháng chỉ 600K. Phương pháp thực hành 100%, lớp học quy mô nhỏ tại Củ Chi, TP. HCM.">
+    <link rel="canonical" href="https://ivyenglish.io.vn/" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
     <link rel="icon" type="image/png" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #5b8cff;
-            --secondary: #2ECC71;
-            --text: #334155;
-            --bg: #f8fafc;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background: var(--bg);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            color: var(--text);
-        }
-
-        /* Hiệu ứng nền Gradient động cho thêm phần sinh động */
-        body::before {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(91, 140, 255, 0.05) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .maintenance-card {
-            background: white;
-            padding: 50px 30px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-            position: relative;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .icon-box {
-            font-size: 70px;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 28px;
-            margin-bottom: 15px;
-            font-weight: 900;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #64748b;
-            margin-bottom: 25px;
-        }
-
-        .quote-box {
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #quote {
-            font-style: italic;
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .btn-contact {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--primary);
-            color: white;
-            padding: 14px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(91, 140, 255, 0.2);
-        }
-
-        .btn-contact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(91, 140, 255, 0.3);
-            background: #4a7ae6;
-        }
-
-        /* Responsive cho Mobile */
-        @media (max-width: 480px) {
-            .maintenance-card { padding: 40px 20px; }
-            h1 { font-size: 24px; }
-        }
-
-        #quote {
-            font-style: italic;
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 1.5;
-            display: block;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .time-box {
-            background: #f1f5f9;
-            padding:5px;
-            border-radius: 18px;
-            min-width: 70px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .time-box span {
-            font-size: 24px;
-            font-weight: 900;
-            color: #5b8cff;
-        }
-
-        .time-box label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="maintenance-card">
-        <div class="icon-box">🛠️</div>
-        <h1>Hệ Thống Đang Nâng Cấp</h1>
-        <p>Chào bạn, <strong>ivyEnglish</strong> đang cập nhật thêm các khóa học và tính năng mới để bạn có trải nghiệm tốt nhất.</p>
-        
-        <div class="countdown-container">
-            <div class="time-box">
-                <span id="days">00</span>
-                <label>Ngày</label>
-            </div>
-            <div class="time-box">
-                <span id="hours">00</span>
-                <label>Giờ</label>
-            </div>
-            <div class="time-box">
-                <span id="minutes">00</span>
-                <label>Phút</label>
-            </div>
-            <div class="time-box">
-                <span id="seconds">00</span>
-                <label>Giây</label>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="header-logo-img">
+                </a>
+                <nav id="main-nav"> <a href="#why-choose-us">Giới Thiệu</a>
+                    <a href="#courses">Khóa Học</a>
+                    <a href="#teachers">Giáo Viên</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#faq">Hỏi Đáp</a>
+                    <a href="#contact" class="cta-nav">Đăng Ký Ngay</a>
+                </nav>
+                <i class="fas fa-bars menu-toggle"></i>
             </div>
         </div>
+    </header>
 
-        <div class="quote-box">
-            <span id="quote">Đang tải thông điệp...</span>
+    <section id="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>Tự Tin Giao Tiếp Trôi Chảy Sau 4 Tháng</h1>
+                <p>Phương pháp thực hành 100%, tập trung vào khả năng giao tiếp và sửa lỗi chi tiết.</p>
+                <a href="#contact" class="btn btn-primary">ĐĂNG KÝ HỌC</a>
+                <p class="small-text">Cam kết đầu ra B1 (theo khung CEFR)</p>
+            </div>
+            <div class="hero-image-col">
+                </div>
         </div>
+    </section>
 
-        <a href="https://zalo.me/0969730433" class="btn-contact">
-            <span>💬 Liên hệ hỗ trợ nhanh</span>
+    <section id="test" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <span style="color: var(--primary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">IvyEnglish Placement Test</span>
+                <h1 style="font-size: 3rem; margin: 15px 0; color: #1e293b; line-height: 1.2;">
+                    Đánh giá trình độ <br><span style="color: var(--primary-color);">Tiếng Anh</span> của bạn
+                </h1>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 30px; max-width: 500px;">
+                    Chỉ mất 5 phút để xác định chính xác lộ trình học phù hợp nhất. Hoàn toàn miễn phí và có kết quả ngay lập tức!
+                </p>
+                
+                <a href="leveltest.html" class="btn-test-highlight">
+                    Bắt đầu kiểm tra 
+                    <i class="fas fa-rocket"></i>
+                </a>
+            </div>
+
+            <div class="hero-image">
+                <img src="images/teacher-education-child-school-clip-art-nursery-d1c0568bc553297a7d2e8ab2cf3032ed.png" alt="English Learning">
+            </div>
+        </div>
+    </section>
+
+    <section id="why-choose-us" class="section-padding bg-light">
+    <div class="container">
+        <h2><i class="fas fa-tree" style="color: var(--xmas-green);"></i> Tại Sao Chọn ivyEnglish?</h2>
+        <div class="usp-grid">
+            <div class="usp-item">
+                <i class="fas fa-users icon-usp"></i>
+                <h3>Lớp Học Cực Nhỏ</h3>
+                <p>Tối đa **5 học viên/lớp**. Đảm bảo 100% thời gian nói và tương tác trực tiếp với giáo viên.</p>
+            </div>
+            <div class="usp-item">
+                <i class="fas fa-hand-holding-usd icon-usp"></i>
+                <h3>Chi Phí Tối Ưu</h3>
+                <p>Khóa học 3 tháng chỉ từ **600.000 VNĐ** với chất lượng quốc tế.</p>
+            </div>
+            <div class="usp-item">
+                <i class="fas fa-comments icon-usp"></i>
+                <h3>Thực Hành 100%</h3>
+                <p>Phương pháp Role-play và Discussion, không học thuật rườm rà, tập trung vào giao tiếp thực tế.</p>
+            </div>
+            <div class="usp-item">
+                <i class="fas fa-certificate icon-usp"></i>
+                <h3>Cam Kết Đầu Ra</h3>
+                <p>Cam kết đạt chuẩn **B1 (CEFR)** sau khóa học Trung cấp. Học lại miễn phí nếu không đạt.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- <section id="about" class="section-padding">
+        <div class="container">
+            <h2>Về Lớp Học Của Chúng Tôi</h2>
+            <div class="about-grid">
+                <div class="about-item">
+                    <h3>🎯 Mục Tiêu Rõ Ràng</h3>
+                    <p>Giúp học viên vượt qua rào cản sợ nói, áp dụng tiếng Anh vào công việc và cuộc sống hàng ngày.</p>
+                </div>
+                <div class="about-item">
+                    <h3>💡 Phương Pháp Độc Quyền</h3>
+                    <p>Học qua các tình huống thực tế (Role-play), lớp học quy mô nhỏ (tối đa 5 học viên) để tăng thời gian tương tác.</p>
+                </div>
+                <div class="about-item">
+                    <h3>👩‍🏫 Giáo Viên Chuyên Môn</h3>
+                    <p>100% giáo viên có chứng chỉ giảng dạy quốc tế (TESOL/CELTA), giàu kinh nghiệm và nhiệt huyết.</p>
+                </div>
+            </div>
+        </div>
+    </section>!-->
+
+    <section id="courses" class="section-padding bg-light">
+        <div class="container">
+            <h2><i class="fas fa-gift" style="color: var(--xmas-red);"></i> Các Khóa Học Chính</h2>
+            
+            <div class="swiper-container course-slider">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa A1 (Beginner - Căn bản)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Xây dựng nền tảng từ số 0. Tập trung chuẩn hóa phát âm 44 âm IPA và các mẫu câu giao tiếp cơ bản nhất.</p>
+                        <ul class="features">
+                            <p><strong>Đối tượng:</strong> Người mất gốc, người mới bắt đầu hoặc sợ nói tiếng Anh.</p>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa A2 (Elementary - Sơ cấp)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Nâng cấp từ vựng và ngữ pháp. Học cách nối câu, tăng tốc độ phản xạ và nghe hiểu các hội thoại thông thường.</p>
+                        <ul class="features">
+                            <p><strong>Đối tượng:</strong> Người đã biết cơ bản nhưng nói còn chậm, ngắt quãng.</p>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+                    
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa B1 (Pre-Intermediate - Trung cấp)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Luyện tư duy tiếng Anh trực tiếp. Tập trung vào kỹ năng thuyết trình, tranh luận và xử lý tình huống thực tế.</p>
+                        <ul class="features">
+                            <p><strong>Đối tượng:</strong> Người muốn giao tiếp trôi chảy để làm việc hoặc đi du lịch.</p>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+
+                    <div class="swiper-slide course-card">
+                        <h3>Khóa B2 (Intermediate - Cao cấp)</h3>
+                        <span class="price">600.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                        <p><strong>Mô tả:</strong> Hoàn thiện kỹ năng giao tiếp chuyên nghiệp. Sử dụng từ vựng học thuật và thành ngữ để nói chuyện tự nhiên như người bản xứ.</p>
+                        <ul class="features">
+                            <p><strong>Đối tượng:</strong> Người cần tiếng Anh để đàm phán, làm việc trong môi trường quốc tế.</p>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                    </div>
+                    
+                </div>
+                
+                <div class="swiper-pagination"></div>
+                
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                
+            </div>
+            </div>
+    </section>
+
+    <section id="teachers" class="section-padding">
+        <div class="container">
+            <h2>Đội Ngũ Giáo Viên Chuyên Nghiệp</h2>
+            <div class="teacher-grid">
+                <div class="teacher-card">
+                    <img src="images/avatar.jpg" alt="Ảnh Giáo viên Lê Văn Trung">
+                    <h3>Thầy Lê Văn Trung</h3>
+                    <p class="role">Giáo viên giao tiếp</p>
+                    <p>Thạc sĩ Ngôn ngữ Anh, 5 năm kinh nghiệm giảng dạy tại Đại học Quốc tế.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="faq" class="section-padding bg-light">
+        <div class="container">
+            <h2>💡 Câu Hỏi Thường Gặp (FAQ)</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>1. Tôi mất gốc tiếng Anh có theo kịp lớp giao tiếp này không?</h3>
+                    <p><strong>Trả lời:</strong> Có. ivyEnglish có lộ trình dành riêng cho người mất gốc, tập trung vào phát âm chuẩn (Phonetics) và từ vựng cốt lõi trước khi bước vào luyện nói các chủ đề thông dụng.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>2. Lớp học tập trung vào kỹ năng nào là chính?</h3>
+                    <p><strong>Trả lời:</strong> Trọng tâm là Nghe và Nói (Listening & Speaking). Bạn sẽ được thực hành phản xạ trực tiếp qua các tình huống đời sống và công việc thực tế thay vì chỉ học ngữ pháp trên giấy.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>3. Làm sao để tôi nhớ từ vựng lâu mà không cần học vẹt?</h3>
+                    <p><strong>Trả lời:</strong> ivyEnglish áp dụng phương pháp Học qua ngữ cảnh (Contextual Learning). Bạn không học từ đơn lẻ mà học qua cụm từ (collocations) và áp dụng ngay vào việc đặt câu, giúp não bộ ghi nhớ sâu hơn.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>4. Tôi bận rộn, nếu nghỉ một buổi có được học bù không?</h3>
+                    <p><strong>Trả lời:</strong> Có. Trung tâm hỗ trợ học bù ở các lớp có trình độ tương đương hoặc gửi video/nội dung bài học để bạn tự ôn tập tại nhà, đảm bảo không bị hổng kiến thức.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>5. Sau 1 tháng học, tôi có thể giao tiếp được ngay không?</h3>
+                    <p><strong>Trả lời:</strong> Bạn sẽ cải thiện rõ rệt khả năng phát âm và nắm được các mẫu câu giao tiếp cơ bản (chào hỏi, giới thiệu bản thân, mua sắm...). Để giao tiếp trôi chảy, bạn cần duy trì lộ trình từ 3-6 tháng.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>6. Lớp học có giới hạn số lượng học viên không?</h3>
+                    <p><strong>Trả lời:</strong> Có. Để đảm bảo mỗi học viên đều có thời gian thực hành nói, mỗi lớp thường giới hạn số lượng nhỏ (khoảng 4-6 người), giúp giáo viên có thể chỉnh sửa lỗi sai cho từng cá nhân.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>7. Tôi nên dành bao nhiêu thời gian tự học tại nhà để đạt hiệu quả cao nhất?</h3>
+                    <p><strong>Trả lời:</strong> Ngoài giờ học trên lớp, bạn nên dành ít nhất 15-30 phút mỗi ngày để nghe lại file ghi âm và luyện nói theo phương pháp Shadowing (nhại lại) được hướng dẫn tại lớp.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>8. ivyEnglish có lớp học Online không?</h3>
+                    <p><strong>Trả lời:</strong> Có. ivyEnglish cung cấp cả lớp học trực tuyến (Online Class) với cùng chất lượng giảng dạy và phương pháp học tương tự như lớp học trực tiếp (Offline Class).</p>
+                </div>
+                <div class="faq-item">
+                    <h3>9. Học phí 600.000đ/tháng áp dụng cho hình thức nào?</h3>
+                    <p><strong>Trả lời:</strong> Học phí 600.000đ/tháng áp dụng cho cả hình thức học trực tiếp (Offline) và học trực tuyến (Online).</p>
+                </div>
+                <div class="faq-item">
+                    <h3>10. Tôi muốn học 1 kèm 1 (1-1) có được không?</h3>
+                    <p><strong>Trả lời:</strong> Có. ivyEnglish cung cấp lớp học 1 kèm 1 (1-1) với giáo viên chuyên môn, giúp bạn tập trung vào điểm yếu và nâng cao kỹ năng một cách hiệu quả nhất.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding bg-light">
+        <div class="container">
+            <h2>Đăng Ký Khóa Học & Tư Vấn</h2>
+            
+            <div class="contact-grid"> 
+                
+                <form action="https://formspree.io/f/xqaropqe" method="POST" id="course-registration-form" class="vertical-contact-form">
+                    <input type="text" name="Họ & Tên" placeholder="Họ và Tên (*)" required>
+                    <input type="email" name="Email" placeholder="Email (*)" required>
+                    <input type="tel" name="Số Điện Thoại" placeholder="Số Điện Thoại(*)" 
+                            required 
+                            pattern="^0[0-9]{9}$" 
+                            title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số (VD: 0987654321)">
+                    <select name="Hình Thức Học" required>
+                        <option value="">Chọn Hình Thức Mà Bạn Muốn Học (*)</option>
+                        <option value="Học ONLINE">Học ONLINE</option>
+                        <option value="Học OFFLINE">Học OFFLINE</option>
+                        <option value="Học 1-1">Học 1-1</option>
+                    </select>
+                    <select name="Khóa Học Quan Tâm" required>
+                        <option value="">Chọn Khóa Học Bạn Quan Tâm (*)</option>
+                        <option value="Khóa A1 (Beginner - Căn bản)">Khóa A1 (Beginner - Căn bản)</option>
+                        <option value="Khóa A2 (Elementary - Sơ cấp)">Khóa A2 (Elementary - Sơ cấp)</option>
+                        <option value="Khóa B1 (Intermediate - Trung cấp)">Khóa B1 (Intermediate - Trung cấp)</option>
+                        <option value="Khóa B2 (Upper-Intermediate - Trung-Cao cấp)">Khóa B2 (Upper-Intermediate - Trung-Cao cấp)</option>
+                    </select>
+                    <div class="privacy-consent">
+                        <input type="checkbox" id="privacy-check" name="Đồng ý Chính sách" required>
+                        <label for="privacy-check">
+                            Bằng việc đăng ký thông tin, bạn xác nhận đã đọc và đồng ý với 
+                            <a href="#privacy-policy" target="_blank">Chính sách bảo mật</a> và 
+                            <a href="#terms-of-service" target="_blank">Điều khoản sử dụng</a> của chúng tôi. Cho phép ivyEnglish sử dụng thông tin mà bạn đã cung cấp nhằm mục đích tư vấn, tiếp thị sản phẩm và nghiên cứu thị trường.
+                            <span style="color: red;">*</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submit-button">GỬI THÔNG TIN TƯ VẤN</button>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d; text-align: center;">Chúng tôi sẽ liên hệ lại trong vòng 24 giờ.</p>
+                </form>
+                
+                <div class="contact-banner image-banner"> 
+                    <img 
+                        src="images/act-student-institute-school-education-a-group-of-students-5d9652581bf3d58603d9c8b3b65a4ca7.png" 
+                        alt="Hình ảnh ưu đãi đặc biệt đăng ký khóa học tiếng Anh" 
+                        loading="lazy"
+                    >
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <div class="container footer-grid">
+
+            <div class="footer-col contact-info">
+                <h3>Liên Hệ Trực Tiếp</h3>
+                <p>📞 Hotline: 096.973.0433</p>
+                <p>📧 Email: trunglv.997@gmail.com</p>
+                <p>📍 Địa chỉ: 2B, Đường số 222, xã Hoà Phú, huyện Củ Chi, TP. HCM</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i> 
+                    </a>
+                    <a href="https://zalo.me/0987654321" target="_blank" class="social-icon zalo">
+                        <i class="fas fa-comment-dots"></i> 
+                    </a>
+                    <a href="tel:0969730433" target="_blank" class="social-icon telephone">
+                        <i class="fas fa-phone-alt"></i> 
+                    </a>
+                    </div>
+            </div>
+
+            <div class="footer-col map-col">
+                <h3>Vị Trí Lớp Học</h3>
+                 <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2705.918383593283!2d106.6171217!3d10.9782897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d3b0ce4561e3%3A0x53f97df55a76a8e3!2sivy%20English%20-%20Ti%E1%BA%BFng%20Anh%20Giao%20Ti%E1%BA%BFp!5e1!3m2!1svi!2s!4v1765818027597!5m2!1svi!2s" 
+                    width="100%" 
+                    height="200" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+             <div class="footer-col copyright-col">
+                 <p>© 2024 ivyEnglish. Bảo lưu mọi quyền.</p>
+                 <p class="small-text">Thiết kế bởi Cường Nguyễn</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
         </a>
     </div>
 
+    <div id="success-popup" class="popup-overlay">
+        <div class="popup-content">
+            <button class="close-btn">&times;</button> 
+            
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Đăng ký thành công!</h3>
+            <p>Cảm ơn bạn đã quan tâm. ivyEnglish sẽ liên hệ với bạn trong vòng 24h tới.</p>
+            
+            <button id="close-popup" class="btn btn-primary">Đóng</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
     <script>
-        // 1. Cấu hình thời gian kết thúc (Năm, Tháng-1, Ngày, Giờ, Phút)
-        // Ví dụ: 20:00 tối nay (Giả sử hôm nay là ngày 7 tháng 9 năm 2025)
-        const targetTime = new Date(2025, 11, 20, 10, 0, 0).getTime();
+        document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các phần tử cần thiết
+        const form = document.getElementById('course-registration-form');
+        const submitButton = document.getElementById('submit-button');
+        const successPopup = document.getElementById('success-popup');
+        const snowContainer = document.body;
+        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
+        const snowflakesCount = 40;
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const diff = targetTime - now;
+        for (let i = 0; i < snowflakesCount; i++) {
+            createSnowflake(snowContainer);
+        }
+        
+        // Lấy tất cả các nút có khả năng đóng popup
+        const closeBtns = document.querySelectorAll('.close-btn, #close-popup');
 
-            if (diff > 0) {
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
+        // --- 1. CODE FIX LỖI NÚT ĐÓNG ---
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                successPopup.style.display = 'none'; // Ẩn popup đi
+            });
+        });
 
-                document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-                document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-                document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-                document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
-            } else {
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại!</p>";
+        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
+        window.addEventListener('click', function(event) {
+            if (event.target === successPopup) {
+                successPopup.style.display = 'none';
             }
+        });
+
+        // --- 2. CODE GỬI DỮ LIỆU ĐI 2 NƠI (FORMSPREE & SHEETDB) ---
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'ĐANG GỬI...';
+
+                const formData = new FormData(form);
+                const randomID = Math.floor(Math.random() * 1000000000);
+                const currentTime = new Date().toLocaleString('vi-VN');
+                
+                const data = Object.fromEntries(formData.entries());
+
+                data["ID"] = randomID; 
+                data["Thời Gian"] = currentTime;
+
+                if (data["Số Điện Thoại"]) {
+                    data["Số Điện Thoại"] = "'" + data["Số Điện Thoại"];
+                }
+
+                try {
+                    // Gửi đi Formspree (để nhận mail)
+                    const promiseFormspree = fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    // Gửi đi SheetDB (để lưu vào Google Sheet) - Gửi biến "data" đã có ID
+                    const promiseSheetDB = fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: [data] }) 
+                    });
+
+                    await Promise.all([promiseFormspree, promiseSheetDB]);
+                    successPopup.style.display = 'flex';
+                    form.reset();
+                } catch (error) {
+                    alert('Có lỗi xảy ra, vui lòng thử lại!');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'GỬI THÔNG TIN TƯ VẤN';
+                }
+            });
         }
+        
+        });
 
-        // Cập nhật mỗi giây
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-        // Danh sách các câu quote tiếng Anh hoặc lời nhắn bớt chán
-        const messages = [
-            "“A different language is a different vision of life.”",
-            "“Learning is a treasure that will follow its owner everywhere.”",
-            "“Đừng lo, chúng mình sẽ quay lại sớm thôi!”",
-            "“Dành 15 phút ôn từ vựng cũ trong lúc chờ bạn nhé!”",
-            "“Hệ thống đang được làm mới để phục vụ bạn tốt hơn.”",
-            "“The limits of my language mean the limits of my world.” – Ludwig Wittgenstein",
-            "“English is not just a language, it's a bridge to the world.”",
-            "“Don’t stop until you’re proud.”",
-            "“Mistakes are proof that you are trying. Keep speaking!”",
-            
-            // Mẹo học tập (Study Tips)
-            "💡 Tip: Try thinking in English for 5 minutes every day.",
-            "💡 Tip: Learn 5 new words today and try to use them in a sentence.",
-            "💡 Tip: Watching movies with English subtitles helps improve your listening.",
-            "💡 Tip: Don't be afraid to make mistakes. That's how you learn!",
-            
-            // Thông báo hệ thống
-            "🚀 ivyEnglish is getting a makeover. We'll be back stronger!",
-            "☕ Take a coffee break, we are updating the best courses for you.",
-            "🔧 We are fine-tuning the system to give you a smoother experience."
-        ];
+        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
+        const scrollToTopButton = document.querySelector('.scroll-to-top');
 
-        function getRandomMessage() {
-            const quoteElement = document.getElementById('quote');
-            
-            quoteElement.style.opacity = 0;
-            quoteElement.style.transform = "translateY(10px)";
-
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * messages.length);
-                quoteElement.innerText = messages[randomIndex];
-                quoteElement.style.opacity = 1;
-                quoteElement.style.transform = "translateY(0)";
-            }, 500);
-        }
-
-        window.onload = () => {
-            getRandomMessage();
-            setInterval(getRandomMessage, 4000); 
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
         };
-    </script>
 
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // --- 4. Khởi tạo Course Slider (Swiper.js) ---
+        document.addEventListener('DOMContentLoaded', function() {
+
+            if (typeof Swiper !== 'undefined') { 
+                const courseSwiper = new Swiper('.course-slider', {
+                    spaceBetween: 30,
+                    
+                    watchOverflow: true, 
+                    
+                    slidesPerView: 1,
+                    
+                    breakpoints: {
+                        768: {
+                            slidesPerView: 2, 
+                            spaceBetween: 40,
+                        },
+                        1024: {
+                            slidesPerView: 3, 
+                            spaceBetween: 50,
+                        },
+                    },
+                    
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                        disabledClass: 'swiper-button-disabled',
+                    },
+                });
+            } else {
+                 console.error("Lỗi: Không tìm thấy thư viện Swiper.js. Đảm bảo đã tải file swiper-bundle.min.js.");
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const header = document.querySelector('header');
+
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                
+                if (menuToggle.classList.contains('menu-active')) {
+                    menuToggle.classList.remove('fa-bars');
+                    menuToggle.classList.add('fa-times');
+                } else {
+                    menuToggle.classList.remove('fa-times');
+                    menuToggle.classList.add('fa-bars');
+                }
+
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('nav-open')) {
+                        nav.classList.remove('nav-open');
+                        menuToggle.classList.remove('menu-active', 'fa-times');
+                        menuToggle.classList.add('fa-bars');
+                        document.body.classList.remove('no-scroll');
+                    }
+                });
+            });
+            
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    nav.classList.remove('nav-open');
+                    menuToggle.classList.remove('menu-active', 'fa-times');
+                    menuToggle.classList.add('fa-bars');
+                    document.body.classList.remove('no-scroll');
+                }
+            });
+        });
+
+        function createSnowflake(container) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
+            snowflake.innerHTML = '❄'; 
+
+            // Random kích thước (từ 10px đến 25px)
+            const size = Math.random() * 15 + 10 + 'px';
+            snowflake.style.fontSize = size;
+            
+            // Random vị trí bắt đầu theo chiều ngang
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            
+            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
+            const duration = Math.random() * 10 + 5 + 's';
+            snowflake.style.animationDuration = duration;
+            
+            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            
+            // Random độ mờ (tạo chiều sâu)
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+
+            container.appendChild(snowflake);
+
+            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
+            snowflake.addEventListener('animationiteration', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
+            snowflake.addEventListener('animationend', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+        }
+    </script>
 </body>
 </html>
