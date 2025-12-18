@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ivyEnglish - Đang Bảo Trì Nâng Cấp</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #5b8cff;
+            --secondary: #2ECC71;
+            --text: #334155;
+            --bg: #f8fafc;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        /* Hiệu ứng nền Gradient động cho thêm phần sinh động */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(91, 140, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .maintenance-card {
+            background: white;
+            padding: 50px 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .icon-box {
+            font-size: 70px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .quote-box {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #quote {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(91, 140, 255, 0.2);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(91, 140, 255, 0.3);
+            background: #4a7ae6;
+        }
+
+        /* Responsive cho Mobile */
+        @media (max-width: 480px) {
+            .maintenance-card { padding: 40px 20px; }
+            h1 { font-size: 24px; }
+        }
+
+        #quote {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 1.5;
+            display: block;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .time-box {
+            background: #f1f5f9;
+            padding:5px;
+            border-radius: 18px;
+            min-width: 70px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-box span {
+            font-size: 24px;
+            font-weight: 900;
+            color: #5b8cff;
+        }
+
+        .time-box label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="maintenance-card">
+        <div class="icon-box">🛠️</div>
+        <h1>Hệ Thống Đang Nâng Cấp</h1>
+        <p>Chào bạn, <strong>ivyEnglish</strong> đang cập nhật thêm các khóa học và tính năng mới để bạn có trải nghiệm tốt nhất.</p>
+        
+        <div class="countdown-container">
+            <div class="time-box">
+                <span id="days">00</span>
+                <label>Ngày</label>
+            </div>
+            <div class="time-box">
+                <span id="hours">00</span>
+                <label>Giờ</label>
+            </div>
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <label>Phút</label>
+            </div>
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <label>Giây</label>
+            </div>
+        </div>
+
+        <div class="quote-box">
+            <span id="quote">Đang tải thông điệp...</span>
+        </div>
+
+        <a href="https://zalo.me/0969730433" class="btn-contact">
+            <span>💬 Liên hệ hỗ trợ nhanh</span>
+        </a>
+    </div>
+
+    <script>
+        // 1. Cấu hình thời gian kết thúc (Năm, Tháng-1, Ngày, Giờ, Phút)
+        // Ví dụ: 20:00 tối nay (Giả sử hôm nay là ngày 7 tháng 9 năm 2025)
+        const targetTime = new Date(2025, 11, 20, 10, 0, 0).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+
+            if (diff > 0) {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+                document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+                document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+                document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+            } else {
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại!</p>";
+            }
+        }
+
+        // Cập nhật mỗi giây
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        // Danh sách các câu quote tiếng Anh hoặc lời nhắn bớt chán
+        const messages = [
+            "“A different language is a different vision of life.”",
+            "“Learning is a treasure that will follow its owner everywhere.”",
+            "“Đừng lo, chúng mình sẽ quay lại sớm thôi!”",
+            "“Dành 15 phút ôn từ vựng cũ trong lúc chờ bạn nhé!”",
+            "“Hệ thống đang được làm mới để phục vụ bạn tốt hơn.”",
+            "“The limits of my language mean the limits of my world.” – Ludwig Wittgenstein",
+            "“English is not just a language, it's a bridge to the world.”",
+            "“Don’t stop until you’re proud.”",
+            "“Mistakes are proof that you are trying. Keep speaking!”",
+            
+            // Mẹo học tập (Study Tips)
+            "💡 Tip: Try thinking in English for 5 minutes every day.",
+            "💡 Tip: Learn 5 new words today and try to use them in a sentence.",
+            "💡 Tip: Watching movies with English subtitles helps improve your listening.",
+            "💡 Tip: Don't be afraid to make mistakes. That's how you learn!",
+            
+            // Thông báo hệ thống
+            "🚀 ivyEnglish is getting a makeover. We'll be back stronger!",
+            "☕ Take a coffee break, we are updating the best courses for you.",
+            "🔧 We are fine-tuning the system to give you a smoother experience."
+        ];
+
+        function getRandomMessage() {
+            const quoteElement = document.getElementById('quote');
+            
+            quoteElement.style.opacity = 0;
+            quoteElement.style.transform = "translateY(10px)";
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                quoteElement.innerText = messages[randomIndex];
+                quoteElement.style.opacity = 1;
+                quoteElement.style.transform = "translateY(0)";
+            }, 500);
+        }
+
+        window.onload = () => {
+            getRandomMessage();
+            setInterval(getRandomMessage, 4000); 
+        };
+    </script>
+
+</body>
+</html>
