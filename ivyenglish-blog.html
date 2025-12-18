@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="SIO0aKLY9cZk8-k09UBuQ6r3zaNIMu_pswgELE3FVWw" />
+    <title>ivyEnglish - Blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="canonical" href="https://ivyenglish.io.vn/" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="header-logo-img">
+                </a>
+                <nav id="main-nav"> <a href="index.html#why-choose-us">Giới Thiệu</a>
+                    <a href="index.html#courses">Khóa Học</a>
+                    <a href="index.html#teachers">Giáo Viên</a>
+                    <a href="ivyenglish-blog.html">Blog</a>
+                    <a href="index.html#faq">Hỏi Đáp</a>
+                    <a href="index.html#contact" class="cta-nav">Đăng Ký Ngay</a>
+                </nav>
+                <i class="fas fa-bars menu-toggle"></i>
+            </div>
+        </div>
+    </header>
+    <!-- End Navbar -->
+
+    <!-- Blog Content -->
+    <section class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
+        <h2 style="text-align: center; margin-bottom: 40px; font-size: 2em; color: #2c3e50;">Tin tức & Kinh nghiệm học tập</h2>
+        
+        <div id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
+            <p style="text-align: center; grid-column: 1/-1;">Đang tải bài viết mới nhất...</p>
+        </div>
+    </section>
+    <!-- End Blog Content -->
+
+    <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
+    </div>
+
+    
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const snowContainer = document.body;
+        const snowflakesCount = 40;
+
+        for (let i = 0; i < snowflakesCount; i++) {
+            createSnowflake(snowContainer);
+        }
+
+        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
+        const scrollToTopButton = document.querySelector('.scroll-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        
+
+        async function loadBlogPosts() {
+        const container = document.getElementById('blog-container');
+        const API_POSTS = "https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts"; // Nhớ thêm ?sheet=Posts
+
+        try {
+            const response = await fetch(API_POSTS);
+            const posts = await response.json();
+
+            if (posts.length === 0) {
+                container.innerHTML = "<p>Chưa có bài viết nào được đăng.</p>";
+                return;
+            }
+
+            container.innerHTML = posts.reverse().map(post => `
+                <div class="blog-card">
+                    <img src="${post.image || 'https://via.placeholder.com/400x200'}" alt="${post.title}">
+                    <div class="blog-card-body">
+                        <span class="blog-category">${post.category}</span>
+                        <h3 class="blog-title">${post.title}</h3>
+                        <div class="blog-time">📅 ${post.time}</div>
+                        <div class="blog-excerpt">
+                            ${stripHtml(post.content).substring(0, 120)}...
+                        </div>
+                        <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(post))}')" class="btn-readmore">Đọc thêm →</a>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error("Lỗi tải bài viết:", error);
+            container.innerHTML = "<p>Không thể tải bài viết lúc này.</p>";
+        }
+    }
+
+    // Hàm bổ trợ để loại bỏ tag HTML khi hiển thị đoạn trích dẫn (Excerpt)
+    function stripHtml(html) {
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+    }
+    // Chạy hàm khi trang web tải xong
+    window.addEventListener('DOMContentLoaded', loadBlogPosts);
+
+        function createSnowflake(container) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄'; 
+            const size = Math.random() * 15 + 10 + 'px';
+            snowflake.style.fontSize = size;
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 10 + 5 + 's';
+            snowflake.style.animationDuration = duration;
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+            container.appendChild(snowflake);
+            snowflake.addEventListener('animationiteration', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+            snowflake.addEventListener('animationend', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+        }
+    });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const header = document.querySelector('header');
+
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                
+                if (menuToggle.classList.contains('menu-active')) {
+                    menuToggle.classList.remove('fa-bars');
+                    menuToggle.classList.add('fa-times');
+                } else {
+                    menuToggle.classList.remove('fa-times');
+                    menuToggle.classList.add('fa-bars');
+                }
+
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('nav-open')) {
+                        nav.classList.remove('nav-open');
+                        menuToggle.classList.remove('menu-active', 'fa-times');
+                        menuToggle.classList.add('fa-bars');
+                        document.body.classList.remove('no-scroll');
+                    }
+                });
+            });
+            
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    nav.classList.remove('nav-open');
+                    menuToggle.classList.remove('menu-active', 'fa-times');
+                    menuToggle.classList.add('fa-bars');
+                    document.body.classList.remove('no-scroll');
+                }
+            });
+        });
+        // CÁC HÀM NÀY PHẢI ĐỂ NGOÀI CÙNG
+      function viewPost(encodedData) {
+            const post = JSON.parse(decodeURIComponent(encodedData));
+            document.getElementById('modal-content').innerHTML = `
+                <div class="post-header">
+                    <span style="color:#5b8cff; font-weight:bold; font-size:0.8em; text-transform:uppercase;">${post.category}</span>
+                    <h1 style="font-size:1.6em; margin:10px 0; line-height:1.3;">${post.title}</h1>
+                    <p style="color:#888; font-size:0.85em;">📅 ${post.time}</p>
+                </div>
+                <hr style="border:0; border-top:1px dashed #eee; margin:20px 0;">
+                <div class="post-full-content">${post.content}</div>
+            `;
+            document.getElementById('postModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Chống cuộn trang chính khi đang xem bài
+        }
+
+        function closePost() {
+            document.getElementById('postModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Mở lại cuộn
+        }
+
+        function stripHtml(html) {
+            let t = document.createElement("DIV"); t.innerHTML = html;
+            return t.textContent || t.innerText || "";
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load bài viết
+            async function loadPosts() {
+                const res = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts");
+                const data = await res.json();
+                document.getElementById('blog-container').innerHTML = data.reverse().map(p => `
+                    <div class="blog-card">
+                        <img src="${p.image || 'https://via.placeholder.com/400x200'}" style="width:100%; height:200px; object-fit:cover;">
+                        <div style="padding:20px;">
+                            <h3 style="margin:0 0 10px 0;">${p.title}</h3>
+                            <p style="font-size:0.9em; color:#666;">${stripHtml(p.content).substring(0,100)}...</p>
+                            <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(p))}')" style="color:#5b8cff; font-weight:bold; text-decoration:none;">Đọc thêm →</a>
+                        </div>
+                    </div>`).join('');
+            }
+            loadPosts();
+        });
+
+        window.onclick = function(e) { if(e.target.id === 'postModal') closePost(); }
+    </script>
+
+    <div id="postModal">
+        <div class="modal-container">
+            <span class="close-btn" onclick="closePost()">&times;</span>
+            <div id="modal-content">
+                </div>
+        </div>
+    </div>
+
+    <footer id="main-footer">
+        <div class="container footer-grid">
+
+            <div class="footer-col contact-info">
+                <h3>Liên Hệ Trực Tiếp</h3>
+                <p>📞 Hotline: 096.973.0433</p>
+                <p>📧 Email: trunglv.997@gmail.com</p>
+                <p>📍 Địa chỉ: 2B, Đường số 222, xã Hoà Phú, huyện Củ Chi, TP. HCM</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i> 
+                    </a>
+                    <a href="https://zalo.me/0987654321" target="_blank" class="social-icon zalo">
+                        <i class="fas fa-comment-dots"></i> 
+                    </a>
+                    <a href="tel:0969730433" target="_blank" class="social-icon telephone">
+                        <i class="fas fa-phone-alt"></i> 
+                    </a>
+                    </div>
+            </div>
+
+            <div class="footer-col map-col">
+                <h3>Vị Trí Lớp Học</h3>
+                 <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2705.918383593283!2d106.6171217!3d10.9782897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d3b0ce4561e3%3A0x53f97df55a76a8e3!2sivy%20English%20-%20Ti%E1%BA%BFng%20Anh%20Giao%20Ti%E1%BA%BFp!5e1!3m2!1svi!2s!4v1765818027597!5m2!1svi!2s" 
+                    width="100%" 
+                    height="200" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+             <div class="footer-col copyright-col">
+                 <p>© 2024 ivyEnglish. Bảo lưu mọi quyền.</p>
+                 <p class="small-text">Thiết kế bởi Cường Nguyễn</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

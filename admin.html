@@ -5,20 +5,128 @@
     <title>Quản trị An Toàn - ivyEnglish</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
     <style>
-        .admin-section { padding: 60px 0; background: #f0f4f8; min-height: 100vh; }
+        :root {
+            --sidebar-width: 260px;
+            --primary-color: #5b8cff;
+            --dark-bg: #2c3e50;
+            --light-bg: #f0f4f8;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: 900;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu {
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+
+        .menu-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: #34495e;
+            color: white;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- STYLE TABLE (Dữ liệu gốc) --- */
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9em; }
-        th { background: #5b8cff; color: white; border: none; }
+        th { background: var(--primary-color); color: white; border: none; }
+        
         .btn-edit { background: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
         .btn-delete { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
         .btn-save { background: #2ECC71; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        
+        /* --- STYLE FORM ĐĂNG BÀI --- */
+        .post-form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box;
+        }
+        /* Quill Editor Height */
+        #editor-container {
+            height: 400px;
+            background: white;
+            border-radius: 0 0 8px 8px;
+        }
+        .ql-toolbar {
+            border-radius: 8px 8px 0 0;
+            background: #f8f9fa;
+        }
+
+        /* --- MODAL EDIT (Dữ liệu gốc) --- */
         .edit-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 500px; position: relative; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.85em; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
     </style>
 </head>
@@ -28,18 +136,35 @@
         if (pin !== "2025") { window.location.href = "index.html"; }
     </script>
 
-    <div class="admin-section">
-        <div class="container">
+    <div class="sidebar">
+        <div class="sidebar-header">IVY ENGLISH</div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" onclick="switchTab('tab-students', this)">
+                <span>Quản lý Học viên</span>
+            </div>
+            <div class="menu-item" onclick="switchTab('tab-posts', this)">
+                <span>Đăng bài viết</span>
+            </div>
+        </div>
+        <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
+            <span>Thoát hệ thống</span>
+        </a>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="tab-students" class="tab-content active">
             <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
                 <h2 style="margin:0;">Bảng Điều Khiển Quản Trị</h2>
                 <div style="display: flex; gap: 10px; flex-grow: 1; justify-content: flex-end;">
                     <div style="position: relative;">
                         <input type="text" id="searchInput" placeholder="Tìm tên hoặc SĐT học viên..." 
-                            style="padding: 16px 15px; border-radius: 20px; border: 1px solid #ccc; width: 300px; outline: none; transition: 0.3s;">
+                            style="padding: 16px 15px; border-radius: 20px; border: 1px solid #ccc; width: 300px; outline: none;">
                     </div>
-                    <button onclick="loadData()" class="btn btn-secondary" style="border-radius: 20px;">Làm mới</button>
+                    <button onclick="loadData()" style="padding: 10px 20px; border-radius: 20px; cursor: pointer; border: none; background: #95a5a6; color: white;">Làm mới</button>
                 </div>
             </div>
+
             <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
                 <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #5b8cff;">
                     <h4 style="color: #888; font-size: 0.8em; margin-bottom: 5px;">TỔNG HỌC VIÊN</h4>
@@ -58,6 +183,7 @@
                     <p id="stat-solo" style="font-size: 1.6em; font-weight: 900; color: #e74c3c; margin: 0;">0</p>
                 </div>
             </div>
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -68,7 +194,8 @@
                             <th>SĐT</th>
                             <th>Email</th>
                             <th>Khóa Học</th>
-                            <th>Hình Thức Học</th> <th>Thao tác</th>
+                            <th>Hình Thức Học</th> 
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="student-data">
@@ -77,15 +204,48 @@
                 </table>
             </div>
         </div>
+
+        <div id="tab-posts" class="tab-content">
+            <h2 style="margin-bottom: 20px;">Đăng Bài Viết Mới</h2>
+            <div class="post-form-container">
+                <form id="postForm">
+                    <div class="form-group">
+                        <label>Tiêu đề bài viết</label>
+                        <input type="text" id="postTitle" placeholder="Nhập tiêu đề..." required>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Danh mục</label>
+                            <select id="postCategory">
+                                <option value="Kinh nghiệm">Kinh nghiệm học tập</option>
+                                <option value="Tài liệu">Tài liệu miễn phí</option>
+                                <option value="Sự kiện">Tin tức - Sự kiện</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Link ảnh bìa (Thumbnail)</label>
+                            <input type="text" id="postImage" placeholder="Dán link ảnh hoặc để trống...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nội dung chi tiết (Chèn được ảnh từ máy hoặc web)</label>
+                        <div id="editor-container"></div>
+                    </div>
+
+                    <button type="submit" class="btn-save" style="background: var(--primary-color); height: 50px;">XUẤT BẢN BÀI VIẾT</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div id="editModal" class="edit-modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
             <h3>Chỉnh sửa thông tin</h3>
             <form id="editForm">
                 <input type="hidden" id="currentRowIndex">
-                
                 <div class="form-group">
                     <label>Họ & Tên</label>
                     <input type="text" id="editName" required>
@@ -121,58 +281,71 @@
     </div>
 
     <script>
+        // --- KHỞI TẠO BỘ SOẠN THẢO THÔNG MINH (QUILL) ---
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image'], // Nút Image cho phép chọn file từ máy hoặc dán link
+                    ['clean']
+                ]
+            }
+        });
+
         const API_URL = "https://sheetdb.io/api/v1/qvitsb1q8evc9";
         let currentData = [];
 
-        // Hàm tải dữ liệu chính
+        // Hàm chuyển Tab
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- QUẢN LÝ DỮ LIỆU HỌC VIÊN (GIỮ NGUYÊN GỐC) ---
         async function loadData() {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "<tr><td colspan='8'>Đang kết nối đến máy chủ...</td></tr>";
-            
             try {
                 const res = await fetch(API_URL);
                 if (!res.ok) throw new Error("Không thể kết nối API");
-                
                 currentData = await res.json();
-                
-                // Xóa ô tìm kiếm và vẽ lại bảng
                 document.getElementById('searchInput').value = "";
                 renderData(); 
                 updateStats();
             } catch (e) { 
                 console.error(e);
-                tbody.innerHTML = `<tr><td colspan='8' style="color:red;">Lỗi: ${e.message}. Hãy kiểm tra lại link SheetDB!</td></tr>`; 
+                tbody.innerHTML = `<tr><td colspan='8' style="color:red;">Lỗi: ${e.message}</td></tr>`; 
             }
         }
 
-        // Hàm vẽ bảng dữ liệu
         function renderData(filter = "") {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "";
-            
             const filteredData = currentData.filter(item => {
                 const name = (item["Họ & Tên"] || "").toLowerCase();
                 const phone = (item["Số Điện Thoại"] || "").toString();
                 return name.includes(filter) || phone.includes(filter);
             });
-
             if (filteredData.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='8'>Không tìm thấy dữ liệu phù hợp.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='8'>Không tìm thấy dữ liệu.</td></tr>";
                 return;
             }
-
             filteredData.forEach((item) => {
                 const originalIndex = currentData.indexOf(item);
                 const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
-                
                 tbody.innerHTML += `
                     <tr>
                         <td>${item["ID"] || (originalIndex + 1)}</td>
                         <td>${item["Thời Gian"] || '---'}</td>
                         <td><strong>${item["Họ & Tên"]}</strong></td>
-                        <td><a href="https://zalo.me/${phoneDisplay}" target="_blank" class="zalo-link">${phoneDisplay}</a></td>
+                        <td><a href="https://zalo.me/${phoneDisplay}" target="_blank">${phoneDisplay}</a></td>
                         <td>${item["Email"] || ''}</td>
-                        <td>${item["Khóa Học Quan Tâm"]}</td>
+                        <td>${item["Khóa Học Quan Tâm"] || item["Khóa Học"]}</td>
                         <td>${item["Hình Thức Học"] || '---'}</td>
                         <td>
                             <button class="btn-edit" onclick="openEditModal(${originalIndex})">Sửa</button>
@@ -182,50 +355,65 @@
             });
         }
 
-        // Hàm cập nhật thống kê (Dashboard)
         function updateStats() {
-            if (!currentData || currentData.length === 0) return;
-
-            const total = currentData.length;
-            
-            // Sử dụng toUpperCase để so sánh không phân biệt chữ hoa chữ thường
-            const online = currentData.filter(item => 
-                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("ONLINE")
-            ).length;
-
-            const offline = currentData.filter(item => 
-                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("OFFLINE")
-            ).length;
-
-            const solo = currentData.filter(item => 
-                (item["Hình Thức Học"] || "").toString().toUpperCase().includes("1-1")
-            ).length;
-
-            // Kiểm tra phần tử tồn tại trước khi gán để tránh lỗi
-            if(document.getElementById('stat-total')) document.getElementById('stat-total').innerText = total;
-            if(document.getElementById('stat-offline')) document.getElementById('stat-offline').innerText = offline;
-            if(document.getElementById('stat-online')) document.getElementById('stat-online').innerText = online;
-            if(document.getElementById('stat-solo')) document.getElementById('stat-solo').innerText = solo;
+            if (!currentData.length) return;
+            document.getElementById('stat-total').innerText = currentData.length;
+            document.getElementById('stat-online').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("ONLINE")).length;
+            document.getElementById('stat-offline').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("OFFLINE")).length;
+            document.getElementById('stat-solo').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("1-1")).length;
         }
 
-        // Sự kiện tìm kiếm
         document.getElementById('searchInput').addEventListener('input', (e) => {
             renderData(e.target.value.toLowerCase());
         });
 
-        // Các hàm modal (Giữ nguyên như bản cũ của bạn)
         function openEditModal(index) {
             const student = currentData[index];
             document.getElementById('currentRowIndex').value = index;
             document.getElementById('editName').value = student["Họ & Tên"];
             document.getElementById('editPhone').value = (student["Số Điện Thoại"] || "").toString().replace(/'/g, "");
             document.getElementById('editEmail').value = student["Email"] || "";
-            document.getElementById('editCourse').value = student["Khóa Học Quan Tâm"];
+            document.getElementById('editCourse').value = student["Khóa Học Quan Tâm"] || student["Khóa Học"];
             document.getElementById('editMode').value = student["Hình Thức Học"];
             document.getElementById('editModal').style.display = 'flex';
         }
 
         function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        // --- XỬ LÝ ĐĂNG BÀI (PHIÊN BẢN THÔNG MINH) ---
+        document.getElementById('postForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerText = "ĐANG ĐĂNG...";
+            btn.disabled = true;
+
+            const postData = {
+                title: document.getElementById('postTitle').value,
+                category: document.getElementById('postCategory').value,
+                image: document.getElementById('postImage').value,
+                content: quill.root.innerHTML, // Lấy nội dung từ Quill Editor
+                time: new Date().toLocaleString('vi-VN')
+            };
+
+            try {
+                const response = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: [postData] })
+                });
+
+                if (response.ok) {
+                    alert("Đăng bài thành công!");
+                    this.reset();
+                    quill.setContents([]);
+                }
+            } catch (error) {
+                alert("Có lỗi xảy ra khi kết nối!");
+            } finally {
+                btn.innerText = "XUẤT BẢN BÀI VIẾT";
+                btn.disabled = false;
+            }
+        });
 
         loadData();
     </script>

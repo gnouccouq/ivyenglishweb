@@ -1,4 +1,8 @@
 /* --- 1. Thiết lập Chung (Reset & Fonts) --- */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 :root {
 --primary-color: #5b8cff;
     --secondary-color: #2ECC71;
@@ -23,6 +27,7 @@
 
 body {
     margin: 0;
+    display: flex;
     font-family: 'Roboto', sans-serif;
     color: var(--text-color);
     line-height: 1.6;
@@ -32,6 +37,8 @@ body {
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+    flex-direction: column;
+    margin: 0;
 }
 
 body::before, body::after {
@@ -256,6 +263,91 @@ nav a:hover {
     opacity: 0.15;
     z-index: -1;
     border-radius: 50%;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+.blog-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+.blog-card img { width: 100%; height: 200px; object-fit: cover; }
+.blog-card-body { padding: 20px; flex-grow: 1; }
+.blog-category { color: #5b8cff; font-size: 0.8em; font-weight: bold; text-transform: uppercase; }
+.blog-title { font-size: 1.2em; margin: 10px 0; color: #333; line-height: 1.4; }
+.blog-time { color: #888; font-size: 0.8em; margin-bottom: 15px; }
+.blog-excerpt { color: #666; font-size: 0.9em; line-height: 1.6; }
+.btn-readmore { 
+    display: inline-block; margin-top: 15px; color: #5b8cff; 
+    text-decoration: none; font-weight: bold; font-size: 0.9em; 
+}
+
+.post-full-content img {
+    max-width: 100%; /* Đảm bảo ảnh không to quá khung */
+    height: auto;
+    border-radius: 10px;
+    margin: 20px 0;
+    display: block;
+}
+.post-full-content iframe { /* Nếu bạn có chèn video youtube */
+    width: 100%;
+    height: 450px;
+    border-radius: 10px;
+}
+
+#postModal {
+    display: none; 
+    position: fixed; 
+    z-index: 9999; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    overflow-y: auto;
+}
+
+.modal-container {
+    background: white; 
+    width: 95%; 
+    max-width: 800px; 
+    margin: 30px auto; /* Cách trên dưới 30px */
+    border-radius: 15px; 
+    position: relative; 
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* Nút đóng modal */
+.close-btn {
+    position: sticky; /* Giữ nút đóng luôn ở trên khi cuộn */
+    top: 0;
+    float: right;
+    font-size: 35px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+}
+
+/* Tối ưu nội dung bên trong bài viết */
+.post-full-content {
+    line-height: 1.8;
+    color: #333;
+    word-wrap: break-word; /* Chống tràn chữ */
+}
+
+.post-full-content img {
+    max-width: 100% !important; /* Quan trọng: Ảnh không bao giờ tràn màn hình */
+    height: auto !important;
+    border-radius: 10px;
+    margin: 15px 0;
+    display: block;
 }
 
 /* Các nút chung */
@@ -764,14 +856,16 @@ nav a:hover {
     padding: 50px 0 25px 0;
     text-align: center;
     display: block;
+    margin-top: auto;
+    flex-shrink: 0;
+    width: 100%;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr; 
+    grid-template-columns: repeat(3, 1fr); /* Chia đều 3 cột */
     gap: 30px;
-    align-items: flex-start;
-    text-align: left;
+    align-items: start;
 }
 
 .footer-col h3 {
@@ -976,6 +1070,10 @@ nav a:hover {
     }
 }
 
+section.blog-section {
+    flex: 1 0 auto;
+}
+
 /* --- 11. FAQ SECTION --- */
 .faq-list {
     max-width: 800px;
@@ -1058,6 +1156,22 @@ nav a:hover {
 /* ========================================================= */
 /* --- MEDIA QUERIES (Responsive cho Mobile) --- */
 /* ========================================================= */
+
+ #postModal {
+        display: none; 
+        position: fixed; 
+        z-index: 10000;
+        padding-top: 0;
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: rgba(0,0,0,0.8); 
+        /* Cho phép cuộn cả modal nếu nội dung quá dài */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
 @media (max-width: 768px) {
     
     .container {
@@ -1129,6 +1243,51 @@ nav a:hover {
         color: var(--white);
     }
 
+    #blog-container {
+        grid-template-columns: 1fr; /* 1 cột duy nhất trên điện thoại */
+        gap: 20px;
+    }
+    .post-full-content {
+        font-size: 1em !important;
+    }
+
+   .modal-container {
+        width: 100% !important;
+        margin: 0 !important;
+        min-height: 100vh;
+        border-radius: 0 !important;
+        padding: 50px 15px 30px 15px !important;
+    }
+
+    .post-full-content h1 {
+        font-size: 1.5em; /* Tiêu đề vừa phải */
+    }
+
+    .post-full-content {
+        font-size: 1.05em; /* Chữ to hơn một chút để dễ đọc trên đt */
+    }
+
+    .post-full-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block;
+        margin: 15px auto;
+    }
+    
+   .close-btn {
+        position: fixed; /* Giữ nút đóng cố định góc trên */
+        top: 10px;
+        right: 20px;
+        background: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
     /* 2. Hero Section */
     #hero {
         padding: 50px 0;
@@ -1192,9 +1351,8 @@ nav a:hover {
     
     /* 6. Footer */
     .footer-grid {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr; /* Mobile về 1 cột */
         text-align: center;
-        gap: 30px; 
     }
     .footer-col {
         margin-bottom: 10px;
