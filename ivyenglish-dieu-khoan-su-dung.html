@@ -226,5 +226,32 @@
             });
         }
     </script>
+
+    <script>
+    async function includeHTML() {
+        // Danh sách các thành phần cần nhúng
+        const components = [
+            { id: 'header-placeholder', file: 'header.html' },
+            { id: 'footer-placeholder', file: 'footer.html' }
+        ];
+
+        for (const comp of components) {
+            const element = document.getElementById(comp.id);
+            if (element) {
+                try {
+                    const response = await fetch(comp.file);
+                    if (response.ok) {
+                        element.innerHTML = await response.text();
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải file: " + comp.file, err);
+                }
+            }
+        }
+    }
+
+    // Chạy hàm khi trang web tải xong
+    document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
 </body>
 </html>

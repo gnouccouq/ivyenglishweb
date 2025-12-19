@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ivyEnglish - Giáo Viên</title>
+    <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-teacher.html" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --p-blue: #1a237e; 
+            --s-gold: #c5a059; 
+            --light-bg: #f4f7fa;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body { 
+            background: var(--light-bg); 
+            font-family: 'Roboto', sans-serif; 
+            color: var(--text-dark); 
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .teacher-header { 
+            background: var(--p-blue); 
+            color: white; 
+            padding: 150px 0; 
+            text-align: center; 
+            margin-bottom: -100px; 
+        }
+
+        /* Main Profile Card */
+        .profile-card { 
+            background: white; 
+            border-radius: 30px; 
+            display: flex; 
+            gap: 50px; 
+            padding: 50px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-left { flex: 0 0 350px; text-align: center; }
+        .teacher-photo { 
+            width: 100%; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+            margin-bottom: 25px; 
+            border: 5px solid #fff;
+        }
+
+        .badge-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .badge-item { 
+            background: #eef2ff; 
+            padding: 8px 18px; 
+            border-radius: 50px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: var(--p-blue); 
+        }
+
+        /* Right Content */
+        .profile-right { flex: 1; }
+        .section-title { 
+            color: var(--p-blue); 
+            font-size: 26px; 
+            font-weight: 900; 
+            margin: 40px 0 20px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 2px; background: #e2e8f0;
+        }
+
+        /* Cert Grid */
+        .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .cert-card { 
+            background: #fff; 
+            border: 1px solid #edf2f7; 
+            padding: 20px; 
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            transition: 0.3s; 
+        }
+        .cert-card:hover { border-color: var(--s-gold); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .cert-icon { font-size: 35px; color: var(--s-gold); }
+
+        /* Philosophy & Timeline */
+        .philosophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .philo-item { 
+            background: #f8fafc; 
+            padding: 20px; 
+            border-radius: 15px; 
+            text-align: center; 
+            border-bottom: 4px solid var(--s-gold); 
+        }
+
+        .timeline { border-left: 3px solid var(--s-gold); padding-left: 30px; margin-left: 10px; }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -37px; top: 5px;
+            width: 12px; height: 12px; background: var(--s-gold); border-radius: 50%;
+        }
+
+        /* Gallery */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .gallery-img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; transition: 0.3s; }
+
+        /* Call to Action */
+        .cta-box {
+            background: linear-gradient(135deg, var(--p-blue), #2a3eb1);
+            color: white; padding: 50px; border-radius: 30px; text-align: center;
+            margin: 60px 0; box-shadow: 0 20px 40px rgba(26, 35, 126, 0.2);
+        }
+        .btn-cta {
+            display: inline-block; background: var(--s-gold); color: white;
+            padding: 18px 45px; border-radius: 50px; text-decoration: none;
+            font-weight: 900; font-size: 18px; transition: 0.3s; margin-top: 20px;
+        }
+        .btn-cta:hover { transform: scale(1.05); background: white; color: var(--p-blue); }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .profile-card { flex-direction: column; padding: 30px; }
+            .profile-left { flex: 0 0 auto; width: 100%; }
+            .cert-grid, .philosophy-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-body);">
+    <div id="header-placeholder"></div>
+
+    <section class="teacher-header">
+    <div class="container">
+        <h1 style="font-size: 40px; margin: 0;">GIÁO VIÊN CHỦ NHIỆM</h1>
+        <p style="opacity: 0.8;">Tận tâm - Chuyên nghiệp - Truyền cảm hứng</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="profile-card">
+        <div class="profile-left">
+            <img src="images/avatar.jpg" alt="Lê Văn Trung (Mr. Jaime)" class="teacher-photo">
+            <h2 style="color: var(--p-blue); font-size: 50px; margin: 0;">Lê Văn Trung (Mr. Jaime)</h2>
+            <p style="color: var(--s-gold); font-weight: 900; letter-spacing: 2px; margin-top: 5px;">FOUNDER & HEAD TEACHER</p>
+            
+            <div class="badge-list">
+                <span class="badge-item"><i class="fas fa-star"></i> IELTS 8.5</span>
+                <span class="badge-item"><i class="fas fa-certificate"></i> TESOL</span>
+                <span class="badge-item"><i class="fas fa-university"></i> ĐH SƯ PHẠM</span>
+            </div>
+        </div>
+
+        <div class="profile-right">
+            <h3 class="section-title"><i class="fas fa-user-graduate"></i> Giới thiệu</h3>
+            <p>Hơn 10 năm kinh nghiệm trong lĩnh vực luyện thi IELTS và tiếng Anh giao tiếp. Mr. Jaime được biết đến với phương pháp giảng dạy hiện đại, tập trung vào việc cá nhân hóa lộ trình cho từng học viên, giúp tối ưu hóa thời gian và đạt kết quả cao nhất.</p>
+
+            <h3 class="section-title"><i class="fas fa-award"></i> Bằng cấp & Chứng chỉ</h3>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <i class="fas fa-file-contract cert-icon"></i>
+                    <div><h4>IELTS Academic</h4><p>Overall 8.5 (British Council)</p></div>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-medal cert-icon"></i>
+                    <div><h4>Chứng chỉ TESOL</h4><p>Giảng dạy chuẩn Quốc tế</p></div>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-graduation-cap cert-icon"></i>
+                    <div><h4>Cử nhân Ngôn ngữ Anh</h4><p>ĐH Sư Phạm TP.HCM</p></div>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-check-double cert-icon"></i>
+                    <div><h4>TKT Certificate</h4><p>Cambridge English</p></div>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-lightbulb"></i> Triết lý giáo dục</h3>
+            <div class="philosophy-grid">
+                <div class="philo-item"><strong>Tương tác</strong><br><small>Học qua trải nghiệm và phản xạ liên tục.</small></div>
+                <div class="philo-item"><strong>Thấu hiểu</strong><br><small>Nắm vững bản chất, không học vẹt.</small></div>
+                <div class="philo-item"><strong>Tận tâm</strong><br><small>Đồng hành sát sao từng học viên.</small></div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-history"></i> Hành trình sự nghiệp</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div style="font-weight: 900; color: var(--p-blue);">2014 - 2018</div>
+                    <div>Tốt nghiệp loại Ưu khoa Ngôn ngữ Anh - ĐH Sư Phạm TP.HCM.</div>
+                </div>
+                <div class="timeline-item">
+                    <div style="font-weight: 900; color: var(--p-blue);">2019 - 2022</div>
+                    <div>Trưởng bộ môn IELTS tại các hệ thống Anh ngữ lớn.</div>
+                </div>
+                <div class="timeline-item">
+                    <div style="font-weight: 900; color: var(--p-blue);">2023 - Nay</div>
+                    <div>Sáng lập ivyEnglish - Trao giá trị tri thức cho cộng đồng.</div>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-images"></i> Hình ảnh thực tế</h3>
+            <div class="gallery-grid">
+                <img src="images/class1.jpg" class="gallery-img" alt="Lớp học">
+                <img src="images/class2.jpg" class="gallery-img" alt="Hoạt động">
+                <img src="images/class3.jpg" class="gallery-img" alt="Học viên">
+            </div>
+
+            <div class="cta-box">
+                <h2 style="color: var(--s-gold);">Bắt đầu hành trình chinh phục Tiếng Anh?</h2>
+                <p>Liên hệ để được Mr. Jaime kiểm tra trình độ và tư vấn lộ trình miễn phí.</p>
+                <a href="index.html#contact" class="btn-cta">ĐĂNG KÝ TƯ VẤN NGAY</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+
+    <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các phần tử cần thiết
+        const snowContainer = document.body;
+        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
+        const snowflakesCount = 40;
+
+        for (let i = 0; i < snowflakesCount; i++) {
+            createSnowflake(snowContainer);
+        }
+       
+        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
+        window.addEventListener('click', function(event) {
+            if (event.target === successPopup) {
+                successPopup.style.display = 'none';
+            }
+        });
+    
+        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
+        const scrollToTopButton = document.querySelector('.scroll-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+         // --- 4. Xử lý Thanh Điều Hướng (Responsive Nav) ---
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const header = document.querySelector('header');
+
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                
+                if (menuToggle.classList.contains('menu-active')) {
+                    menuToggle.classList.remove('fa-bars');
+                    menuToggle.classList.add('fa-times');
+                } else {
+                    menuToggle.classList.remove('fa-times');
+                    menuToggle.classList.add('fa-bars');
+                }
+
+                document.body.classList.toggle('no-scroll');
+            });
+            
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('nav-open')) {
+                        nav.classList.remove('nav-open');
+                        menuToggle.classList.remove('menu-active', 'fa-times');
+                        menuToggle.classList.add('fa-bars');
+                        document.body.classList.remove('no-scroll');
+                    }
+                });
+            });
+            
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    nav.classList.remove('nav-open');
+                    menuToggle.classList.remove('menu-active', 'fa-times');
+                    menuToggle.classList.add('fa-bars');
+                    document.body.classList.remove('no-scroll');
+                }
+            });
+        });
+
+        function createSnowflake(container) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
+            snowflake.innerHTML = '❄'; 
+
+            // Random kích thước (từ 10px đến 25px)
+            const size = Math.random() * 15 + 10 + 'px';
+            snowflake.style.fontSize = size;
+            
+            // Random vị trí bắt đầu theo chiều ngang
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            
+            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
+            const duration = Math.random() * 10 + 5 + 's';
+            snowflake.style.animationDuration = duration;
+            
+            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
+            snowflake.style.animationDelay = Math.random() * 5 + 's';
+            
+            // Random độ mờ (tạo chiều sâu)
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+
+            container.appendChild(snowflake);
+
+            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
+            snowflake.addEventListener('animationiteration', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
+            snowflake.addEventListener('animationend', function() {
+                snowflake.remove();
+                createSnowflake(container);
+            });
+        }
+    </script>
+
+    <script>
+    async function includeHTML() {
+        // Danh sách các thành phần cần nhúng
+        const components = [
+            { id: 'header-placeholder', file: 'header.html' },
+            { id: 'footer-placeholder', file: 'footer.html' }
+        ];
+
+        for (const comp of components) {
+            const element = document.getElementById(comp.id);
+            if (element) {
+                try {
+                    const response = await fetch(comp.file);
+                    if (response.ok) {
+                        element.innerHTML = await response.text();
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải file: " + comp.file, err);
+                }
+            }
+        }
+    }
+
+    // Chạy hàm khi trang web tải xong
+    document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
+</body>
+</html>
