@@ -489,46 +489,6 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            const header = document.querySelector('header');
-
-            menuToggle.addEventListener('click', function() {
-                nav.classList.toggle('nav-open'); 
-                menuToggle.classList.toggle('menu-active'); 
-                
-                if (menuToggle.classList.contains('menu-active')) {
-                    menuToggle.classList.remove('fa-bars');
-                    menuToggle.classList.add('fa-times');
-                } else {
-                    menuToggle.classList.remove('fa-times');
-                    menuToggle.classList.add('fa-bars');
-                }
-
-                document.body.classList.toggle('no-scroll');
-            });
-            
-            nav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        nav.classList.remove('nav-open');
-                        menuToggle.classList.remove('menu-active', 'fa-times');
-                        menuToggle.classList.add('fa-bars');
-                        document.body.classList.remove('no-scroll');
-                    }
-                });
-            });
-            
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
-            });
-        });
 
         function createSnowflake(container) {
             const snowflake = document.createElement('div');
@@ -590,6 +550,49 @@
                 }
             }
         }
+        initMenuLogic();
+    }
+    function initMenuLogic() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.getElementById('main-nav');
+
+        // Kiểm tra xem các phần tử có tồn tại không trước khi gán sự kiện
+        if (!menuToggle || !nav) return;
+
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('nav-open'); 
+            menuToggle.classList.toggle('menu-active'); 
+            
+            if (menuToggle.classList.contains('menu-active')) {
+                menuToggle.classList.remove('fa-bars');
+                menuToggle.classList.add('fa-times');
+            } else {
+                menuToggle.classList.remove('fa-times');
+                menuToggle.classList.add('fa-bars');
+            }
+
+            document.body.classList.toggle('no-scroll');
+        });
+        
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (nav.classList.contains('nav-open')) {
+                    nav.classList.remove('nav-open');
+                    menuToggle.classList.remove('menu-active', 'fa-times');
+                    menuToggle.classList.add('fa-bars');
+                    document.body.classList.remove('no-scroll');
+                }
+            });
+        });
+        
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active', 'fa-times');
+                menuToggle.classList.add('fa-bars');
+                document.body.classList.remove('no-scroll');
+            }
+        });
     }
 
     // Chạy hàm khi trang web tải xong
