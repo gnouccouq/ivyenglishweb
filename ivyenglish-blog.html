@@ -36,6 +36,18 @@
     </header>
     <!-- End Navbar -->
 
+    <div id="featured-posts-container" style="margin-bottom: 50px;">
+        <h2 style="color: var(--xmas-red); border-bottom: 2px solid var(--xmas-gold); padding-bottom: 10px;">
+            <i class="fas fa-star"></i> BÀI VIẾT NỔI BẬT
+        </h2>
+        <div id="featured-list" class="blog-grid"></div>
+    </div>
+
+    <div id="regular-posts-container">
+        <h2 style="color: var(--primary-color);">TẤT CẢ BÀI VIẾT</h2>
+        <div id="blog-list" class="blog-grid"></div>
+    </div>
+
     <!-- Blog Content -->
     <section class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
         <h2 style="text-align: center; margin-bottom: 40px; font-size: 2em; color: #2c3e50;">Tin tức & Kinh nghiệm học tập</h2>
@@ -97,7 +109,7 @@
 
         async function loadBlogPosts() {
         const container = document.getElementById('blog-container');
-        const API_POSTS = "https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts"; // Nhớ thêm ?sheet=Posts
+        const API_POSTS = "https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts"; // Nhớ thêm ?sheet=Posts
 
         try {
             const response = await fetch(API_POSTS);
@@ -158,6 +170,35 @@
                 snowflake.remove();
                 createSnowflake(container);
             });
+        }
+    });
+
+    fetch('https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts')
+    .then(res => res.json())
+    .then(data => {
+        const featuredList = document.getElementById('featured-list');
+        const blogList = document.getElementById('blog-list');
+        
+        // Làm sạch container
+        featuredList.innerHTML = '';
+        blogList.innerHTML = '';
+
+        // Đảo ngược để bài mới nhất hiện lên đầu
+        data.reverse().forEach(post => {
+            const postHTML = createPostCard(post); // Hàm tạo giao diện card bài viết của bạn
+
+            if (post.NoiBat === "true") {
+                // Đẩy vào mục Nổi bật
+                featuredList.insertAdjacentHTML('beforeend', postHTML);
+            } else {
+                // Đẩy vào mục thông thường
+                blogList.insertAdjacentHTML('beforeend', postHTML);
+            }
+        });
+
+        // Ẩn mục nổi bật nếu không có bài nào được chọn
+        if (featuredList.innerHTML === '') {
+            document.getElementById('featured-posts-container').style.display = 'none';
         }
     });
     </script>
@@ -244,7 +285,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Load bài viết
             async function loadPosts() {
-                const res = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts");
+                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts");
                 const data = await res.json();
                 document.getElementById('blog-container').innerHTML = data.reverse().map(p => `
                     <div class="blog-card">

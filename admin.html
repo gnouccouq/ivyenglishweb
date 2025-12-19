@@ -251,6 +251,13 @@
                         </div>
                     </div>
 
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="post-featured" style="width: 20px; height: 20px;">
+                            <span style="font-weight: bold;">Đánh dấu là bài viết NỔI BẬT</span>
+                        </label>
+                    </div>
+
                     <div class="form-group">
                         <label>Nội dung chi tiết (Chèn được ảnh từ máy hoặc web)</label>
                         <div id="editor-container"></div>
@@ -307,6 +314,14 @@
                 <input type="hidden" id="edit-old-title">
                 <input type="text" id="edit-title" placeholder="Tiêu đề" style="width:100%; margin:10px 0; padding:8px;">
                 <input type="text" id="edit-image" placeholder="Link ảnh" style="width:100%; margin:10px 0; padding:8px;">
+                <div style="margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 8px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="edit-post-featured" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 500; color: var(--primary-color);">
+                            <i class="fas fa-star"></i> Đánh dấu là bài viết NỔI BẬT
+                        </span>
+                    </label>
+                </div>
                 <div id="editor-edit-container" style="height: 300px; margin-bottom: 50px;"></div>
                 <div style="text-align: right;">
                     <button onclick="saveEditPost()" class="btn-action" style="background:#2ecc71; padding:10px 20px;">CẬP NHẬT</button>
@@ -380,7 +395,7 @@
             }
         });
 
-        const API_URL = "https://sheetdb.io/api/v1/qvitsb1q8evc9";
+        const API_URL = "https://sheetdb.io/api/v1/stjh3ikcs21t8";
         let currentData = [];
 
         // Hàm chuyển Tab
@@ -520,6 +535,7 @@
         document.getElementById('postForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button');
+            const isFeatured = document.getElementById('post-featured').checked;
             btn.innerText = "ĐANG ĐĂNG...";
             btn.disabled = true;
 
@@ -528,11 +544,12 @@
                 category: document.getElementById('postCategory').value,
                 image: document.getElementById('postImage').value,
                 content: quill.root.innerHTML, // Lấy nội dung từ Quill Editor
-                time: new Date().toLocaleString('vi-VN')
+                time: new Date().toLocaleString('vi-VN'),
+                NoiBat: isFeatured ? "true" : "false"
             };
 
             try {
-                const response = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts", {
+                const response = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: [postData] })
@@ -557,7 +574,7 @@
         // 1. Tải danh sách bài viết
         async function loadAdminPosts() {
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=Posts");
+                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts");
                 const data = await res.json();
                 const container = document.getElementById('admin-post-list');
                 container.innerHTML = data.reverse().map(p => `
@@ -579,6 +596,7 @@
             document.getElementById('edit-old-title').value = post.title;
             document.getElementById('edit-title').value = post.title;
             document.getElementById('edit-image').value = post.image;
+            document.getElementById('edit-post-featured').checked = (post.NoiBat === "true");
             quillEdit.root.innerHTML = post.content;
             document.getElementById('editModalPost').style.display = 'block';
         }
@@ -589,14 +607,16 @@
         // 4. Lưu bài viết sau khi sửa (Sử dụng PATCH theo Title)
         async function saveEditPost() {
             const oldTitle = document.getElementById('edit-old-title').value;
+            const isFeatured = document.getElementById('edit-post-featured').checked;
             const updateData = {
                 title: document.getElementById('edit-title').value,
                 image: document.getElementById('edit-image').value,
-                content: quillEdit.root.innerHTML
+                content: quillEdit.root.innerHTML,
+                NoiBat: isFeatured ? "true" : "false"
             };
 
             try {
-                const res = await fetch(`https://sheetdb.io/api/v1/qvitsb1q8evc9/title/${encodeURIComponent(oldTitle)}?sheet=Posts`, {
+                const res = await fetch(`https://sheetdb.io/api/v1/stjh3ikcs21t8/title/${encodeURIComponent(oldTitle)}?sheet=Posts`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: updateData })
@@ -604,6 +624,11 @@
                 if(res.ok) {
                     alert("Đã cập nhật bài viết!");
                     location.reload();
+                }else {
+                    // Thêm log để kiểm tra lỗi cụ thể từ Server nếu có
+                    const errorText = await res.text();
+                    console.error("Lỗi từ server:", errorText);
+                    alert("Lỗi server: " + errorText);
                 }
             } catch (e) { alert("Lỗi cập nhật!"); }
         }
@@ -612,7 +637,7 @@
         async function deletePost(title) {
             if(!confirm("Bạn có chắc chắn muốn xóa bài viết này?")) return;
             try {
-                const res = await fetch(`https://sheetdb.io/api/v1/qvitsb1q8evc9/title/${title}?sheet=Posts`, {
+                const res = await fetch(`https://sheetdb.io/api/v1/stjh3ikcs21t8/title/${title}?sheet=Posts`, {
                     method: 'DELETE'
                 });
                 if(res.ok) {
@@ -630,7 +655,7 @@
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Đang tải dữ liệu...</td></tr>';
             
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=QuizResults");
+                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=QuizResults");
                 const data = await res.json();
 
                 window.allQuizData = data.reverse();
