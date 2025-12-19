@@ -325,26 +325,7 @@ nav a:hover {
     box-sizing: border-box;
 }
 
-/* Card dành riêng cho bài nổi bật */
-#featured-list .blog-card {
-    border: 2px solid var(--xmas-gold);
-    transform: scale(1.02);
-    position: relative;
-}
 
-#featured-list .blog-card::before {
-    content: "HOT";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--xmas-red);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 10;
-}
 
 /* Nút đóng modal */
 .close-btn {
@@ -559,7 +540,7 @@ nav a:hover {
     padding-bottom: 50px; 
     overflow: hidden;
     position: relative;
-    max-width: 1000px; 
+    max-width: 1200px; 
     margin: 0 auto;
 }
 
@@ -737,6 +718,52 @@ nav a:hover {
     color: var(--secondary-color);
     font-weight: 700;
     margin-bottom: 10px;
+}
+
+.teacher-spotlight { padding: 80px 0;  }
+.spotlight-wrapper { 
+    display: flex; 
+    align-items: center; 
+    gap: 50px; 
+    background: white; 
+    padding: 40px; 
+    border-radius: 30px; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+}
+
+.spotlight-image { position: relative; flex: 0 0 400px; }
+.spotlight-image img { width: 100%; border-radius: 20px; object-fit: cover; }
+
+.experience-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    background: var(--secondary-color); color: white;
+    padding: 15px 25px; border-radius: 15px; text-align: center;
+    box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+}
+.experience-badge .year { display: block; font-size: 24px; font-weight: 900; }
+
+.spotlight-content { flex: 1; }
+.sub-title { color: var(--primary-color); font-weight: 700; letter-spacing: 2px; font-size: 14px; }
+.spotlight-content h2 { font-size: 42px; color: #1e293b; margin: 10px 0; font-weight: 800; }
+
+.tags { display: flex; gap: 10px; margin-bottom: 20px; }
+.tag { background: #eef2ff; color: #4f46e5; padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: 600; }
+
+.quote { font-style: italic; color: #64748b; font-size: 18px; line-height: 1.6; margin-bottom: 30px; position: relative; }
+.quote i { color: #cbd5e1; margin-right: 10px; font-size: 24px; }
+
+.btn-primary-custom {
+    display: inline-block; padding: 15px 30px; background: var(--primary-color);
+    color: white; text-decoration: none; border-radius: 12px; font-weight: 700;
+    transition: 0.3s;
+}
+.btn-primary-custom:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(26, 35, 126, 0.2); color: white;}
+
+/* Mobile Reponsive */
+@media (max-width: 992px) {
+    .spotlight-wrapper { flex-direction: column; text-align: center; }
+    .spotlight-image { flex: 0 0 auto; width: 100%; max-width: 300px; }
+    .tags { justify-content: center; }
 }
 
 /* --- 7. CONTACT SECTION & FORM --- */
