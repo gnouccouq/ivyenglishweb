@@ -263,6 +263,24 @@
             textarea.style.cssText = "font-family: 'Roboto', Arial, sans-serif !important;width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; min-height: 120px; box-sizing: border-box;";
             selectedIdx = "writing"; 
             container.appendChild(textarea);
+            const voiceHTML = `
+            <div class="voice-record-section" style="margin-top: 15px; text-align: center;">
+                <p style="font-style: italic; font-size: 0.9em; color: #666;">
+                    Sau khi viết xong, hãy bấm ghi âm và đọc lại đoạn văn trên để giáo viên sửa phát âm nhé!
+                </p>
+                <button type="button" id="startRecord" class="btn-record" style="background: #e74c3c; color: white; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;">
+                    <i class="fas fa-microphone"></i> Bắt đầu ghi âm
+                </button>
+                <button type="button" id="stopRecord" style="display:none; background: #2c3e50; color: white; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;">
+                    <i class="fas fa-stop"></i> Dừng & Lưu
+                </button>
+                <div id="recordStatus" style="margin-top: 10px; font-weight: bold; color: #e74c3c;"></div>
+                <audio id="audioPlayback" controls style="display:none; margin: 10px auto;"></audio>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', voiceHTML);
+    
+        selectedIdx = "writing"; // Đánh dấu đã chọn (để qua câu tiếp theo)
         } else {
             q.options.forEach((opt, idx) => {
                 const div = document.createElement('div');
@@ -299,90 +317,168 @@
         }
     }
 
-    function showResults() {
-    clearInterval(timerInterval);
-    document.getElementById('exam-screen').style.display = 'none';
-    document.getElementById('result-screen').style.display = 'block';
-    
-    const scoreElement = document.getElementById('score-number');
-    const aiFeedbackElement = document.getElementById('ai-feedback');
-    const nameVal = document.getElementById('userName').value;
-    const phoneVal = document.getElementById('userPhone').value;
-    
-    // 1. CHẤM ĐIỂM CÂU 15 (WRITING)
-    const writingVal = document.getElementById('writing-task') ? document.getElementById('writing-task').value.trim() : "";
-    let writingScore = 0;
-    if (writingVal.length > 0) {
-        writingScore = 1; // Có nhập là được 1 điểm theo yêu cầu của bạn
-    }
+    async function uploadAudioToCloudinary(blob) {
+        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
+        const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload'; // ví dụ: ivy_upload
+        
+        const formData = new FormData();
+        formData.append('file', blob);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-    const finalScore = score + writingScore;
-    if (scoreElement) scoreElement.innerText = finalScore;
-
-    // 2. PHÂN LOẠI TRÌNH ĐỘ VÀ NHẬN XÉT TÙY BIẾN
-    let level = "", desc = "", customComment = "";
-
-    if (finalScore <= 5) { 
-        level = "A1 - BEGINNER"; 
-        desc = "Bạn đang ở trình độ bắt đầu. Khóa học A1 sẽ giúp bạn xây dựng nền tảng vững chắc.";
-        customComment = "Đừng nản lòng nhé! Tiếng Anh là một hành trình. Bạn nên tập trung vào từ vựng cơ bản và các cấu trúc câu đơn giản trước khi tiến xa hơn.";
-    } else if (finalScore <= 9) { 
-        level = "A2 - ELEMENTARY"; 
-        desc = "Khá tốt! Khóa A2 sẽ giúp bạn giao tiếp tự tin hơn trong đời sống.";
-        customComment = "Bạn đã có nền tảng cơ bản khá ổn. Để bứt phá, bạn cần luyện tập phản xạ giao tiếp và mở rộng vốn từ vựng theo chủ đề hàng ngày.";
-    } else if (finalScore <= 12) { 
-        level = "B1 - INTERMEDIATE"; 
-        desc = "Rất tốt! Bạn có thể sử dụng tiếng Anh linh hoạt trong nhiều tình huống.";
-        customComment = "Khả năng đọc hiểu và ngữ pháp của bạn rất tốt! Giai đoạn này bạn nên tập trung vào việc viết các đoạn văn dài hơn và nghe các bản tin tiếng Anh tốc độ tự nhiên.";
-    } else { 
-        level = "B2 - UPPER INTERMEDIATE"; 
-        desc = "Xuất sắc! Bạn có khả năng sử dụng tiếng Anh chuyên sâu và tự nhiên.";
-        customComment = "Tuyệt vời! Bạn có tư duy ngôn ngữ rất sắc bén. Bạn hoàn toàn có thể chinh phục các chứng chỉ quốc tế như IELTS 6.5+ hoặc làm việc trong môi trường đa quốc gia.";
-    }
-
-    // Hiển thị kết quả lên màn hình
-    document.getElementById('suggested-course').innerText = level;
-    document.getElementById('course-desc').innerText = desc;
-    if (aiFeedbackElement) {
-        aiFeedbackElement.innerHTML = `<strong>Lời khuyên từ giáo viên:</strong> ${customComment}`;
-    }
-
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
-    // 3. GỬI DỮ LIỆU LÊN SHEETDB (Sử dụng mode no-cors để tránh lỗi chặn từ file local)
-    const payload = {
-        "ID": Date.now(),
-        "ThoiGian": new Date().toLocaleString('vi-VN'),
-        "HoTen": nameVal,
-        "Sdt": phoneVal,
-        "DiemSo": finalScore + "/15",
-        "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
-        "BaiViet": writingVal,
-        "TrinhDo": level
-    };
-
-    fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=QuizResults", {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json' 
-        },
-        body: JSON.stringify({ data: [payload] }) // Luôn bọc trong { data: [...] }
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw err; });
+        try {
+            const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+            const data = await response.json();
+            return data.secure_url || ""; 
+        } catch (error) {
+            console.error("Lỗi Cloudinary:", error);
+            return "";
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Thành công:", data);
-    })
-    .catch(error => {
-        console.error("Lỗi chi tiết:", error);
-        // Bạn có thể hiển thị thông báo lỗi cho người dùng tại đây nếu cần
+    }
+
+    async function showResults() {
+        clearInterval(timerInterval);
+        document.getElementById('exam-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        const scoreElement = document.getElementById('score-number');
+        const aiFeedbackElement = document.getElementById('ai-feedback');
+        const nameVal = document.getElementById('userName').value;
+        const phoneVal = document.getElementById('userPhone').value;
+        
+        // 1. CHẤM ĐIỂM CÂU 15 (WRITING)
+        const writingVal = document.getElementById('writing-task') ? document.getElementById('writing-task').value.trim() : "";
+        let writingScore = 0;
+        if (writingVal.length > 0) {
+            writingScore = 1; // Có nhập là được 1 điểm theo yêu cầu của bạn
+        }
+
+        const finalScore = score + writingScore;
+        if (scoreElement) scoreElement.innerText = finalScore;
+
+        // 2. PHÂN LOẠI TRÌNH ĐỘ VÀ NHẬN XÉT TÙY BIẾN
+        let level = "", desc = "", customComment = "";
+
+        if (finalScore <= 5) { 
+            level = "A1 - BEGINNER"; 
+            desc = "Bạn đang ở trình độ bắt đầu. Khóa học A1 sẽ giúp bạn xây dựng nền tảng vững chắc.";
+            customComment = "Đừng nản lòng nhé! Tiếng Anh là một hành trình. Bạn nên tập trung vào từ vựng cơ bản và các cấu trúc câu đơn giản trước khi tiến xa hơn.";
+        } else if (finalScore <= 9) { 
+            level = "A2 - ELEMENTARY"; 
+            desc = "Khá tốt! Khóa A2 sẽ giúp bạn giao tiếp tự tin hơn trong đời sống.";
+            customComment = "Bạn đã có nền tảng cơ bản khá ổn. Để bứt phá, bạn cần luyện tập phản xạ giao tiếp và mở rộng vốn từ vựng theo chủ đề hàng ngày.";
+        } else if (finalScore <= 12) { 
+            level = "B1 - INTERMEDIATE"; 
+            desc = "Rất tốt! Bạn có thể sử dụng tiếng Anh linh hoạt trong nhiều tình huống.";
+            customComment = "Khả năng đọc hiểu và ngữ pháp của bạn rất tốt! Giai đoạn này bạn nên tập trung vào việc viết các đoạn văn dài hơn và nghe các bản tin tiếng Anh tốc độ tự nhiên.";
+        } else { 
+            level = "B2 - UPPER INTERMEDIATE"; 
+            desc = "Xuất sắc! Bạn có khả năng sử dụng tiếng Anh chuyên sâu và tự nhiên.";
+            customComment = "Tuyệt vời! Bạn có tư duy ngôn ngữ rất sắc bén. Bạn hoàn toàn có thể chinh phục các chứng chỉ quốc tế như IELTS 6.5+ hoặc làm việc trong môi trường đa quốc gia.";
+        }
+
+        // Hiển thị kết quả lên màn hình
+        document.getElementById('suggested-course').innerText = level;
+        document.getElementById('course-desc').innerText = desc;
+        if (aiFeedbackElement) {
+            aiFeedbackElement.innerHTML = `<strong>Lời khuyên từ giáo viên:</strong> ${customComment}`;
+        }
+
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        let finalAudioLink = "";
+        if (window.currentAudioBlob) {
+            try {
+                document.getElementById('recordStatus').innerText = " đang tải file ghi âm...";
+                finalAudioLink = await uploadAudioToCloudinary(window.currentAudioBlob);
+                // Quan trọng: Gán link vừa upload được vào biến để gửi lên Sheet
+                window.recordedAudioLink = finalAudioLink; 
+            } catch (e) {
+                console.error("Lỗi upload âm thanh:", e);
+            }
+        }
+
+        // 3. GỬI DỮ LIỆU LÊN SHEETDB (Sử dụng mode no-cors để tránh lỗi chặn từ file local)
+        const payload = {
+            "ID": Date.now().toString(),
+            "ThoiGian": new Date().toLocaleString('vi-VN'),
+            "HoTen": nameVal,
+            "Sdt": phoneVal,
+            "DiemSo": finalScore + "/15",
+            "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
+            "BaiViet": writingVal,
+            "TrinhDo": level,
+            "LinkGhiAm": window.recordedAudioLink || ""
+        };
+
+        fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=QuizResults", {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
+            },
+            body: JSON.stringify({ 
+                data: [
+                    {
+                        "ID": Date.now().toString(),
+                        "ThoiGian": new Date().toLocaleString('vi-VN'),
+                        "HoTen": nameVal,
+                        "Sdt": phoneVal,
+                        "DiemSo": finalScore + "/15",
+                        "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
+                        "BaiViet": writingVal,
+                        "TrinhDo": level,
+                        "LinkGhiAm": window.recordedAudioLink || "" // Đảm bảo dùng đúng biến này
+                    }
+                ] 
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log("Đã lưu vào Sheet:", data))
+        .catch(err => console.error("Lỗi gửi SheetDB:", err));
+    }
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    // Sử dụng Event Delegation vì các nút này được tạo động khi showQuestion
+    document.addEventListener('click', async function(e) {
+        if (e.target && e.target.id === 'startRecord') {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                    window.currentAudioBlob = audioBlob; 
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    document.getElementById('audioPlayback').src = audioUrl;
+                    document.getElementById('audioPlayback').style.display = 'block';
+                };
+
+                mediaRecorder.start();
+                document.getElementById('startRecord').style.display = 'none';
+                document.getElementById('stopRecord').style.display = 'inline-block';
+                document.getElementById('recordStatus').innerText = "🔴 Đang ghi âm... (Hãy đọc đoạn văn của bạn)";
+            } catch (err) {
+                alert("Bạn cần cho phép truy cập Microphone để sử dụng tính năng này!");
+            }
+        }
+
+        if (e.target && e.target.id === 'stopRecord') {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                document.getElementById('stopRecord').style.display = 'none';
+                document.getElementById('startRecord').style.display = 'inline-block';
+                document.getElementById('startRecord').innerHTML = '<i class="fas fa-redo"></i> Ghi âm lại';
+                document.getElementById('recordStatus').innerText = "✅ Đã ghi xong!";
+            }
+        }
     });
-}
 </script>
 </body>
 </html>

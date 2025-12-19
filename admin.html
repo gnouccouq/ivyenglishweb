@@ -673,6 +673,7 @@
             const diem = item["Điểm Số"] || item.DiemSo || "0";
             const cauSai = item.ChiTietCauSai || item.ChiTietCauSai || "Không có dữ liệu chi tiết";
             const baiViet = item["Bài Viết"] || item.BaiViet || item["BaiViết"] || "Không có bài viết";
+            const linkGhiAm = item.LinkGhiAm || "";
 
             content.innerHTML = `
                 <p><strong>Học viên:</strong> ${hoTen || "N/A"}</p>
@@ -687,6 +688,8 @@
                 <div style="background: #fff8e1; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; white-space: pre-wrap;">
                     ${baiViet || "Không có bài viết."}
                 </div>
+                <p style="margin-top:15px;"><strong>Phát âm (Audio):</strong></p>
+                ${linkGhiAm ? `<audio controls src="${linkGhiAm}" style="width:100%"></audio>` : "Không có file ghi âm."}
             `;
             
             // Hiển thị modal
