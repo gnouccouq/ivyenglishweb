@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Không tìm thấy trang | ivyEnglish</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        .error-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background-color: var(--bg-body);
+        }
+        .error-card {
+            background: var(--white);
+            padding: 50px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-soft);
+            max-width: 600px;
+            width: 100%;
+        }
+        .error-code {
+            font-size: 100px;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+        }
+        .error-message {
+            font-size: 24px;
+            color: var(--text-color);
+            margin: 20px 0;
+        }
+        .error-desc {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .illustration {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #4a7ae6;
+            color: rgb(255, 255, 255);
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(91, 140, 255, 0.2);
+        }
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(91, 140, 255, 0.3);
+            background: #4a7ae6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-container">
+        <div class="error-card">
+            <span class="illustration">🧭</span>
+            <h1 class="error-code">404</h1>
+            <h2 class="error-message">Oops! Trang bạn tìm không tồn tại</h2>
+            <p class="error-desc">Có vẻ như đường dẫn đã bị hỏng hoặc trang này đã được chuyển sang một địa chỉ khác.</p>
+            
+            <a href="index.html" class="btn-back">
+            <span>Về Trang Chủ</span>
+        </a>
+        </div>
+    </div>
+
+    <div id="snow-container"></div>
+    <script>
+        // Copy hàm tạo tuyết từ index.html sang đây nếu muốn đồng bộ
+    </script>
+</body>
+</html>

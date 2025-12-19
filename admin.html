@@ -689,7 +689,14 @@
                     ${baiViet || "Không có bài viết."}
                 </div>
                 <p style="margin-top:15px;"><strong>Phát âm (Audio):</strong></p>
-                ${linkGhiAm ? `<audio controls src="${linkGhiAm}" style="width:100%"></audio>` : "Không có file ghi âm."}
+                ${linkGhiAm ? `
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <audio controls src="${linkGhiAm}" style="flex:1"></audio>
+                        <a href="${linkGhiAm}" download target="_blank" class="btn-action" style="padding:10px; font-size:12px;">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                ` : "Không có file ghi âm."}
             `;
             
             // Hiển thị modal
