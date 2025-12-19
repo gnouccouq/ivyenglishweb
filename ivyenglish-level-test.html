@@ -29,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
         header { 
             position: fixed; top: 0; width: 100%; z-index: 1000; 
             background: rgba(51, 65, 85, 0.9); backdrop-filter: blur(10px); 
@@ -41,22 +40,18 @@
             justify-content: space-between; align-items: center; 
             height: 100%; padding: 0 20px; 
         }
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary-color); text-decoration: none; }
-        .logo span { color: var(--secondary-color); }
 
-        /* --- LAYOUT CHÍNH --- */
         .main-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 100px 20px 40px; /* Cách header 100px */
+            padding: 100px 20px 40px;
             min-height: calc(100vh - 140px);
         }
 
         .test-container {
             background: var(--glass-bg) !important;
             backdrop-filter: blur(15px) saturate(180%);
-            -webkit-backdrop-filter: blur(15px) saturate(180%);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 40px;
@@ -91,16 +86,6 @@
         }
         .btn-action:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(46, 204, 113, 0.3); }
 
-        .reading-box {
-            background: rgba(255, 255, 255, 0.4);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            border-left: 5px solid var(--primary-color);
-            line-height: 1.8;
-            font-size: 0.95rem;
-        }
-
         .option {
             background: rgba(255, 255, 255, 0.5);
             border: 1px solid var(--glass-border);
@@ -116,8 +101,6 @@
         .progress-bar { height: 8px; background: rgba(0,0,0,0.05); border-radius: 10px; margin: 20px 0; }
         .progress { height: 100%; background: var(--primary-color); width: 0%; border-radius: 10px; transition: 0.3s; }
         .timer { font-weight: 900; color: #ef4444; font-size: 1.2rem; }
-
-        
     </style>
 </head>
 <body>
@@ -126,8 +109,8 @@
         <div class="nav-container">
             <a href="index.html"><img src="images/logo.png" alt="Logo" style="height: 40px;"></a>
             <div style="display: flex; gap: 20px;">
-                <a href="index.html" style="color: white; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Home</a>
-                <a href="index.html#courses" style="color: white; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Courses</a>
+                <a href="index.html" style="color: white; text-decoration: none; font-weight: 500;">Home</a>
+                <a href="index.html#courses" style="color: white; text-decoration: none; font-weight: 500;">Courses</a>
             </div>
         </div>
     </header>
@@ -135,22 +118,31 @@
     <div class="main-wrapper">
         <div id="intro-screen" class="test-container">
             <h2 style="text-align: center; color: var(--primary-color);">HƯỚNG DẪN KIỂM TRA</h2>
-            <p style="text-align: center;">Vui lòng xem bảng quy đổi trình độ dự kiến:</p>
+            <ul style="margin-bottom: 20px;">
+                <li>Bài test gồm 15 câu hỏi (Ngữ pháp, Từ vựng & Đọc hiểu).</li>
+                <li>Câu 15 là bài viết ngắn (Writing).</li>
+                <li>Kết quả sẽ được lưu lại để giáo viên tư vấn lộ trình.</li>
+            </ul>
 
             <table class="level-table">
                 <thead>
-                    <tr>
-                        <th>Số câu đúng</th>
-                        <th>Trình độ</th>
-                    </tr>
+                    <tr><th>Số câu đúng</th><th>Trình độ</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>0 - 3 câu</td><td><strong>A1 (Beginner)</strong></td></tr>
-                    <tr><td>4 - 6 câu</td><td><strong>A2 (Elementary)</strong></td></tr>
-                    <tr><td>7 - 8 câu</td><td><strong>B1 (Intermediate)</strong></td></tr>
-                    <tr><td>9 - 10 câu</td><td><strong>B2 (Upper-Intermediate)</strong></td></tr>
+                    <tr><td>0 - 5 câu</td><td><strong>A1 (Beginner)</strong></td></tr>
+                    <tr><td>6 - 8 câu</td><td><strong>A2 (Elementary)</strong></td></tr>
+                    <tr><td>9 - 11 câu</td><td><strong>B1 (Intermediate)</strong></td></tr>
+                    <tr><td>12 - 15 câu</td><td><strong>B2 (Upper-Intermediate)</strong></td></tr>
                 </tbody>
             </table>
+
+            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin-left: auto; margin-right: auto;">
+                <input type="text" id="userName" placeholder="Họ và Tên (*)" required style="padding: 12px; border: 1px solid #ddd; border-radius: 20px;">
+                <input type="tel" id="userPhone" placeholder="Số điện thoại (Zalo)" required style="padding: 12px; border: 1px solid #ddd; border-radius: 20px;"
+                required 
+                            pattern="^0[0-9]{9}$" 
+                            title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số (VD: 0987654321)">
+            </div>
 
             <div style="text-align: center; margin-top: 30px;">
                 <button class="btn-action" onclick="startExam()">BẮT ĐẦU LÀM BÀI</button>
@@ -160,19 +152,15 @@
         <div id="exam-screen" class="test-container">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="timer" id="timer">10:00</div>
-                <div id="question-counter">Câu hỏi 1/10</div>
+                <div id="question-counter" style="font-weight: bold;">Câu hỏi 1/15</div>
             </div>
             <div class="progress-bar"><div class="progress" id="progress"></div></div>
             
-            <div id="quiz-content">
-                <div id="reading-passage" class="reading-box" style="display: none;">
-                    <strong>Reading Passage:</strong><br>
-                    "My name is Sarah and I live in a small town. I have been learning English for two years because I want to travel around the world. At first, speaking was very difficult for me, but I practiced every day. Now, I can communicate with foreigners confidently. I believe that learning a new language opens many doors to different cultures. Next year, I am planning to visit London to improve my accent and experience the local lifestyle."
-                </div>
-                
-                <h3 id="question-text" style="margin-bottom: 20px;"></h3>
-                <div id="options-container"></div>
-            </div>
+            <div id="reading-passage" style="display: none; margin-bottom: 20px;"></div>
+            
+            <h3 id="question-text" style="margin-bottom: 20px; line-height: 1.5;"></h3>
+            
+            <div id="options-container"></div>
 
             <div style="margin-top: 30px; text-align: right;">
                 <button id="next-btn" class="btn-action" style="padding: 10px 30px; font-size: 1rem;" onclick="nextQuestion()">Tiếp theo</button>
@@ -181,63 +169,102 @@
 
         <div id="result-screen" class="test-container" style="text-align: center;">
             <h2 style="color: var(--secondary-color);">Hoàn thành!</h2>
-            <div style="font-size: 4rem; font-weight: 900; margin: 10px 0;"><span id="score-number">0</span>/10</div>
+            <div style="font-size: 4rem; font-weight: 900; margin: 10px 0;"><span id="score-number">0</span>/15</div>
             <h3 id="suggested-course" style="color: var(--primary-color);">--</h3>
             <p id="course-desc" style="margin-bottom: 30px; padding: 0 20px;">--</p>
+            <div id="ai-feedback" style="font-style: italic; color: #475569; background: #f8fafc; padding: 15px; border-radius: 10px; margin: 0 20px 20px; border-left: 4px solid var(--primary-color); text-align: left; font-size: 0.95rem; line-height: 1.5;">
+                Đang đợi AI phân tích bài làm...
+            </div>
             <button class="btn-action" onclick="location.href='index.html'">VỀ TRANG CHỦ</button>
         </div>
     </div>
 
-    <script>
-        // GIỮ NGUYÊN 10 CÂU HỎI CỦA BẠN
-        const questions = [
-            { q: "Person A: 'How's it going?' - Person B: '________'", a: ["A. I'm 20 years old.", "B. Not bad, thanks.", "C. I go by bus.", "D. Yes, I like it."], c: 1 },
-            { q: "What should you say when you accidentally bump into someone?", a: ["A. Excuse me.", "B. I'm sorry.", "C. Never mind.", "D. You're welcome."], c: 1 },
-            { q: "At a restaurant, you want to pay. You ask:", a: ["A. How much money?", "B. Can I have the bill, please?", "C. Where is the food?", "D. Give me the price."], c: 1 },
-            { q: "A friend says 'Good luck with your exam!'. You reply:", a: ["A. Same to you.", "B. Thank you, I'll need it!", "C. No problem.", "D. I don't know."], c: 1 },
-            { q: "If you don't hear what someone said, you say:", a: ["A. What?", "B. Can you say that again, please?", "C. Speak louder.", "D. I am deaf."], c: 1 },
-            { q: "Why is Sarah learning English?", a: ["A. To get a job.", "B. To travel the world.", "C. To watch movies.", "D. To live in a small town."], c: 1 },
-            { q: "How long has she been learning English?", a: ["A. One year.", "B. Two years.", "C. Five years.", "D. Next year."], c: 1 },
-            { q: "What was Sarah's main problem at the beginning?", a: ["A. Reading.", "B. Writing.", "C. Speaking.", "D. Listening."], c: 2 },
-            { q: "What does Sarah plan to do next year?", a: ["A. Move to a new town.", "B. Visit London.", "C. Stay at home.", "D. Buy a new car."], c: 1 },
-            { q: "What does Sarah think about learning a new language?", a: ["A. It is a waste of time.", "B. It is only for travelers.", "C. It opens many doors to cultures.", "D. It is very boring."], c: 2 }
-        ];
+<script>
+    const questions = [
+        { q: "1. Hello! How ___ you?", options: ["A. is", "B. are", "C. am", "D. be"], answer: 1 },
+        { q: "2. She ___ in Spain.", options: ["A. live", "B. lives", "C. is live", "D. living"], answer: 1 },
+        { q: "3. I don’t have ___ apples.", options: ["A. a", "B. some", "C. any", "D. much"], answer: 2 },
+        { q: "4. What time do you usually ___ up?", options: ["A. get", "B. gets", "C. getting", "D. to get"], answer: 0 },
+        { q: "5. Can I ___ you a question?", options: ["A. say", "B. tell", "C. speak", "D. ask"], answer: 3 },
+        { q: "6. We ___ to the zoo last weekend.", options: ["A. go", "B. goes", "C. went", "D. gone"], answer: 2 },
+        { q: "7. This music is too ___. Turn it down!", options: ["A. loudly", "B. loud", "C. loudest", "D. louder"], answer: 1 },
+        { q: "8. I enjoy ___ detective stories.", options: ["A. to read", "B. reading", "C. read", "D. reads"], answer: 1 },
+        { q: "9. If it rains, we ___ stay inside.", options: ["A. will", "B. would", "C. do", "D. did"], answer: 0 },
+        { q: "10. Choose the correct sentence:", options: ["A. I can to swim.", "B. She don't like tea.", "C. They are play football.", "D. He goes to work by bus."], answer: 3 },
+        { q: "11. What does she look like?", options: ["A. She likes reading books.", "B. She's very kind and helpful.", "C. She has short black hair.", "D. She looks at the window."], answer: 2 },
+        { q: "12. Where does Lian work?", options: ["A. In a hospital", "B. In a travel agency", "C. In a zoo", "D. In a school"], answer: 1 },
+        { q: "13. What does Lian like to do in her free time?", options: ["A. Cook and read", "B. Watch sports", "C. Watch wildlife shows and listen to music", "D. Go shopping"], answer: 2 },
+        { q: "14. Why does Lian love her job?", options: ["A. She travels every day", "B. She meets animals", "C. She learns about new places", "D. She doesn't like it"], answer: 2 },
+        { q: "15. Write 3 sentences about your favorite type of TV show, book, or music.", type: "writing" }
+    ];
 
-        let currentIdx = 0;
-        let score = 0;
-        let timeLeft = 600; 
-        let timerInterval;
-        let selectedIdx = null;
+    let currentIdx = 0;
+    let score = 0;
+    let timeLeft = 600; 
+    let timerInterval;
+    let selectedIdx = null;
+    let userWrongAnswers = []; // ĐÃ THÊM: Khai báo mảng lưu câu sai
 
-        function startExam() {
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('exam-screen').style.display = 'block';
-            startTimer();
-            renderQuestion();
+    function startExam() {
+        const name = document.getElementById('userName').value.trim();
+        const phone = document.getElementById('userPhone').value.trim();
+        if (name === "" || phone === "") {
+            alert("Vui lòng nhập Họ tên và Số điện thoại!");
+            return;
+        }
+        document.getElementById('intro-screen').style.display = 'none';
+        document.getElementById('exam-screen').style.display = 'block';
+        startTimer();
+        renderQuestion();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            if (timeLeft <= 0) showResults();
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        const q = questions[currentIdx];
+        selectedIdx = null; 
+
+        document.getElementById('question-counter').innerText = `Câu hỏi ${currentIdx + 1}/${questions.length}`;
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + '%';
+        
+        const readingPassage = document.getElementById('reading-passage');
+        if (currentIdx >= 11 && currentIdx <= 13) {
+            readingPassage.style.display = 'block';
+            readingPassage.innerHTML = `
+                <div style="background: #f0f7ff; border-left: 4px solid #5b8cff; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin-top:0; color:#5b8cff;"><i class="fas fa-book-open"></i> Đọc đoạn văn sau:</h4>
+                    <p style="font-style: italic; line-height: 1.6; color: #334155; margin: 0;">
+                        "My name is Lian. I live in Malaysia. I work in a travel agency. Every day, I help
+                        people plan their holidays. I love my job because I learn about new places. In
+                        my free time, I watch wildlife shows and listen to pop music."
+                    </p>
+                </div>
+            `;
+        } else {
+            readingPassage.style.display = 'none';
         }
 
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                let m = Math.floor(timeLeft / 60);
-                let s = timeLeft % 60;
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if (timeLeft <= 0) showResults();
-            }, 1000);
-        }
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
 
-        function renderQuestion() {
-            const q = questions[currentIdx];
-            document.getElementById('question-counter').innerText = `Câu hỏi ${currentIdx + 1}/${questions.length}`;
-            document.getElementById('question-text').innerText = q.q;
-            document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + '%';
-            
-            // Chỉ hiện bài đọc từ câu 6 đến 10
-            document.getElementById('reading-passage').style.display = (currentIdx >= 5) ? 'block' : 'none';
-
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
-            q.a.forEach((opt, idx) => {
+        if (q.type === 'writing') {
+            const textarea = document.createElement('textarea');
+            textarea.id = 'writing-task';
+            textarea.placeholder = 'Nhập ít nhất 3 câu...';
+            textarea.style.cssText = "font-family: 'Roboto', Arial, sans-serif !important;width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; min-height: 120px; box-sizing: border-box;";
+            selectedIdx = "writing"; 
+            container.appendChild(textarea);
+        } else {
+            q.options.forEach((opt, idx) => {
                 const div = document.createElement('div');
                 div.className = 'option';
                 div.innerText = opt;
@@ -249,40 +276,113 @@
                 container.appendChild(div);
             });
         }
+    }
 
-        function nextQuestion() {
-            if (selectedIdx === null) { alert("Vui lòng chọn đáp án!"); return; }
-            if (selectedIdx === questions[currentIdx].c) score++;
-            selectedIdx = null;
-            currentIdx++;
-            if (currentIdx < questions.length) renderQuestion(); else showResults();
-        }
-
-        function showResults() {
-            clearInterval(timerInterval);
-            document.getElementById('exam-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            document.getElementById('score-number').innerText = score;
-
-            let level = "", desc = "";
-            if (score <= 3) { 
-                level = "A1 - BEGINNER"; 
-                desc = "Bạn đang ở trình độ bắt đầu. Khóa học A1 sẽ giúp bạn xây dựng nền tảng vững chắc."; 
-            } else if (score <= 6) { 
-                level = "A2 - ELEMENTARY"; 
-                desc = "Khá tốt! Khóa A2 sẽ giúp bạn giao tiếp tự tin hơn trong đời sống."; 
-            } else if (score <= 8) { 
-                level = "B1 - INTERMEDIATE"; 
-                desc = "Rất tốt! Bạn có thể sử dụng tiếng Anh linh hoạt trong nhiều tình huống."; 
-            } else { 
-                level = "B2 - UPPER INTERMEDIATE"; 
-                desc = "Xuất sắc! Bạn có khả năng sử dụng tiếng Anh chuyên sâu và tự nhiên."; 
+    function nextQuestion() {
+        if (selectedIdx === null) { alert("Vui lòng chọn đáp án!"); return; }
+        
+        const currentQ = questions[currentIdx];
+        if (currentQ.type !== 'writing') {
+            if (selectedIdx === currentQ.answer) {
+                score++;
+            } else {
+                // Sửa lỗi: Đảm bảo userWrongAnswers đã tồn tại
+                userWrongAnswers.push(`${currentQ.q} (Chọn: ${currentQ.options[selectedIdx]} | Đúng: ${currentQ.options[currentQ.answer]})`);
             }
-
-            document.getElementById('suggested-course').innerText = level;
-            document.getElementById('course-desc').innerText = desc;
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
-    </script>
+
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            renderQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+    clearInterval(timerInterval);
+    document.getElementById('exam-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    
+    const scoreElement = document.getElementById('score-number');
+    const aiFeedbackElement = document.getElementById('ai-feedback');
+    const nameVal = document.getElementById('userName').value;
+    const phoneVal = document.getElementById('userPhone').value;
+    
+    // 1. CHẤM ĐIỂM CÂU 15 (WRITING)
+    const writingVal = document.getElementById('writing-task') ? document.getElementById('writing-task').value.trim() : "";
+    let writingScore = 0;
+    if (writingVal.length > 0) {
+        writingScore = 1; // Có nhập là được 1 điểm theo yêu cầu của bạn
+    }
+
+    const finalScore = score + writingScore;
+    if (scoreElement) scoreElement.innerText = finalScore;
+
+    // 2. PHÂN LOẠI TRÌNH ĐỘ VÀ NHẬN XÉT TÙY BIẾN
+    let level = "", desc = "", customComment = "";
+
+    if (finalScore <= 5) { 
+        level = "A1 - BEGINNER"; 
+        desc = "Bạn đang ở trình độ bắt đầu. Khóa học A1 sẽ giúp bạn xây dựng nền tảng vững chắc.";
+        customComment = "Đừng nản lòng nhé! Tiếng Anh là một hành trình. Bạn nên tập trung vào từ vựng cơ bản và các cấu trúc câu đơn giản trước khi tiến xa hơn.";
+    } else if (finalScore <= 9) { 
+        level = "A2 - ELEMENTARY"; 
+        desc = "Khá tốt! Khóa A2 sẽ giúp bạn giao tiếp tự tin hơn trong đời sống.";
+        customComment = "Bạn đã có nền tảng cơ bản khá ổn. Để bứt phá, bạn cần luyện tập phản xạ giao tiếp và mở rộng vốn từ vựng theo chủ đề hàng ngày.";
+    } else if (finalScore <= 12) { 
+        level = "B1 - INTERMEDIATE"; 
+        desc = "Rất tốt! Bạn có thể sử dụng tiếng Anh linh hoạt trong nhiều tình huống.";
+        customComment = "Khả năng đọc hiểu và ngữ pháp của bạn rất tốt! Giai đoạn này bạn nên tập trung vào việc viết các đoạn văn dài hơn và nghe các bản tin tiếng Anh tốc độ tự nhiên.";
+    } else { 
+        level = "B2 - UPPER INTERMEDIATE"; 
+        desc = "Xuất sắc! Bạn có khả năng sử dụng tiếng Anh chuyên sâu và tự nhiên.";
+        customComment = "Tuyệt vời! Bạn có tư duy ngôn ngữ rất sắc bén. Bạn hoàn toàn có thể chinh phục các chứng chỉ quốc tế như IELTS 6.5+ hoặc làm việc trong môi trường đa quốc gia.";
+    }
+
+    // Hiển thị kết quả lên màn hình
+    document.getElementById('suggested-course').innerText = level;
+    document.getElementById('course-desc').innerText = desc;
+    if (aiFeedbackElement) {
+        aiFeedbackElement.innerHTML = `<strong>Lời khuyên từ giáo viên:</strong> ${customComment}`;
+    }
+
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+    // 3. GỬI DỮ LIỆU LÊN SHEETDB (Sử dụng mode no-cors để tránh lỗi chặn từ file local)
+    const payload = {
+        "ID": Date.now(),
+        "ThoiGian": new Date().toLocaleString('vi-VN'),
+        "HoTen": nameVal,
+        "Sdt": phoneVal,
+        "DiemSo": finalScore + "/15",
+        "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
+        "BaiViet": writingVal,
+        "TrinhDo": level
+    };
+
+    fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=QuizResults", {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json' 
+        },
+        body: JSON.stringify({ data: [payload] }) // Luôn bọc trong { data: [...] }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw err; });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Thành công:", data);
+    })
+    .catch(error => {
+        console.error("Lỗi chi tiết:", error);
+        // Bạn có thể hiển thị thông báo lỗi cho người dùng tại đây nếu cần
+    });
+}
+</script>
 </body>
 </html>

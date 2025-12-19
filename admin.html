@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <link rel="canonical" href="https://ivyenglish.io.vn/admin.html" />
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <style>
@@ -142,7 +143,7 @@
         }
 
         /* --- MODAL EDIT (Dữ liệu gốc) --- */
-        .edit-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .edit-modal { display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 500px; position: relative; }
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
     </style>
@@ -161,6 +162,9 @@
             </div>
             <div class="menu-item" onclick="switchTab('tab-posts', this)">
                 <span>Quản lý bài viết</span>
+            </div>
+            <div class="menu-item" onclick="switchTab('tab-QuizResults', this)">
+                <span>Quản lý kết quả test</span>
             </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
@@ -238,6 +242,7 @@
                                 <option value="Kinh nghiệm">Kinh nghiệm học tập</option>
                                 <option value="Tài liệu">Tài liệu miễn phí</option>
                                 <option value="Sự kiện">Tin tức - Sự kiện</option>
+                                <option value="Tuyển Sinh">Tuyển Sinh</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -266,6 +271,29 @@
                         </tr>
                     </thead>
                     <tbody id="admin-post-list">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-QuizResults" class="tab-content">
+            <div class="section-header">
+                <h2>Danh sách Học viên Test Trình độ</h2>
+                <button class="btn-primary" onclick="loadQuizResults()"><i class="fas fa-sync"></i> Làm mới</button>
+            </div>
+            <div class="table-container" style="background: white; padding: 20px; border-radius: 12px; margin-top: 20px; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;" id="quiz-table">
+                    <thead>
+                        <tr style="background: #f8fafc; text-align: left;">
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">Thời gian</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">Học viên</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">SĐT</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">Điểm</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">Trình độ</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #eee;">Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quiz-list-body">
                         </tbody>
                 </table>
             </div>
@@ -327,6 +355,16 @@
         </div>
     </div>
 
+    <div id="quizDetailModal" class="edit-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeQuizModal()">&times;</span>
+            <h3 style="border-bottom: 2px solid #5b8cff; padding-bottom: 10px;">Chi Tiết Bài Làm</h3>
+            <div id="quizDetailContent" style="margin-top: 20px; line-height: 1.6;">
+                </div>
+            <button onclick="closeQuizModal()" class="btn-save" style="background: #95a5a6; margin-top: 20px;">ĐÓNG</button>
+        </div>
+    </div>
+
     <script>
         // --- KHỞI TẠO BỘ SOẠN THẢO THÔNG MINH (QUILL) ---
         const quill = new Quill('#editor-container', {
@@ -351,6 +389,9 @@
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
+            if (tabId === 'tab-QuizResults') {
+                loadQuizResults();
+            }
         }
 
         // --- QUẢN LÝ DỮ LIỆU HỌC VIÊN (GIỮ NGUYÊN GỐC) ---
@@ -580,9 +621,81 @@
                 }
             } catch (e) { alert("Lỗi xóa bài!"); }
         }
-
         // Gọi hàm tải danh sách khi trang web load
         loadAdminPosts();
+
+        // --- QUẢN LÝ KẾT QUẢ TEST TRÌNH ĐỘ ---
+        async function loadQuizResults() {
+            const tbody = document.getElementById('quiz-list-body');
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Đang tải dữ liệu...</td></tr>';
+            
+            try {
+                const res = await fetch("https://sheetdb.io/api/v1/qvitsb1q8evc9?sheet=QuizResults");
+                const data = await res.json();
+
+                window.allQuizData = data.reverse();
+                
+                tbody.innerHTML = '';
+                window.allQuizData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    // Lưu dữ liệu vào biến toàn cục hoặc dataset để popup lấy
+                    const detailData = encodeURIComponent(JSON.stringify(item));
+                    
+                    row.innerHTML = `
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.ThoiGian || ''}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold;">${item.HoTen || ''}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.Sdt || ''}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;"><span style="color:red; font-weight:bold;">${item.DiemSo || 0}</span></td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.TrinhDo || ''}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                            <button onclick="openQuizModal(${index})" 
+                                style="padding: 6px 12px; cursor:pointer; background:#5b8cff; color:white; border:none; border-radius:4px;">
+                                <i class="fas fa-eye"></i> Xem chi tiết
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Lỗi tải dữ liệu!</td></tr>';
+            }
+        }
+
+        // Hàm mở Modal và đổ dữ liệu
+        function openQuizModal(index) {
+            const item = window.allQuizData[index];
+            if (!item) return;
+            const content = document.getElementById('quizDetailContent');
+            
+            // Kiểm tra và lấy dữ liệu linh hoạt theo tên cột trên Sheet
+            const hoTen = item["Họ & Tên"] || item.HoTen || "N/A";
+            const sdt = item["Số Điện Thoại"] || item.Sdt || "N/A";
+            const diem = item["Điểm Số"] || item.DiemSo || "0";
+            const cauSai = item.ChiTietCauSai || item.ChiTietCauSai || "Không có dữ liệu chi tiết";
+            const baiViet = item["Bài Viết"] || item.BaiViet || item["BaiViết"] || "Không có bài viết";
+
+            content.innerHTML = `
+                <p><strong>Học viên:</strong> ${hoTen || "N/A"}</p>
+                <p><strong>Số điện thoại:</strong> ${sdt || "N/A"}</p>
+                <p><strong>Kết quả:</strong> <span style="color:red; font-weight:bold;">${diem}</span></p>
+                <hr>
+                <p><strong>Chi tiết bài làm:</strong></p>
+                <div style="background: #f9f9f9; padding: 10px; border-radius: 5px; max-height: 120px; overflow-y: auto; border:1px solid #ddd; white-space: pre-wrap;">
+                    ${cauSai || "Không có dữ liệu"}
+                </div>
+                <p style="margin-top:15px;"><strong>Bài viết (Writing):</strong></p>
+                <div style="background: #fff8e1; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; white-space: pre-wrap;">
+                    ${baiViet || "Không có bài viết."}
+                </div>
+            `;
+            
+            // Hiển thị modal
+            document.getElementById('quizDetailModal').style.display = 'flex';
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quizDetailModal').style.display = 'none';
+        }
     </script>
 </body>
 </html>
