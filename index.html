@@ -22,24 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">
-                    <img src="images/logo.png" alt="ivyEnglish Logo" class="header-logo-img">
-                </a>
-                <nav id="main-nav"> <a href="#why-choose-us">Giới Thiệu</a>
-                    <a href="#courses">Khóa Học</a>
-                    <a href="#teachers">Giáo Viên</a>
-                    <a href="ivyenglish-level-test.html">Thi Thử</a>
-                    <a href="ivyenglish-blog.html">Tin Tức</a>
-                    <a href="#faq">Hỏi Đáp</a>
-                    <a href="#contact" class="cta-nav">Đăng Ký Ngay</a>
-                </nav>
-                <i class="fas fa-bars menu-toggle"></i>
-            </div>
-        </div>
-    </header>
+    <div id="header-placeholder"></div>
 
     <section id="hero">
         <div class="container hero-grid">
@@ -336,53 +319,7 @@
         </div>
     </section>
 
-    <footer id="main-footer">
-        <div class="container footer-grid">
-
-            <div class="footer-col contact-info">
-                <h3>Liên Hệ Trực Tiếp</h3>
-                <p>📞 Hotline: 096.973.0433</p>
-                <p>📧 Email: trunglv.997@gmail.com</p>
-                <p>📍 Địa chỉ: 2B, Đường số 222, xã Hoà Phú, huyện Củ Chi, TP. HCM</p>
-                <div class="social-links">
-                    <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="social-icon facebook">
-                        <i class="fab fa-facebook-f"></i> 
-                    </a>
-                    <a href="https://zalo.me/0987654321" target="_blank" class="social-icon zalo">
-                        <i class="fas fa-comment-dots"></i> 
-                    </a>
-                    <a href="tel:0969730433" target="_blank" class="social-icon telephone">
-                        <i class="fas fa-phone-alt"></i> 
-                    </a>
-                    </div>
-            </div>
-
-            <div class="footer-col map-col">
-                <h3>Vị Trí Lớp Học</h3>
-                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2705.918383593283!2d106.6171217!3d10.9782897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d3b0ce4561e3%3A0x53f97df55a76a8e3!2sivy%20English%20-%20Ti%E1%BA%BFng%20Anh%20Giao%20Ti%E1%BA%BFp!5e1!3m2!1svi!2s!4v1765818027597!5m2!1svi!2s" 
-                    width="100%" 
-                    height="200" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-
-            <div class="footer-col copyright-col">
-                <h3>MENU</h3>
-                <p><a style="color: white;" href="index.html">Trang chủ</a></p>
-                <p><a style="color: white;" href="index.html#courses">Khóa Học</a></p>
-                <p><a style="color: white;" href="index.html#teachers">Giáo Viên</a></p>
-                <p><a style="color: white;" href="ivyenglish-level-test.html">Thi Thử</a></p>
-                <p><a style="color: white;" href="ivyenglish-blog.html">Tin Tức</a></p>
-                <p><a style="color: white;" href="index.html#faq">Hỏi Đáp</a></p>
-                <p>© 2025 ivyEnglish. Bảo lưu mọi quyền.</p>
-                <p class="small-text">Thiết kế bởi Cường Nguyễn</p>
-            </div>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <div class="floating-contact">
         <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
@@ -631,5 +568,32 @@
             });
         }
     </script>
+
+<script>
+    async function includeHTML() {
+        // Danh sách các thành phần cần nhúng
+        const components = [
+            { id: 'header-placeholder', file: 'header.html' },
+            { id: 'footer-placeholder', file: 'footer.html' }
+        ];
+
+        for (const comp of components) {
+            const element = document.getElementById(comp.id);
+            if (element) {
+                try {
+                    const response = await fetch(comp.file);
+                    if (response.ok) {
+                        element.innerHTML = await response.text();
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải file: " + comp.file, err);
+                }
+            }
+        }
+    }
+
+    // Chạy hàm khi trang web tải xong
+    document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
 </body>
 </html>
