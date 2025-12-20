@@ -20,8 +20,18 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="header-placeholder"></div>
 
     <section id="hero">
@@ -37,7 +47,7 @@
         </div>
     </section>
 
-    <section id="test" class="hero-section">
+    <section data-aos="fade-up" id="test" class="hero-section">
         <div class="hero-container">
             <div class="hero-content">
                 <span style="color: var(--primary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">IvyEnglish Placement Test</span>
@@ -60,12 +70,12 @@
         </div>
     </section>
 
-    <section id="teachers" class="teacher-spotlight">
+    <section data-aos="fade-up" id="teachers" class="teacher-spotlight">
         <h2>👨‍🏫 Giáo Viên Tại ivyEnglish</h2>
         <div class="container">
             <div class="spotlight-wrapper">
                 <div class="spotlight-image">
-                    <img src="images/avatar.jpg" alt="Mr. Le Van Trung - FOUNDER & CHỦ NHIỆM ivyEnglish">
+                    <img src="images/avatar.jpg" alt="Mr. Le Van Trung - FOUNDER & CHỦ NHIỆM ivyEnglish" data-aos="zoom-in">
                     <div class="experience-badge">
                         <span class="year">10+</span>
                         <span class="text">Năm kinh nghiệm</span>
@@ -94,7 +104,7 @@
         </div>
     </section>
 
-    <section id="why-choose-us" class="section-padding bg-light">
+    <section data-aos="fade-up" id="why-choose-us" class="section-padding bg-light">
     <div class="container">
         <h2><i class="fas fa-tree" style="color: var(--xmas-green);"></i> Tại Sao Chọn ivyEnglish?</h2>
         <div class="usp-grid">
@@ -142,11 +152,11 @@
         </div>
     </section>!-->
 
-    <section id="courses" class="section-padding bg-light">
+    <section data-aos="fade-up" id="courses" class="section-padding bg-light">
         <div class="container">
             <h2><i class="fas fa-gift" style="color: var(--xmas-red);"></i> Khoá học ONLINE & OFFLINE</h2>
             
-            <div class="swiper-container course-slider">
+            <div data-aos="fade-right" class="swiper-container course-slider">
                 <div class="swiper-wrapper">
                     
                     <div class="swiper-slide course-card">
@@ -198,20 +208,20 @@
 
             <h2><i class="fas fa-gift" style="color: var(--xmas-red);"></i> Khoá học 1 Kèm 1</h2>
 
-                        <div class="swiper-container course-slider">
-                <div class="swiper-wrapper">
-                    
-                    <div class="swiper-slide course-card">
-                        <h3>Khóa A1 (Beginner - Căn bản)</h3>
-                        <span class="price">900.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
-                        <p><strong>Mô tả:</strong> Xây dựng nền tảng từ số 0. Tập trung chuẩn hóa phát âm 44 âm IPA và các mẫu câu giao tiếp cơ bản nhất.</p>
-                        <ul class="features">
-                            <p><strong>Đối tượng:</strong> Người mất gốc, người mới bắt đầu hoặc sợ nói tiếng Anh.</p>
-                        </ul>
-                        <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                <div data-aos="fade-right" class="swiper-container course-slider">
+                    <div class="swiper-wrapper">
+                        
+                        <div class="swiper-slide course-card">
+                            <h3>Khóa A1 (Beginner - Căn bản)</h3>
+                            <span class="price">900.000 VNĐ / tháng</span> <p class="duration"><i class="far fa-clock"></i>12 Unit - 12 Tuần - 2 buổi/tuần</p>
+                            <p><strong>Mô tả:</strong> Xây dựng nền tảng từ số 0. Tập trung chuẩn hóa phát âm 44 âm IPA và các mẫu câu giao tiếp cơ bản nhất.</p>
+                            <ul class="features">
+                                <p><strong>Đối tượng:</strong> Người mất gốc, người mới bắt đầu hoặc sợ nói tiếng Anh.</p>
+                            </ul>
+                            <a href="#contact" class="btn btn-secondary">Xem Chi Tiết</a>
+                        </div>
+                        
                     </div>
-                    
-                </div>
                 
                 <div class="swiper-pagination"></div>
                 <div class="swiper-button-prev"></div>
@@ -220,7 +230,7 @@
         </div>
     </section>
     
-    <section id="faq" class="section-padding bg-light">
+    <section data-aos="fade-up" id="faq" class="section-padding bg-light">
         <div class="container">
             <h2>💡 Câu Hỏi Thường Gặp (FAQ)</h2>
             <div class="faq-list">
@@ -268,7 +278,7 @@
         </div>
     </section>
 
-    <section id="contact" class="section-padding bg-light">
+    <section data-aos="fade-up" id="contact" class="section-padding bg-light">
         <div class="container">
             <h2>✒️ Đăng Ký Khóa Học & Tư Vấn</h2>
             
@@ -308,7 +318,7 @@
                 </form>
                 
                 <div class="contact-banner image-banner"> 
-                    <img 
+                    <img data-aos="zoom-in"
                         src="images/act-student-institute-school-education-a-group-of-students-5d9652581bf3d58603d9c8b3b65a4ca7.png" 
                         alt="Hình ảnh ưu đãi đặc biệt đăng ký khóa học tiếng Anh" 
                         loading="lazy"
@@ -531,8 +541,7 @@
 
 <script>
     async function includeHTML() {
-        // Danh sách các thành phần cần nhúng
-        const components = [
+            const components = [
             { id: 'header-placeholder', file: 'header.html' },
             { id: 'footer-placeholder', file: 'footer.html' }
         ];
@@ -550,6 +559,17 @@
                 }
             }
         }
+
+        // Sau khi tải xong các file, ẩn vòng xoay
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        }, 600); // Đợi 0.6s cho cảm giác mượt mà
+
         initMenuLogic();
     }
     function initMenuLogic() {
@@ -598,5 +618,14 @@
     // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
 </script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // Tốc độ hiệu ứng (1 giây)
+    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+  });
+</script>
+
 </body>
 </html>

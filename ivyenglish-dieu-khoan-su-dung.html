@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* Đảm bảo nội dung không tràn và dễ đọc */
         .content-wrapper {
@@ -45,9 +46,17 @@
     </style>
 </head>
 <body style="background-color: var(--bg-body);">
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
     <div id="header-placeholder"></div>
 
-    <div class="main-wrapper" style="padding: 120px 20px 80px; display: flex; justify-content: center;">
+    <div data-aos="fade-up" class="main-wrapper" style="padding: 120px 20px 80px; display: flex; justify-content: center;">
         
         <div class="test-container" style="max-width: 900px; width: 100%; padding: 40px; box-sizing: border-box; text-align: left;">
             
@@ -229,26 +238,36 @@
 
 <script>
     async function includeHTML() {
-        // Danh sách các thành phần cần nhúng
         const components = [
-            { id: 'header-placeholder', file: 'header.html' },
-            { id: 'footer-placeholder', file: 'footer.html' }
-        ];
+        { id: 'header-placeholder', file: 'header.html' },
+        { id: 'footer-placeholder', file: 'footer.html' }
+    ];
 
-        for (const comp of components) {
-            const element = document.getElementById(comp.id);
-            if (element) {
-                try {
-                    const response = await fetch(comp.file);
-                    if (response.ok) {
-                        element.innerHTML = await response.text();
-                    }
-                } catch (err) {
-                    console.error("Lỗi khi tải file: " + comp.file, err);
+    for (const comp of components) {
+        const element = document.getElementById(comp.id);
+        if (element) {
+            try {
+                const response = await fetch(comp.file);
+                if (response.ok) {
+                    element.innerHTML = await response.text();
                 }
+            } catch (err) {
+                console.error("Lỗi khi tải file: " + comp.file, err);
             }
         }
-        initMenuLogic();
+    }
+
+    // Sau khi tải xong các file, ẩn vòng xoay
+    setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+            setTimeout(() => preloader.style.display = 'none', 500);
+        }
+    }, 600); // Đợi 0.6s cho cảm giác mượt mà
+
+    initMenuLogic();
     }
     function initMenuLogic() {
         const menuToggle = document.querySelector('.menu-toggle');
@@ -295,6 +314,14 @@
 
     // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // Tốc độ hiệu ứng (1 giây)
+    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+  });
 </script>
 </body>
 </html>

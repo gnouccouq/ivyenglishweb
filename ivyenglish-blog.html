@@ -13,17 +13,26 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
     <!-- Navbar -->
     <div id="header-placeholder"></div>
     <!-- End Navbar -->
 
     <!-- Blog Content -->
-    <section class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
+    <section data-aos="fade-up" class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
         <h2 style="text-align: center; margin-bottom: 40px; font-size: 2em; color: #2c3e50;">Tin tức & Kinh nghiệm học tập</h2>
         
-        <div id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
+        <div data-aos="fade-right" id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
             <p style="text-align: center; grid-column: 1/-1;">Đang tải bài viết mới nhất...</p>
         </div>
     </section>
@@ -264,8 +273,7 @@
 
 <script>
     async function includeHTML() {
-        // Danh sách các thành phần cần nhúng
-        const components = [
+            const components = [
             { id: 'header-placeholder', file: 'header.html' },
             { id: 'footer-placeholder', file: 'footer.html' }
         ];
@@ -283,6 +291,17 @@
                 }
             }
         }
+
+        // Sau khi tải xong các file, ẩn vòng xoay
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        }, 600); // Đợi 0.6s cho cảm giác mượt mà
+
         initMenuLogic();
     }
     function initMenuLogic() {
@@ -330,6 +349,14 @@
 
     // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // Tốc độ hiệu ứng (1 giây)
+    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+  });
 </script>
 
 </body>

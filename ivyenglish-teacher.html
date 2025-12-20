@@ -13,6 +13,7 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root { 
             --p-blue: #1a237e; 
@@ -176,6 +177,14 @@
     </style>
 </head>
 <body style="background-color: var(--bg-body);">
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
     <div id="header-placeholder"></div>
 
     <section class="teacher-header">
@@ -185,7 +194,7 @@
     </div>
 </section>
 
-<div class="container">
+<div data-aos="fade-up" class="container">  
     <div class="profile-card">
         <div class="profile-left">
             <img src="images/avatar.jpg" alt="Lê Văn Trung (Mr. Jaime)" class="teacher-photo">
@@ -404,10 +413,9 @@
         }
     </script>
 
-    <script>
+ <script>
     async function includeHTML() {
-        // Danh sách các thành phần cần nhúng
-        const components = [
+            const components = [
             { id: 'header-placeholder', file: 'header.html' },
             { id: 'footer-placeholder', file: 'footer.html' }
         ];
@@ -425,6 +433,17 @@
                 }
             }
         }
+
+        // Sau khi tải xong các file, ẩn vòng xoay
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        }, 600); // Đợi 0.6s cho cảm giác mượt mà
+
         initMenuLogic();
     }
     function initMenuLogic() {
@@ -472,6 +491,13 @@
 
     // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // Tốc độ hiệu ứng (1 giây)
+    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+  });
 </script>
 </body>
 </html>
