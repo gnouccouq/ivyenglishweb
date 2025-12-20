@@ -30,10 +30,11 @@
 
     <!-- Blog Content -->
     <section data-aos="fade-up" class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
-        <h2 style="text-align: center; margin-bottom: 40px; font-size: 2em; color: #2c3e50;">Tin tức & Kinh nghiệm học tập</h2>
-        
-        <div data-aos="fade-right" id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-            <p style="text-align: center; grid-column: 1/-1;">Đang tải bài viết mới nhất...</p>
+        <div data-aos="fade-right" id="blog-container">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
         </div>
     </section>
     <!-- End Blog Content -->
@@ -85,39 +86,124 @@
             });
         });
         
-        
+    let allPosts = []; // Biến lưu trữ toàn bộ bài viết để dùng cho mục "Tất cả"
+    let visibleCount = 6;    
 
-        async function loadBlogPosts() {
+    async function loadBlogPosts() {
         const container = document.getElementById('blog-container');
-        const API_POSTS = "https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts"; // Nhớ thêm ?sheet=Posts
+        const API_POSTS = "https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts";
 
         try {
             const response = await fetch(API_POSTS);
-            const posts = await response.json();
+            const data = await response.json();
 
-            if (posts.length === 0) {
+            if (!data || data.length === 0) {
                 container.innerHTML = "<p>Chưa có bài viết nào được đăng.</p>";
                 return;
             }
 
-            container.innerHTML = posts.reverse().map(post => `
-                <div class="blog-card">
-                    <img src="${post.image || 'https://via.placeholder.com/400x200'}" alt="${post.title}">
-                    <div class="blog-card-body">
-                        <span class="blog-category">${post.category}</span>
-                        <h3 class="blog-title">${post.title}</h3>
-                        <div class="blog-time">📅 ${post.time}</div>
-                        <div class="blog-excerpt">
-                            ${stripHtml(post.content).substring(0, 120)}...
-                        </div>
-                        <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(post))}')" class="btn-readmore">Đọc thêm →</a>
-                    </div>
+            // Đảo ngược để bài mới nhất lên đầu
+            allPosts = data.reverse();
+
+            // 1. Định nghĩa thứ tự ưu tiên các mục
+            const priorityOrder = ["Tuyển sinh", "Tài liệu", "Tin tức", "Kinh nghiệm"];
+
+            // 2. Nhóm bài viết theo category
+            const groupedPosts = allPosts.reduce((groups, post) => {
+                const category = post.category || "Tin tức khác";
+                if (!groups[category]) groups[category] = [];
+                groups[category].push(post);
+                return groups;
+            }, {});
+
+            let finalHtml = "";
+
+            // 3. Hiển thị các mục theo thứ tự ưu tiên đã định nghĩa
+            priorityOrder.forEach(cat => {
+                if (groupedPosts[cat] && groupedPosts[cat].length > 0) {
+                    finalHtml += renderCategorySection(cat, groupedPosts[cat]);
+                }
+            });
+
+            // 4. Hiển thị các mục còn lại (nếu có category khác ngoài danh sách ưu tiên)
+            for (const cat in groupedPosts) {
+                if (!priorityOrder.includes(cat)) {
+                    finalHtml += renderCategorySection(cat, groupedPosts[cat]);
+                }
+            }
+
+            // 5. Thêm mục "Tất cả bài viết" ở cuối cùng
+            finalHtml += `
+                <div class="category-divider" data-aos="fade-right">
+                    <h2>Tất cả bài viết</h2>
+                    <div class="line"></div>
                 </div>
-            `).join('');
+                <div id="all-posts-grid" class="blog-group">
+                    ${renderPosts(allPosts.slice(0, visibleCount))}
+                </div>
+                <div id="load-more-container" style="text-align: center; margin-top: 30px;">
+                    ${allPosts.length > visibleCount ? '<button onclick="loadMorePosts()" class="btn-loadmore">Xem thêm bài viết</button>' : ''}
+                </div>
+            `;
+
+            container.style.display = "block";
+            container.innerHTML = finalHtml;
 
         } catch (error) {
             console.error("Lỗi tải bài viết:", error);
             container.innerHTML = "<p>Không thể tải bài viết lúc này.</p>";
+        }
+    }
+
+    function renderCategorySection(title, posts) {
+        const limit = 3; // Bạn có thể chỉnh thành 4 nếu muốn hiện 4 bài đầu tiên
+        const hasMore = posts.length > limit;
+        const sectionId = `section-${title.replace(/\s+/g, '-')}`;
+
+        return `
+            <div class="category-divider" data-aos="fade-right">
+                <h2>${title}</h2>
+                <div class="line"></div>
+            </div>
+            <div id="${sectionId}" class="blog-group">
+                ${renderPosts(posts.slice(0, limit))}
+            </div>
+            ${hasMore ? `
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <button class="btn-view-cat" onclick="expandCategory('${sectionId}', '${encodeURIComponent(JSON.stringify(posts))}')">
+                        Xem tất cả bài viết ${title}
+                    </button>
+                </div>
+            ` : '<div style="margin-bottom: 40px;"></div>'}
+        `;
+    }
+
+    function renderPosts(posts) {
+        return posts.map(post => `
+            <div class="blog-card" data-aos="zoom-in">
+                <img src="${post.image || 'https://via.placeholder.com/400x200'}" alt="${post.title}">
+                <div class="blog-card-body">
+                    <span class="blog-category">${post.category}</span>
+                    <h3 class="blog-title">${post.title}</h3>
+                    <div class="blog-time">📅 ${post.time}</div>
+                    <div class="blog-excerpt">${stripHtml(post.content).substring(0, 100)}...</div>
+                    <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(post))}')" class="btn-readmore">Đọc thêm →</a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function expandCategory(id, encodedPosts) {
+        const posts = JSON.parse(decodeURIComponent(encodedPosts));
+        document.getElementById(id).innerHTML = renderPosts(posts);
+        event.target.parentElement.style.display = 'none'; // Ẩn nút sau khi bấm
+    }
+
+    function loadMorePosts() {
+        visibleAllCount += 6;
+        document.getElementById('all-posts-grid').innerHTML = renderPosts(allPosts.slice(0, visibleAllCount));
+        if (visibleAllCount >= allPosts.length) {
+            document.getElementById('load-more-all-container').style.display = 'none';
         }
     }
 

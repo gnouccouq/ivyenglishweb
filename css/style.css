@@ -289,6 +289,101 @@ nav a:hover {
     text-decoration: none; font-weight: bold; font-size: 0.9em; 
 }
 
+/* Style cho tiêu đề phân loại bài viết */
+.category-divider {
+    display: flex;
+    align-items: center;
+    margin: 40px 0 20px;
+    width: 100%;
+}
+
+.category-divider h2 {
+    margin: 0;
+    padding-right: 20px;
+    font-size: 1.5em;
+    color: var(--primary-color);
+    white-space: nowrap; /* Không cho chữ xuống dòng */
+    text-align: left; /* Căn trái theo ý bạn */
+}
+
+.category-divider .line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #ddd; /* Màu của thanh gạch ngang */
+    position: relative;
+}
+
+/* Layout chia mục */
+.category-divider {
+    display: flex;
+    align-items: center;
+    margin: 40px 0 20px;
+}
+
+.category-divider h2 {
+    margin: 0;
+    padding-right: 20px;
+    font-size: 1.6em;
+    color: #2c3e50;
+    white-space: nowrap;
+}
+
+.category-divider .line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #eee;
+}
+
+.blog-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.btn-view-cat {
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-view-cat:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Nút Xem thêm */
+.btn-loadmore {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(91, 140, 255, 0.3);
+}
+
+.btn-loadmore:hover {
+    background-color: #4a76d9;
+    transform: translateY(-2px);
+}
+
+/* Container cho mỗi nhóm bài viết */
+.blog-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
 .post-full-content img {
     max-width: 100%; /* Đảm bảo ảnh không to quá khung */
     height: auto;
@@ -1434,6 +1529,18 @@ section.blog-section {
     }
     .contact-banner.image-banner {
         order: 1;
+    }
+}
+
+@media (max-width: 1100px) {
+    .blog-group, #blog-container {
+        grid-template-columns: repeat(2, 1fr); /* Xuống 2 cột trên Tablet/Laptop nhỏ */
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-group, #blog-container {
+        grid-template-columns: 1fr; /* Xuống 1 cột trên Mobile */
     }
 }
 
