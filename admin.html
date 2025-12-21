@@ -380,7 +380,7 @@
             }
         });
 
-        const API_URL = "https://sheetdb.io/api/v1/stjh3ikcs21t8";
+        const API_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
         let currentData = [];
 
         // Hàm chuyển Tab
@@ -532,7 +532,7 @@
             };
 
             try {
-                const response = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts", {
+                const response = await fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=Posts", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: [postData] })
@@ -561,7 +561,7 @@
         // 1. Tải danh sách bài viết
         async function loadAdminPosts() {
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts");
+                const res = await fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=Posts");
                 const data = await res.json();
                 const container = document.getElementById('admin-post-list');
                 container.innerHTML = data.reverse().map(p => `
@@ -600,7 +600,7 @@
             };
 
             try {
-                const res = await fetch(`https://sheetdb.io/api/v1/stjh3ikcs21t8/title/${encodeURIComponent(oldTitle)}?sheet=Posts`, {
+                const res = await fetch(`https://sheetdb.io/api/v1/3abfyh1liwt97/title/${encodeURIComponent(oldTitle)}?sheet=Posts`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: updateData })
@@ -621,7 +621,7 @@
         async function deletePost(title) {
             if(!confirm("Bạn có chắc chắn muốn xóa bài viết này?")) return;
             try {
-                const res = await fetch(`https://sheetdb.io/api/v1/stjh3ikcs21t8/title/${title}?sheet=Posts`, {
+                const res = await fetch(`https://sheetdb.io/api/v1/3abfyh1liwt97/title/${title}?sheet=Posts`, {
                     method: 'DELETE'
                 });
                 if(res.ok) {
@@ -639,7 +639,7 @@
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Đang tải dữ liệu...</td></tr>';
             
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=QuizResults");
+                const res = await fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=QuizResults");
                 const data = await res.json();
 
                 window.allQuizData = data.reverse();
