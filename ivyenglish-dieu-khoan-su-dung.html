@@ -14,34 +14,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        /* Đảm bảo nội dung không tràn và dễ đọc */
-        .content-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px;
-            background: var(--white);
-            border-radius: var(--border-radius-xl);
-            box-shadow: var(--shadow-soft);
-            box-sizing: border-box; /* Cực kỳ quan trọng để không tràn viền */
+        /* Giao diện Hero đồng bộ trang Index (Sử dụng dải màu Slate và Blue) */
+        :root {
+            --p-blue: #1a237e;
+            --s-gold: #c5a059;
+            --text-dark: #1e293b;
+            --white: #ffffff;
         }
-        .term-section { margin-bottom: 35px; }
-        .term-section h3 { 
-            color: var(--primary-color); 
-            text-transform: uppercase; 
-            font-size: 1.2rem;
+        body { background-color: #f4f7fa; color: var(--text-dark); }
+        .terms-hero {
+            background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%);
+            padding: 120px 0 70px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            color: white;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+        .terms-hero h1 {
+            font-size: 38px;
+            color: var(--p-blue); /* Màu #5b8cff từ Index */
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Container nội dung dạng Card hiện đại */
+        .terms-container {
+            max-width: 900px;
+            margin: -50px auto 80px;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 30px; /* Bo góc lớn đồng bộ Index */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05); /* Shadow mềm mịn */
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        /* Tiêu đề mục sử dụng thanh nhấn màu Gold */
+        .terms-content-wrapper h3 {
+            color: var(--p-blue);
+            font-size: 20px;
+            margin-top: 35px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            border-left: 5px solid var(--s-gold); /* Nhấn màu vàng đặc trưng */
+            padding-left: 15px;
         }
-        .term-section p, .term-section li { 
-            color: var(--text-color); 
-            line-height: 1.8; 
+
+        .terms-content-wrapper h3 i {
+            color: var(--s-gold); /* Icon màu vàng */
+            font-size: 18px;
+        }
+        
+        .terms-content-wrapper p, 
+        .terms-content-wrapper li {
+            color: #475569; /* Màu chữ Slate giống Index */
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
             text-align: justify;
         }
-        ul { padding-left: 20px; }
+
+        .terms-content-wrapper ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .update-info {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        /* Box thông tin liên hệ được cách điệu */
+        .contact-card-box {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px dashed var(--s-gold);
+            margin-top: 30px;
+        }
+
         @media (max-width: 768px) {
-            .content-wrapper { padding: 25px 15px; }
+            .terms-container { 
+                margin: -30px 15px 50px; 
+                padding: 35px 20px; 
+                border-radius: 20px;
+            }
+            .terms-hero h1 { font-size: 26px; }
+            .terms-content-wrapper h3 { font-size: 18px; }
         }
     </style>
 </head>
@@ -54,52 +120,55 @@
             </div>
         </div>
     </div>
+
     <div id="header-placeholder"></div>
 
-    <div data-aos="fade-up" class="main-wrapper" style="padding: 120px 20px 80px; display: flex; justify-content: center;">
-        
-        <div class="test-container" style="max-width: 900px; width: 100%; padding: 40px; box-sizing: border-box; text-align: left;">
-            
-            <h1 style="color: var(--primary-color); text-align: center; margin-bottom: 10px; font-weight: 900;">ĐIỀU KHOẢN SỬ DỤNG</h1>
-            <p style="text-align: center; font-style: italic; color: #64748b; margin-bottom: 40px;">Cập nhật lần cuối: Ngày 19 tháng 12 năm 2025</p>
+    <main>
+        <section class="terms-hero">
+            <div class="container">
+                <h1 data-aos="fade-down" style="color: var(--s-gold);">Điều Khoản Sử Dụng</h1>
+                <p class="update-info" data-aos="fade-up">Cập nhật lần cuối: Ngày 19 tháng 12 năm 2025</p>
+            </div>
+        </section>
 
-            <div class="terms-content" style="color: var(--text-color); line-height: 1.8;">
-                
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-check-circle"></i> 1. CHẤP THUẬN CÁC ĐIỀU KHOẢN</h3>
+        <div class="terms-container" data-aos="fade-up">
+            <div class="terms-content-wrapper">
                 <p>Bằng việc truy cập và sử dụng dịch vụ tại <strong>ivyEnglish</strong>, bạn mặc nhiên đồng ý với các điều khoản và điều kiện này. Chúng tôi có quyền thay đổi, chỉnh sửa, thêm hoặc lược bỏ bất kỳ phần nào trong Điều khoản sử dụng này vào bất cứ lúc nào.</p>
 
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-user-shield"></i> 2. QUYỀN SỞ HỮU TRÍ TUỆ</h3>
-                <p>Tất cả nội dung được đăng tải trên website, bao gồm nhưng không giới hạn ở: văn bản, thiết kế đồ họa, logo, hình ảnh, tệp âm thanh, video, mã nguồn và các bài kiểm tra trình độ đều là tài sản độc quyền của ivyEnglish. Mọi hành vi sao chép, trích dẫn mà không có sự đồng ý bằng văn bản từ chúng tôi đều được coi là vi phạm pháp luật.</p>
+                <h3><i class="fas fa-check-circle"></i> 1. CHẤP THUẬN CÁC ĐIỀU KHOẢN</h3>
+                <p>Việc bạn truy cập website và đăng ký tư vấn đồng nghĩa với việc bạn chấp thuận các quy chuẩn hoạt động và bảo mật của chúng tôi. Mọi thay đổi sẽ có hiệu lực ngay khi được đăng tải mà không cần thông báo trước.</p>
 
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-microphone-alt"></i> 3. DỊCH VỤ GHI ÂM VÀ DỮ LIỆU CÁ NHÂN</h3>
-                <p>Website có tích hợp tính năng ghi âm để phục vụ việc kiểm tra phát âm. Khi sử dụng tính năng này:</p>
-                <ul style="padding-left: 20px;">
-                    <li>Bạn đồng ý cho phép trình duyệt truy cập Microphone.</li>
-                    <li>Dữ liệu âm thanh sẽ được tải lên máy chủ lưu trữ (Cloudinary) để giáo viên có thể nghe và đánh giá.</li>
-                    <li>Chúng tôi cam kết không sử dụng giọng nói của bạn vào mục đích thương mại khác ngoài việc giảng dạy.</li>
+                <h3><i class="fas fa-user-shield"></i> 2. QUYỀN SỞ HỮU TRÍ TUỆ</h3>
+                <p>Tất cả nội dung bao gồm: văn bản, đồ họa, logo, hình ảnh, bài nghe và giáo trình độc quyền đều là tài sản của ivyEnglish. Bạn không được phép sao chép hoặc phân phối lại dưới mọi hình thức nếu không có sự cho phép bằng văn bản.</p>
+
+                <h3><i class="fas fa-microphone-alt"></i> 3. DỊCH VỤ GHI ÂM VÀ DỮ LIỆU</h3>
+                <p>Website tích hợp tính năng ghi âm phục vụ luyện phát âm:</p>
+                <ul>
+                    <li>Dữ liệu âm thanh được bảo mật trên hệ thống Cloudinary.</li>
+                    <li>Chúng tôi chỉ sử dụng dữ liệu này để giáo viên đánh giá trình độ của học viên.</li>
+                    <li>Cam kết không chia sẻ giọng nói của bạn cho bên thứ ba vì mục đích quảng cáo.</li>
                 </ul>
 
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-exclamation-triangle"></i> 4. TRÁCH NHIỆM CỦA NGƯỜI DÙNG</h3>
-                <p>Người dùng cam kết cung cấp thông tin cá nhân chính xác (Họ tên, Số điện thoại) để chúng tôi có thể gửi kết quả và hỗ trợ lộ trình học tập. Học viên không được phép sử dụng các phần mềm can thiệp vào hệ thống để làm sai lệch kết quả bài thi.</p>
+                <h3><i class="fas fa-exclamation-triangle"></i> 4. TRÁCH NHIỆM NGƯỜI DÙNG</h3>
+                <p>Người dùng cam kết cung cấp thông tin chính xác. Nghiêm cấm mọi hành vi tấn công mạng, sử dụng tool can thiệp vào kết quả bài thi hoặc phát tán nội dung độc hại trên nền tảng của chúng tôi.</p>
 
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-info-circle"></i> 5. GIỚI HẠN TRÁCH NHIỆM</h3>
-                <p>ivyEnglish cung cấp các bài kiểm tra và tài liệu học tập với mục tiêu hỗ trợ người học. Tuy nhiên, kết quả từ các bài thi tự động trên web chỉ mang tính chất tham khảo đầu vào, không dùng để thay thế cho các chứng chỉ quốc tế chính thống như IELTS, TOEIC hay TOEFL.</p>
+                <h3><i class="fas fa-info-circle"></i> 5. GIỚI HẠN TRÁCH NHIỆM</h3>
+                <p>Kết quả từ các bài kiểm tra tự động trên website mang tính chất tham khảo lộ trình. ivyEnglish không chịu trách nhiệm nếu kết quả này có sự chênh lệch so với kết quả thi tại các trung tâm khảo thí quốc tế.</p>
 
-                <h3 style="color: var(--primary-color); margin-top: 25px;"><i class="fas fa-envelope"></i> 6. LIÊN HỆ</h3>
-                <p>Mọi thắc mắc hoặc khiếu nại về chất lượng dịch vụ, vui lòng liên hệ trực tiếp qua:</p>
-                <p>
-                    <strong>Hotline:</strong> 096.973.0433<br>
-                    <strong>Email:</strong> trunglv.997@gmail.com<br>
-                    <strong>Địa chỉ:</strong> Trụ sở chính ivyEnglish - 2B, Đường số 222, xã Hoà Phú, huyện Củ Chi, TP. Hồ Chí Minh.
-                </p>
+                <h3><i class="fas fa-envelope"></i> 6. THÔNG TIN LIÊN HỆ</h3>
+                <p>Mọi thắc mắc vui lòng liên hệ trực tiếp đội ngũ hỗ trợ:</p>
+                <div class="contact-card-box">
+                    <p style="margin-bottom: 8px;"><strong><i class="fas fa-phone-alt" style="color: var(--p-blue); margin-right: 8px;"></i> Hotline:</strong> 096.973.0433</p>
+                    <p style="margin-bottom: 8px;"><strong><i class="fas fa-envelope" style="color: var(--p-blue); margin-right: 8px;"></i> Email:</strong> trunglv.997@gmail.com</p>
+                    <p style="margin-bottom: 0;"><strong><i class="fas fa-map-marker-alt" style="color: var(--p-blue); margin-right: 8px;"></i> Địa chỉ:</strong> Trụ sở chính ivyEnglish - 2B, Đường số 222, xã Hoà Phú, huyện Củ Chi, TP. Hồ Chí Minh.</p>
+                </div>
             </div>
-
         </div>
-    </div>
+    </main>
 
     <div id="footer-placeholder"></div>
 
-     <div class="floating-contact">
+    <div class="floating-contact">
         <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
             <i class="fas fa-arrow-up"></i>
         </a>
@@ -115,213 +184,91 @@
     </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các phần tử cần thiết
-        const snowContainer = document.body;
-        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
-        const snowflakesCount = 40;
-
-        for (let i = 0; i < snowflakesCount; i++) {
-            createSnowflake(snowContainer);
-        }
-       
-        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
-        window.addEventListener('click', function(event) {
-            if (event.target === successPopup) {
-                successPopup.style.display = 'none';
-            }
-        });
-    
-        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
-        const scrollToTopButton = document.querySelector('.scroll-to-top');
-
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                scrollToTopButton.style.display = "flex";
-            } else {
-                scrollToTopButton.style.display = "none";
-            }
-        };
-
-        scrollToTopButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-         // --- 4. Xử lý Thanh Điều Hướng (Responsive Nav) ---
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            const header = document.querySelector('header');
-
-            menuToggle.addEventListener('click', function() {
-                nav.classList.toggle('nav-open'); 
-                menuToggle.classList.toggle('menu-active'); 
-                
-                if (menuToggle.classList.contains('menu-active')) {
-                    menuToggle.classList.remove('fa-bars');
-                    menuToggle.classList.add('fa-times');
+            const snowContainer = document.body;
+            const snowflakesCount = 40;
+            for (let i = 0; i < snowflakesCount; i++) { createSnowflake(snowContainer); }
+            
+            const scrollToTopButton = document.querySelector('.scroll-to-top');
+            window.onscroll = function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollToTopButton.style.display = "flex";
                 } else {
-                    menuToggle.classList.remove('fa-times');
-                    menuToggle.classList.add('fa-bars');
+                    scrollToTopButton.style.display = "none";
                 }
-
-                document.body.classList.toggle('no-scroll');
-            });
-            
-            nav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        nav.classList.remove('nav-open');
-                        menuToggle.classList.remove('menu-active', 'fa-times');
-                        menuToggle.classList.add('fa-bars');
-                        document.body.classList.remove('no-scroll');
-                    }
-                });
-            });
-            
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
+            };
+            scrollToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
         function createSnowflake(container) {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
-            
-            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
             snowflake.innerHTML = '❄'; 
-
-            // Random kích thước (từ 10px đến 25px)
             const size = Math.random() * 15 + 10 + 'px';
             snowflake.style.fontSize = size;
-            
-            // Random vị trí bắt đầu theo chiều ngang
             snowflake.style.left = Math.random() * 100 + 'vw';
-            
-            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
             const duration = Math.random() * 10 + 5 + 's';
             snowflake.style.animationDuration = duration;
-            
-            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
             snowflake.style.animationDelay = Math.random() * 5 + 's';
-            
-            // Random độ mờ (tạo chiều sâu)
             snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-
             container.appendChild(snowflake);
+            snowflake.addEventListener('animationiteration', function() { snowflake.remove(); createSnowflake(container); });
+        }
 
-            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
-            snowflake.addEventListener('animationiteration', function() {
-                snowflake.remove();
-                createSnowflake(container);
+        async function includeHTML() {
+            const components = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+            for (const comp of components) {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    try {
+                        const response = await fetch(comp.file);
+                        if (response.ok) { element.innerHTML = await response.text(); }
+                    } catch (err) { console.error("Lỗi: " + comp.file, err); }
+                }
+            }
+            initMenuLogic();
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                    setTimeout(() => preloader.style.display = 'none', 500);
+                }
+            }, 600);
+        }
+
+        function initMenuLogic() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const dropdowns = document.querySelectorAll('.dropdown');
+            if (!menuToggle || !nav) return;
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                menuToggle.classList.replace(menuToggle.classList.contains('menu-active') ? 'fa-bars' : 'fa-times', menuToggle.classList.contains('menu-active') ? 'fa-times' : 'fa-bars');
+                document.body.classList.toggle('no-scroll');
             });
-            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
-            snowflake.addEventListener('animationend', function() {
-                snowflake.remove();
-                createSnowflake(container);
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                toggle.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768 && !dropdown.classList.contains('active')) {
+                        e.preventDefault();
+                        dropdowns.forEach(d => d.classList.remove('active'));
+                        dropdown.classList.add('active');
+                    }
+                });
             });
         }
+        document.addEventListener("DOMContentLoaded", includeHTML);
     </script>
-
-<script>
-    async function includeHTML() {
-        const components = [
-        { id: 'header-placeholder', file: 'header.html' },
-        { id: 'footer-placeholder', file: 'footer.html' }
-    ];
-
-    for (const comp of components) {
-        const element = document.getElementById(comp.id);
-        if (element) {
-            try {
-                const response = await fetch(comp.file);
-                if (response.ok) {
-                    element.innerHTML = await response.text();
-                }
-            } catch (err) {
-                console.error("Lỗi khi tải file: " + comp.file, err);
-            }
-        }
-    }
-
-    // Sau khi tải xong các file, ẩn vòng xoay
-    setTimeout(() => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.style.opacity = '0';
-            preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
-            setTimeout(() => preloader.style.display = 'none', 500);
-        }
-    }, 600); // Đợi 0.6s cho cảm giác mượt mà
-
-    initMenuLogic();
-    }
-    function initMenuLogic() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const nav = document.getElementById('main-nav');
-
-        // Kiểm tra xem các phần tử có tồn tại không trước khi gán sự kiện
-        if (!menuToggle || !nav) return;
-
-        menuToggle.addEventListener('click', function() {
-            nav.classList.toggle('nav-open'); 
-            menuToggle.classList.toggle('menu-active'); 
-            
-            if (menuToggle.classList.contains('menu-active')) {
-                menuToggle.classList.remove('fa-bars');
-                menuToggle.classList.add('fa-times');
-            } else {
-                menuToggle.classList.remove('fa-times');
-                menuToggle.classList.add('fa-bars');
-            }
-
-            document.body.classList.toggle('no-scroll');
-        });
-        
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (nav.classList.contains('nav-open')) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
-            });
-        });
-        
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active', 'fa-times');
-                menuToggle.classList.add('fa-bars');
-                document.body.classList.remove('no-scroll');
-            }
-        });
-    }
-
-    // Chạy hàm khi trang web tải xong
-    document.addEventListener("DOMContentLoaded", includeHTML);
-</script>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-  AOS.init({
-    duration: 1000, // Tốc độ hiệu ứng (1 giây)
-    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
-  });
-</script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
 </body>
 </html>

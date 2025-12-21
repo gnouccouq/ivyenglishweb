@@ -14,40 +14,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        .content-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px;
-            background: var(--white);
-            border-radius: var(--border-radius-xl);
-            box-shadow: var(--shadow-soft);
-            box-sizing: border-box;
+        /* Giao diện Hero đồng bộ trang Điều Khoản */
+        :root {
+            --p-blue: #1a237e;
+            --s-gold: #c5a059;
+            --text-dark: #1e293b;
+            --white: #ffffff;
         }
-        .policy-section { margin-bottom: 35px; }
-        .policy-section h3 { 
-            color: var(--primary-color); 
-            text-transform: uppercase; 
-            font-size: 1.2rem;
+        body { background-color: #f4f7fa; color: var(--text-dark); }
+        .policy-hero {
+            background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%);
+            padding: 120px 0 70px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            color: white;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+        .policy-hero h1 {
+            font-size: 38px;
+            color: var(--p-blue);
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Container nội dung dạng Card bo góc 30px */
+        .policy-container {
+            max-width: 900px;
+            margin: -50px auto 80px;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        /* Tiêu đề mục sử dụng thanh nhấn màu Gold */
+        .policy-content-wrapper h3 {
+            color: var(--p-blue);
+            font-size: 20px;
+            margin-top: 35px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            border-left: 5px solid var(--s-gold);
+            padding-left: 15px;
         }
-        .policy-section p, .policy-section li { 
-            color: var(--text-color); 
-            line-height: 1.8; 
+
+        .policy-content-wrapper h3 i {
+            color: var(--s-gold);
+            font-size: 18px;
+        }
+        
+        .policy-content-wrapper p, 
+        .policy-content-wrapper li {
+            color: #475569;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
             text-align: justify;
         }
-        ul { padding-left: 20px; }
-        .highlight-box {
-            background: #f0f7ff;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid var(--primary-color);
-            margin: 20px 0;
+
+        .policy-content-wrapper ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
         }
+
+        .update-info {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px dashed var(--s-gold);
+            margin: 25px 0;
+        }
+
         @media (max-width: 768px) {
-            .content-wrapper { padding: 25px 15px; }
+            .policy-container { 
+                margin: -30px 15px 50px; 
+                padding: 35px 20px; 
+                border-radius: 20px;
+            }
+            .policy-hero h1 { font-size: 26px; }
+            .policy-content-wrapper h3 { font-size: 18px; }
         }
     </style>
 </head>
@@ -60,16 +119,21 @@
             </div>
         </div>
     </div>
+
     <div id="header-placeholder"></div>
 
-    <div data-aos="fade-up" class="main-wrapper" style="padding-top: 130px; padding-bottom: 80px;">
-        <div class="content-wrapper">
-            
-            <h1 style="text-align: center; color: var(--primary-color); margin-bottom: 5px; font-weight: 900;">CHÍNH SÁCH BẢO MẬT</h1>
-            <p style="text-align: center; font-style: italic; color: #64748b; margin-bottom: 40px;">Cập nhật lần cuối: Ngày 19 tháng 12 năm 2025</p>
-            <p style="text-align: center; font-style: italic; color: #94a3b8; margin-bottom: 45px;">ivyEnglish cam kết bảo vệ tuyệt đối thông tin cá nhân của học viên</p>
+    <main>
+        <section class="policy-hero">
+            <div class="container">
+                <h1 data-aos="fade-down" style="color: var(--s-gold);">Chính Sách Bảo Mật</h1>
+                <p class="update-info" data-aos="fade-up">Cập nhật lần cuối: Ngày 19 tháng 12 năm 2025</p>
+                <p style="color: #94a3b8; font-style: italic;" data-aos="fade-up">ivyEnglish cam kết bảo vệ tuyệt đối thông tin cá nhân của học viên</p>
+            </div>
+        </section>
 
-            <div class="policy-section">
+        <div class="policy-container" data-aos="fade-up">
+            <div class="policy-content-wrapper">
+                
                 <h3><i class="fas fa-user-lock"></i> 1. Thông tin chúng tôi thu thập</h3>
                 <p>Khi bạn tham gia bài kiểm tra trình độ hoặc đăng ký tư vấn tại ivyEnglish, chúng tôi thu thập các thông tin sau:</p>
                 <ul>
@@ -78,9 +142,7 @@
                     <li><strong>Dữ liệu âm thanh:</strong> File ghi âm giọng nói khi bạn thực hiện phần thi Speaking.</li>
                     <li><strong>Dữ liệu kỹ thuật:</strong> Địa chỉ IP, loại trình duyệt để tối ưu hóa hiển thị web.</li>
                 </ul>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-microchip"></i> 2. Cách thức sử dụng thông tin</h3>
                 <p>Thông tin thu thập được sử dụng duy nhất cho các mục đích:</p>
                 <ul>
@@ -89,31 +151,21 @@
                     <li>Gửi kết quả bài thi qua Zalo hoặc Email cá nhân.</li>
                     <li>Nâng cấp trải nghiệm người dùng trên hệ thống website.</li>
                 </ul>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-microphone-alt"></i> 3. Bảo mật dữ liệu ghi âm</h3>
                 <div class="highlight-box">
-                    <p><strong>Lưu ý:</strong> File ghi âm của bạn được lưu trữ trên hệ thống máy chủ mã hóa (Cloudinary). Chỉ đội ngũ chuyên môn tại ivyEnglish mới có quyền truy cập để chấm điểm. Chúng tôi tuyệt đối không sử dụng giọng nói của học viên để huấn luyện AI bên thứ ba hoặc sử dụng vào mục đích thương mại khi chưa có sự cho phép bằng văn bản.</p>
+                    <p style="margin-bottom: 0;"><strong>Lưu ý:</strong> File ghi âm của bạn được lưu trữ trên hệ thống máy chủ mã hóa (Cloudinary). Chỉ đội ngũ chuyên môn tại ivyEnglish mới có quyền truy cập để chấm điểm. Chúng tôi tuyệt đối không sử dụng giọng nói của học viên để huấn luyện AI bên thứ ba hoặc sử dụng vào mục đích thương mại khi chưa có sự cho phép bằng văn bản.</p>
                 </div>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-server"></i> 4. Lưu trữ và Bảo vệ dữ liệu</h3>
                 <p>Chúng tôi áp dụng các biện pháp bảo mật kỹ thuật hiện đại để chống lại việc truy cập trái phép, thay đổi hoặc phá hủy dữ liệu. Dữ liệu của bạn được lưu trữ trên hệ thống an toàn và chỉ tồn tại trong thời gian cần thiết để phục vụ mục đích đào tạo.</p>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-cookie-bite"></i> 5. Chính sách Cookie</h3>
                 <p>Website sử dụng Cookie để ghi nhớ các tùy chọn cá nhân (ví dụ: việc bạn đã hoàn thành bài test nào). Bạn có thể chọn tắt Cookie trong phần cài đặt trình duyệt, tuy nhiên điều này có thể làm ảnh hưởng đến một số tính năng ghi nhớ kết quả làm bài của hệ thống.</p>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-share-alt-square"></i> 6. Chia sẻ với bên thứ ba</h3>
                 <p>ivyEnglish cam kết <strong>KHÔNG</strong> bán, trao đổi hoặc cho thuê thông tin cá nhân của học viên cho bên thứ ba. Chúng tôi chỉ chia sẻ thông tin trong trường hợp pháp luật yêu cầu hoặc để ngăn chặn các hành vi gian lận kỹ thuật gây hại cho hệ thống.</p>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-user-edit"></i> 7. Quyền của người dùng</h3>
                 <p>Bạn có quyền yêu cầu chúng tôi:</p>
                 <ul>
@@ -121,33 +173,27 @@
                     <li>Chỉnh sửa hoặc cập nhật thông tin liên hệ bị sai lệch.</li>
                     <li>Xóa hoàn toàn dữ liệu ghi âm và kết quả thi khỏi hệ thống của ivyEnglish.</li>
                 </ul>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-child"></i> 8. Bảo vệ quyền riêng tư trẻ em</h3>
                 <p>Dịch vụ của chúng tôi có thể được sử dụng bởi học viên dưới 13 tuổi dưới sự giám sát của phụ huynh hoặc người giám hộ. Chúng tôi không cố ý thu thập thông tin từ trẻ em mà không có sự đồng ý của gia đình. Nếu phụ huynh phát hiện con em mình cung cấp thông tin cho chúng tôi, vui lòng liên hệ để chúng tôi xóa dữ liệu ngay lập tức.</p>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-globe"></i> 9. Chuyển giao dữ liệu xuyên biên giới</h3>
                 <p>Để đảm bảo tốc độ truy cập và lưu trữ tệp ghi âm Speaking, dữ liệu của bạn có thể được lưu trữ trên các hạ tầng điện toán đám mây quốc tế (như Cloudinary, Google Cloud). Bằng việc sử dụng dịch vụ, bạn đồng ý với việc dữ liệu được xử lý trên các hệ thống này với tiêu chuẩn bảo mật toàn cầu.</p>
-            </div>
 
-            <div class="policy-section">
                 <h3><i class="fas fa-history"></i> 10. Thay đổi chính sách</h3>
                 <p>ivyEnglish có quyền cập nhật chính sách bảo mật này theo từng giai đoạn phát triển của trung tâm. Mọi thay đổi sẽ được thông báo thông qua việc cập nhật ngày "Cập nhật lần cuối" ở đầu trang này. Chúng tôi khuyến khích bạn thường xuyên kiểm tra trang này để nắm bắt cách chúng tôi bảo vệ thông tin của bạn.</p>
-            </div>
 
-            <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px dashed #e2e8f0;">
-                <p style="margin-bottom: 20px; font-weight: 500;">Bạn có câu hỏi về quyền riêng tư?</p>
-                <p>Liên hệ bộ phận dữ liệu: <strong>trunglv.997@gmail.com</strong></p>
+                <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px dashed #e2e8f0;">
+                    <p style="margin-bottom: 10px; font-weight: 500;">Bạn có câu hỏi về quyền riêng tư?</p>
+                    <p>Liên hệ bộ phận dữ liệu: <strong style="color: var(--p-blue);">trunglv.997@gmail.com</strong></p>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <div id="footer-placeholder"></div>
 
-     <div class="floating-contact">
+    <div class="floating-contact">
         <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
             <i class="fas fa-arrow-up"></i>
         </a>
@@ -163,213 +209,91 @@
     </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các phần tử cần thiết
-        const snowContainer = document.body;
-        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
-        const snowflakesCount = 40;
-
-        for (let i = 0; i < snowflakesCount; i++) {
-            createSnowflake(snowContainer);
-        }
-       
-        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
-        window.addEventListener('click', function(event) {
-            if (event.target === successPopup) {
-                successPopup.style.display = 'none';
-            }
-        });
-    
-        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
-        const scrollToTopButton = document.querySelector('.scroll-to-top');
-
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                scrollToTopButton.style.display = "flex";
-            } else {
-                scrollToTopButton.style.display = "none";
-            }
-        };
-
-        scrollToTopButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-         // --- 4. Xử lý Thanh Điều Hướng (Responsive Nav) ---
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            const header = document.querySelector('header');
-
-            menuToggle.addEventListener('click', function() {
-                nav.classList.toggle('nav-open'); 
-                menuToggle.classList.toggle('menu-active'); 
-                
-                if (menuToggle.classList.contains('menu-active')) {
-                    menuToggle.classList.remove('fa-bars');
-                    menuToggle.classList.add('fa-times');
+            const snowContainer = document.body;
+            const snowflakesCount = 40;
+            for (let i = 0; i < snowflakesCount; i++) { createSnowflake(snowContainer); }
+            
+            const scrollToTopButton = document.querySelector('.scroll-to-top');
+            window.onscroll = function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollToTopButton.style.display = "flex";
                 } else {
-                    menuToggle.classList.remove('fa-times');
-                    menuToggle.classList.add('fa-bars');
+                    scrollToTopButton.style.display = "none";
                 }
-
-                document.body.classList.toggle('no-scroll');
-            });
-            
-            nav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        nav.classList.remove('nav-open');
-                        menuToggle.classList.remove('menu-active', 'fa-times');
-                        menuToggle.classList.add('fa-bars');
-                        document.body.classList.remove('no-scroll');
-                    }
-                });
-            });
-            
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
+            };
+            scrollToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
         function createSnowflake(container) {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
-            
-            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
             snowflake.innerHTML = '❄'; 
-
-            // Random kích thước (từ 10px đến 25px)
             const size = Math.random() * 15 + 10 + 'px';
             snowflake.style.fontSize = size;
-            
-            // Random vị trí bắt đầu theo chiều ngang
             snowflake.style.left = Math.random() * 100 + 'vw';
-            
-            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
             const duration = Math.random() * 10 + 5 + 's';
             snowflake.style.animationDuration = duration;
-            
-            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
             snowflake.style.animationDelay = Math.random() * 5 + 's';
-            
-            // Random độ mờ (tạo chiều sâu)
             snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-
             container.appendChild(snowflake);
+            snowflake.addEventListener('animationiteration', function() { snowflake.remove(); createSnowflake(container); });
+        }
 
-            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
-            snowflake.addEventListener('animationiteration', function() {
-                snowflake.remove();
-                createSnowflake(container);
+        async function includeHTML() {
+            const components = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+            for (const comp of components) {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    try {
+                        const response = await fetch(comp.file);
+                        if (response.ok) { element.innerHTML = await response.text(); }
+                    } catch (err) { console.error("Lỗi: " + comp.file, err); }
+                }
+            }
+            initMenuLogic();
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                    setTimeout(() => preloader.style.display = 'none', 500);
+                }
+            }, 600);
+        }
+
+        function initMenuLogic() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            const dropdowns = document.querySelectorAll('.dropdown');
+            if (!menuToggle || !nav) return;
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                menuToggle.classList.replace(menuToggle.classList.contains('menu-active') ? 'fa-bars' : 'fa-times', menuToggle.classList.contains('menu-active') ? 'fa-times' : 'fa-bars');
+                document.body.classList.toggle('no-scroll');
             });
-            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
-            snowflake.addEventListener('animationend', function() {
-                snowflake.remove();
-                createSnowflake(container);
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                toggle.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768 && !dropdown.classList.contains('active')) {
+                        e.preventDefault();
+                        dropdowns.forEach(d => d.classList.remove('active'));
+                        dropdown.classList.add('active');
+                    }
+                });
             });
         }
+        document.addEventListener("DOMContentLoaded", includeHTML);
     </script>
-
-<script>
-    async function includeHTML() {
-        const components = [
-        { id: 'header-placeholder', file: 'header.html' },
-        { id: 'footer-placeholder', file: 'footer.html' }
-    ];
-
-    for (const comp of components) {
-        const element = document.getElementById(comp.id);
-        if (element) {
-            try {
-                const response = await fetch(comp.file);
-                if (response.ok) {
-                    element.innerHTML = await response.text();
-                }
-            } catch (err) {
-                console.error("Lỗi khi tải file: " + comp.file, err);
-            }
-        }
-    }
-
-    // Sau khi tải xong các file, ẩn vòng xoay
-    setTimeout(() => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.style.opacity = '0';
-            preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
-            setTimeout(() => preloader.style.display = 'none', 500);
-        }
-    }, 600); // Đợi 0.6s cho cảm giác mượt mà
-
-    initMenuLogic();
-    }
-    function initMenuLogic() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const nav = document.getElementById('main-nav');
-
-        // Kiểm tra xem các phần tử có tồn tại không trước khi gán sự kiện
-        if (!menuToggle || !nav) return;
-
-        menuToggle.addEventListener('click', function() {
-            nav.classList.toggle('nav-open'); 
-            menuToggle.classList.toggle('menu-active'); 
-            
-            if (menuToggle.classList.contains('menu-active')) {
-                menuToggle.classList.remove('fa-bars');
-                menuToggle.classList.add('fa-times');
-            } else {
-                menuToggle.classList.remove('fa-times');
-                menuToggle.classList.add('fa-bars');
-            }
-
-            document.body.classList.toggle('no-scroll');
-        });
-        
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (nav.classList.contains('nav-open')) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
-            });
-        });
-        
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active', 'fa-times');
-                menuToggle.classList.add('fa-bars');
-                document.body.classList.remove('no-scroll');
-            }
-        });
-    }
-
-    // Chạy hàm khi trang web tải xong
-    document.addEventListener("DOMContentLoaded", includeHTML);
-</script>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-  AOS.init({
-    duration: 1000, // Tốc độ hiệu ứng (1 giây)
-    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
-  });
-</script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
 </body>
 </html>

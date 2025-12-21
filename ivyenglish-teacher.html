@@ -415,7 +415,7 @@
 
  <script>
     async function includeHTML() {
-            const components = [
+        const components = [
             { id: 'header-placeholder', file: 'header.html' },
             { id: 'footer-placeholder', file: 'footer.html' }
         ];
@@ -434,64 +434,96 @@
             }
         }
 
-        // Sau khi tải xong các file, ẩn vòng xoay
+        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
+        initMenuLogic();
+
+        // Ẩn preloader
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
                 preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                preloader.style.visibility = 'hidden';
                 setTimeout(() => preloader.style.display = 'none', 500);
             }
-        }, 600); // Đợi 0.6s cho cảm giác mượt mà
-
-        initMenuLogic();
+        }, 600);
     }
+
     function initMenuLogic() {
         const menuToggle = document.querySelector('.menu-toggle');
         const nav = document.getElementById('main-nav');
+        const dropdowns = document.querySelectorAll('.dropdown');
 
-        // Kiểm tra xem các phần tử có tồn tại không trước khi gán sự kiện
         if (!menuToggle || !nav) return;
 
+        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open'); 
             menuToggle.classList.toggle('menu-active'); 
             
             if (menuToggle.classList.contains('menu-active')) {
-                menuToggle.classList.remove('fa-bars');
-                menuToggle.classList.add('fa-times');
+                menuToggle.classList.replace('fa-bars', 'fa-times');
             } else {
-                menuToggle.classList.remove('fa-times');
-                menuToggle.classList.add('fa-bars');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
             }
-
             document.body.classList.toggle('no-scroll');
         });
         
-        nav.querySelectorAll('a').forEach(link => {
+        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
+        dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        
+        toggle.addEventListener('click', function(e) {
+            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
+            if (window.innerWidth <= 768) {
+                
+                // Nếu dropdown này chưa được mở (chưa có class 'active')
+                if (!dropdown.classList.contains('active')) {
+                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
+                    
+                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    dropdowns.forEach(d => d.classList.remove('active'));
+                    
+                    // Mở dropdown hiện tại
+                    dropdown.classList.add('active');
+                } 
+                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
+            }
+        });
+    });
+
+        // Đóng dropdown khi bấm ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+        });
+
+        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
+        nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
-                if (nav.classList.contains('nav-open')) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
             });
         });
         
+        // Reset khi xoay ngang màn hình hoặc đổi kích thước
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active', 'fa-times');
-                menuToggle.classList.add('fa-bars');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
                 document.body.classList.remove('no-scroll');
+                dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
     }
 
-    // Chạy hàm khi trang web tải xong
+    // Chạy duy nhất một sự kiện khởi tạo
     document.addEventListener("DOMContentLoaded", includeHTML);
 </script>
+
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({

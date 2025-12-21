@@ -696,32 +696,38 @@ header {
 }
 
 /* --- 5. COURSES SECTION --- */
-.course-grid {
-    display: block;
+#courses {
+    background-color: var(--bg-body); /* Nền xám nhạt đồng bộ trang Teacher */
+    padding: var(--padding-section);
 }
 
-/* Định dạng Swiper Container */
-.course-slider {
-    padding-bottom: 50px; 
-    overflow: hidden;
-    position: relative;
-    max-width: 1200px; 
-    margin: 0 auto;
+.course-grid {
+    display: flex;
+    gap: 20px;
+    padding: 20px 5px;
+    /* Cho phép lướt ngang */
+    overflow-x: auto; 
+    /* Ẩn thanh cuộn xấu trên trình duyệt nếu muốn, hoặc để mặc định */
+    scroll-snap-type: x mandatory; /* Giúp card dừng đúng vị trí khi lướt */
+    -webkit-overflow-scrolling: touch; /* Lướt mượt trên iPhone */
+}
+
+.courses-grid::-webkit-scrollbar {
+    display: none;
 }
 
 /* Định dạng chung cho Course Card (Slide) */
 .course-card {
+    /* Quan trọng: Ngăn card bị bóp méo/giãn */
+    flex: 0 0 300px; /* Không giãn, không co, độ rộng cố định 300px */
+    
+    scroll-snap-align: start; /* Điểm dừng khi lướt */
     background: var(--white);
-    padding: 25px 35px;
-    border-radius: 24px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #edf2f7;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+    height: 100%; /* Đảm bảo các card cao bằng nhau */
 }
 
 .course-card:hover, .teacher-card:hover {
@@ -1837,3 +1843,5 @@ header {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
+
+

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="SIO0aKLY9cZk8-k09UBuQ6r3zaNIMu_pswgELE3FVWw" />
-    <title>ivyEnglish - Blog</title>
+    <title>ivyEnglish - Blog & Chia Sẻ Kiến Thức</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-blog.html" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -14,6 +14,134 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Đồng bộ màu sắc và style mới */
+        :root {
+            --p-blue: #1a237e;
+            --s-gold: #c5a059;
+            --accent: #5b8cff;
+        }
+
+        /* Hero Section cho Blog */
+        .blog-hero {
+            background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%);
+            padding: 120px 20px 80px;
+            text-align: center;
+            color: white;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+        .blog-hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
+        .blog-hero p { opacity: 0.9; font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
+
+        /* Divider Category */
+        .category-divider {
+            margin: 60px 0 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .category-divider h2 {
+            font-size: 1.8rem;
+            color: var(--p-blue);
+            white-space: nowrap;
+            font-weight: 800;
+        }
+        .category-divider .line {
+            height: 3px;
+            background: linear-gradient(to right, var(--accent), transparent);
+            flex-grow: 1;
+            border-radius: 2px;
+        }
+
+        /* Blog Grid & Cards */
+        .blog-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .blog-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(91, 140, 255, 0.15);
+        }
+        .blog-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .blog-card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .blog-category {
+            background: rgba(91, 140, 255, 0.1);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            width: fit-content;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .blog-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; line-height: 1.4; color: var(--p-blue); }
+        .blog-time { font-size: 0.85rem; color: #888; margin-bottom: 15px; }
+        .blog-excerpt { color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; }
+        
+        .btn-readmore {
+            margin-top: auto;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-readmore:hover { gap: 12px; }
+
+        /* Buttons */
+        .btn-view-cat, .btn-loadmore {
+            background: #fff;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-view-cat:hover, .btn-loadmore:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* Modal Customization */
+        #postModal {
+            display: none; position: fixed; z-index: 10000; left: 0; top: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+        }
+        .modal-container {
+            background: #fff; margin: 2% auto; padding: 40px; border-radius: 20px;
+            max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative;
+        }
+        .close-btn { position: absolute; right: 25px; top: 20px; font-size: 30px; cursor: pointer; color: #666; }
+        .post-full-content img { max-width: 100%; border-radius: 12px; margin: 20px 0; }
+        .post-full-content { line-height: 1.8; color: #334155; font-size: 1.1rem; }
+
+        @media (max-width: 768px) {
+            .blog-hero h1 { font-size: 2rem; }
+            .modal-container { margin: 0; width: 100%; height: 100%; max-height: 100%; border-radius: 0; padding: 20px; }
+        }
+    </style>
 </head>
 <body>
     <div id="preloader">
@@ -24,22 +152,26 @@
             </div>
         </div>
     </div>
-    <!-- Navbar -->
-    <div id="header-placeholder"></div>
-    <!-- End Navbar -->
 
-    <!-- Blog Content -->
-    <section data-aos="fade-up" class="blog-section" style="padding: 50px 20px; max-width: 1200px; margin: auto;">
-        <div data-aos="fade-right" id="blog-container">
-            <div class="logo-wrapper">
-                <img src="images/logo.png" alt="Logo" class="loader-logo">
-                <div class="spinner"></div>
+    <div id="header-placeholder"></div>
+
+    <section class="blog-hero">
+        <div class="container" data-aos="zoom-in">
+            <h1>Blog ivyEnglish</h1>
+            <p>Chia sẻ kinh nghiệm học tiếng Anh, tài liệu miễn phí và những tin tức mới nhất về các khóa học tại Củ Chi.</p>
+        </div>
+    </section>
+
+    <section class="blog-section" style="padding: 0 20px 80px; max-width: 1200px; margin: auto;">
+        <div id="blog-container">
+            <div style="text-align: center; padding: 50px;">
+                <div class="spinner" style="margin: 0 auto;"></div>
+                <p style="margin-top: 15px; color: #64748b;">Đang tải bài viết...</p>
             </div>
         </div>
     </section>
-    <!-- End Blog Content -->
 
-     <div class="floating-contact">
+    <div class="floating-contact">
         <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
             <i class="fas fa-arrow-up"></i>
         </a>
@@ -56,8 +188,16 @@
 
     <div id="footer-placeholder"></div>
 
+    <div id="postModal">
+        <div class="modal-container">
+            <span class="close-btn" onclick="closePost()">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="js/main.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         const snowContainer = document.body;
@@ -67,7 +207,6 @@
             createSnowflake(snowContainer);
         }
 
-        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
         const scrollToTopButton = document.querySelector('.scroll-to-top');
 
         window.onscroll = function() {
@@ -86,8 +225,8 @@
             });
         });
         
-    let allPosts = []; // Biến lưu trữ toàn bộ bài viết để dùng cho mục "Tất cả"
-    let visibleCount = 6;    
+    let allPosts = []; 
+    let visibleAllCount = 6;    
 
     async function loadBlogPosts() {
         const container = document.getElementById('blog-container');
@@ -102,13 +241,10 @@
                 return;
             }
 
-            // Đảo ngược để bài mới nhất lên đầu
             allPosts = data.reverse();
 
-            // 1. Định nghĩa thứ tự ưu tiên các mục
             const priorityOrder = ["Tuyển sinh", "Tài liệu", "Tin tức", "Kinh nghiệm"];
 
-            // 2. Nhóm bài viết theo category
             const groupedPosts = allPosts.reduce((groups, post) => {
                 const category = post.category || "Tin tức khác";
                 if (!groups[category]) groups[category] = [];
@@ -118,31 +254,28 @@
 
             let finalHtml = "";
 
-            // 3. Hiển thị các mục theo thứ tự ưu tiên đã định nghĩa
             priorityOrder.forEach(cat => {
                 if (groupedPosts[cat] && groupedPosts[cat].length > 0) {
                     finalHtml += renderCategorySection(cat, groupedPosts[cat]);
                 }
             });
 
-            // 4. Hiển thị các mục còn lại (nếu có category khác ngoài danh sách ưu tiên)
             for (const cat in groupedPosts) {
                 if (!priorityOrder.includes(cat)) {
                     finalHtml += renderCategorySection(cat, groupedPosts[cat]);
                 }
             }
 
-            // 5. Thêm mục "Tất cả bài viết" ở cuối cùng
             finalHtml += `
                 <div class="category-divider" data-aos="fade-right">
                     <h2>Tất cả bài viết</h2>
                     <div class="line"></div>
                 </div>
                 <div id="all-posts-grid" class="blog-group">
-                    ${renderPosts(allPosts.slice(0, visibleCount))}
+                    ${renderPosts(allPosts.slice(0, visibleAllCount))}
                 </div>
-                <div id="load-more-container" style="text-align: center; margin-top: 30px;">
-                    ${allPosts.length > visibleCount ? '<button onclick="loadMorePosts()" class="btn-loadmore">Xem thêm bài viết</button>' : ''}
+                <div id="load-more-all-container" style="text-align: center; margin-top: 30px;">
+                    ${allPosts.length > visibleAllCount ? '<button onclick="loadMorePosts()" class="btn-loadmore">Xem thêm bài viết</button>' : ''}
                 </div>
             `;
 
@@ -156,7 +289,7 @@
     }
 
     function renderCategorySection(title, posts) {
-        const limit = 3; // Bạn có thể chỉnh thành 4 nếu muốn hiện 4 bài đầu tiên
+        const limit = 3; 
         const hasMore = posts.length > limit;
         const sectionId = `section-${title.replace(/\s+/g, '-')}`;
 
@@ -187,19 +320,19 @@
                     <h3 class="blog-title">${post.title}</h3>
                     <div class="blog-time">📅 ${post.time}</div>
                     <div class="blog-excerpt">${stripHtml(post.content).substring(0, 100)}...</div>
-                    <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(post))}')" class="btn-readmore">Đọc thêm →</a>
+                    <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(post))}')" class="btn-readmore">Đọc thêm <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         `).join('');
     }
 
-    function expandCategory(id, encodedPosts) {
+    window.expandCategory = function(id, encodedPosts) {
         const posts = JSON.parse(decodeURIComponent(encodedPosts));
         document.getElementById(id).innerHTML = renderPosts(posts);
-        event.target.parentElement.style.display = 'none'; // Ẩn nút sau khi bấm
+        event.target.parentElement.style.display = 'none'; 
     }
 
-    function loadMorePosts() {
+    window.loadMorePosts = function() {
         visibleAllCount += 6;
         document.getElementById('all-posts-grid').innerHTML = renderPosts(allPosts.slice(0, visibleAllCount));
         if (visibleAllCount >= allPosts.length) {
@@ -207,13 +340,12 @@
         }
     }
 
-    // Hàm bổ trợ để loại bỏ tag HTML khi hiển thị đoạn trích dẫn (Excerpt)
     function stripHtml(html) {
-    let tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+        let tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
     }
-    // Chạy hàm khi trang web tải xong
+    
     window.addEventListener('DOMContentLoaded', loadBlogPosts);
 
         function createSnowflake(container) {
@@ -238,128 +370,43 @@
             });
         }
     });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            const header = document.querySelector('header');
+    function viewPost(encodedData) {
+        const post = JSON.parse(decodeURIComponent(encodedData));
+        const shareLink = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(post.title)}`;
+        document.getElementById('modal-content').innerHTML = `
+            <div class="post-header">
+                <span style="color:#5b8cff; font-weight:bold; font-size:0.8em; text-transform:uppercase;">${post.category}</span>
+                <h1 style="font-size:1.8em; margin:10px 0; line-height:1.3; color:#1e293b;">${post.title}</h1>
+                <p style="color:#888; font-size:0.85em; margin-bottom:15px;">📅 ${post.time}</p>
+                <button onclick="copyToClipboard('${shareLink}')" style="background:#5b8cff; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight:600;">
+                    <i class="fas fa-share-alt"></i> Sao chép link
+                </button>
+            </div>
+            <hr style="border:0; border-top:1px solid #eee; margin:25px 0;">
+            <div class="post-full-content">${post.content}</div>
+        `;
+        document.getElementById('postModal').style.display = 'block';
+        document.body.style.overflow = 'hidden'; 
+        window.history.pushState({}, '', `?id=${encodeURIComponent(post.title)}`);
+    }
 
-            menuToggle.addEventListener('click', function() {
-                nav.classList.toggle('nav-open'); 
-                menuToggle.classList.toggle('menu-active'); 
-                
-                if (menuToggle.classList.contains('menu-active')) {
-                    menuToggle.classList.remove('fa-bars');
-                    menuToggle.classList.add('fa-times');
-                } else {
-                    menuToggle.classList.remove('fa-times');
-                    menuToggle.classList.add('fa-bars');
-                }
-
-                document.body.classList.toggle('no-scroll');
-            });
-            
-            nav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        nav.classList.remove('nav-open');
-                        menuToggle.classList.remove('menu-active', 'fa-times');
-                        menuToggle.classList.add('fa-bars');
-                        document.body.classList.remove('no-scroll');
-                    }
-                });
-            });
-            
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
-                }
-            });
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Đã sao chép liên kết bài viết!");
         });
-        // CÁC HÀM NÀY PHẢI ĐỂ NGOÀI CÙNG
-      function viewPost(encodedData) {
-            const post = JSON.parse(decodeURIComponent(encodedData));
-            const shareLink = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(post.title)}`;
-            document.getElementById('modal-content').innerHTML = `
-                <div class="post-header">
-                    <span style="color:#5b8cff; font-weight:bold; font-size:0.8em; text-transform:uppercase;">${post.category}</span>
-                    <h1 style="font-size:1.6em; margin:10px 0; line-height:1.3;">${post.title}</h1>
-                    <p style="color:#888; font-size:0.85em;">📅 ${post.time}</p>
-                    <button onclick="copyToClipboard('${shareLink}')" style="background:#5b8cff; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
-                        <i class="fas fa-share-alt"></i> Sao chép link
-                    </button>
-                </div>
-                <hr style="border:0; border-top:1px dashed #eee; margin:20px 0;">
-                <div class="post-full-content">${post.content}</div>
-            `;
-            document.getElementById('postModal').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Chống cuộn trang chính khi đang xem bài
-            window.history.pushState({}, '', `?id=${encodeURIComponent(post.title)}`);
-        }
+    }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Đã sao chép liên kết bài viết!");
-            });
-        }
+    function closePost() {
+        document.getElementById('postModal').style.display = 'none';
+        document.body.style.overflow = 'auto'; 
+        window.history.pushState({}, '', window.location.pathname);
+    }
 
-        function closePost() {
-            document.getElementById('postModal').style.display = 'none';
-            document.body.style.overflow = 'auto'; // Mở lại cuộn
-            window.history.pushState({}, '', window.location.pathname);
-        }
+    window.onclick = function(e) { if(e.target.id === 'postModal') closePost(); }
 
-        function stripHtml(html) {
-            let t = document.createElement("DIV"); t.innerHTML = html;
-            return t.textContent || t.innerText || "";
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load bài viết
-            async function loadPosts() {
-                const res = await fetch("https://sheetdb.io/api/v1/stjh3ikcs21t8?sheet=Posts");
-                const data = await res.json();
-                document.getElementById('blog-container').innerHTML = data.reverse().map(p => `
-                    <div class="blog-card">
-                        <img src="${p.image || 'https://via.placeholder.com/400x200'}" style="width:100%; height:200px; object-fit:cover;">
-                        <div style="padding:20px;">
-                            <h3 style="margin:0 0 10px 0;">${p.title}</h3>
-                            <p style="font-size:0.9em; color:#666;">${stripHtml(p.content).substring(0,100)}...</p>
-                            <a href="javascript:void(0)" onclick="viewPost('${encodeURIComponent(JSON.stringify(p))}')" style="color:#5b8cff; font-weight:bold; text-decoration:none;">Đọc thêm →</a>
-                        </div>
-                    </div>`).join('');
-                const urlParams = new URLSearchParams(window.location.search);
-                const postId = urlParams.get('id');
-                
-                if (postId) {
-                    const targetPost = data.find(p => p.title === postId);
-                    if (targetPost) {
-                        viewPost(encodeURIComponent(JSON.stringify(targetPost)));
-                    }
-                }
-            }
-            loadPosts();
-        });
-
-        window.onclick = function(e) { if(e.target.id === 'postModal') closePost(); }
-    </script>
-
-    <div id="postModal">
-        <div class="modal-container">
-            <span class="close-btn" onclick="closePost()">&times;</span>
-            <div id="modal-content">
-                </div>
-        </div>
-    </div>
-
-<script>
     async function includeHTML() {
-            const components = [
+        const components = [
             { id: 'header-placeholder', file: 'header.html' },
             { id: 'footer-placeholder', file: 'footer.html' }
         ];
@@ -377,73 +424,79 @@
                 }
             }
         }
-
-        // Sau khi tải xong các file, ẩn vòng xoay
+        initMenuLogic();
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
                 preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                preloader.style.visibility = 'hidden';
                 setTimeout(() => preloader.style.display = 'none', 500);
             }
-        }, 600); // Đợi 0.6s cho cảm giác mượt mà
-
-        initMenuLogic();
+        }, 600);
     }
+
     function initMenuLogic() {
         const menuToggle = document.querySelector('.menu-toggle');
         const nav = document.getElementById('main-nav');
-
-        // Kiểm tra xem các phần tử có tồn tại không trước khi gán sự kiện
+        const dropdowns = document.querySelectorAll('.dropdown');
         if (!menuToggle || !nav) return;
 
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open'); 
             menuToggle.classList.toggle('menu-active'); 
-            
             if (menuToggle.classList.contains('menu-active')) {
-                menuToggle.classList.remove('fa-bars');
-                menuToggle.classList.add('fa-times');
+                menuToggle.classList.replace('fa-bars', 'fa-times');
             } else {
-                menuToggle.classList.remove('fa-times');
-                menuToggle.classList.add('fa-bars');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
             }
-
             document.body.classList.toggle('no-scroll');
         });
         
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (nav.classList.contains('nav-open')) {
-                    nav.classList.remove('nav-open');
-                    menuToggle.classList.remove('menu-active', 'fa-times');
-                    menuToggle.classList.add('fa-bars');
-                    document.body.classList.remove('no-scroll');
+        dropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('.dropdown-toggle');
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    if (!dropdown.classList.contains('active')) {
+                        e.preventDefault();
+                        dropdowns.forEach(d => d.classList.remove('active'));
+                        dropdown.classList.add('active');
+                    } 
                 }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+        });
+
+        nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
             });
         });
         
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active', 'fa-times');
-                menuToggle.classList.add('fa-bars');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
                 document.body.classList.remove('no-scroll');
+                dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
     }
-
-    // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
 </script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-  AOS.init({
-    duration: 1000, // Tốc độ hiệu ứng (1 giây)
-    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
-  });
+  AOS.init({ duration: 1000, once: true });
 </script>
 
 </body>
-</html> 
+</html>
