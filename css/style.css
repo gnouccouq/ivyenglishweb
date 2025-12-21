@@ -142,7 +142,7 @@ header {
 }
 
 #main-nav a:hover {
-    color: #091cc7 !important; /* Màu vàng Gold để cực kỳ nổi bật trên nền xanh đậm */
+    color: #c5a059 !important; /* Màu vàng Gold để cực kỳ nổi bật trên nền xanh đậm */
     transform: translateY(-2px);
 }
 
@@ -329,8 +329,8 @@ header {
 .hero-image::after {
     content: '';
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
     background: var(--primary-color);
     filter: blur(80px);
     opacity: 0.15;
