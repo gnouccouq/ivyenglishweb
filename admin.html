@@ -588,7 +588,7 @@
         // 1. Tải danh sách bài viết
         async function loadAdminPosts() {
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=Posts");
+                const res = await fetch("https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts");
                 const data = await res.json();
                 const container = document.getElementById('admin-post-list');
                 container.innerHTML = data.reverse().map(p => `
