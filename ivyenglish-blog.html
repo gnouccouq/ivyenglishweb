@@ -165,7 +165,6 @@
     <section class="blog-section" style="padding: 0 20px 80px; max-width: 1200px; margin: auto;">
         <div id="blog-container">
             <div style="text-align: center; padding: 50px;">
-                <div class="spinner" style="margin: 0 auto;"></div>
                 <p style="margin-top: 15px; color: #64748b;">Đang tải bài viết...</p>
             </div>
         </div>
@@ -230,7 +229,7 @@
 
     async function loadBlogPosts() {
         const container = document.getElementById('blog-container');
-        const API_POSTS = "https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=Posts";
+        const API_POSTS = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
 
         try {
             const response = await fetch(API_POSTS);

@@ -374,10 +374,37 @@
                     [{ 'header': [1, 2, 3, false] }],
                     ['bold', 'italic', 'underline', 'strike'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link', 'image'], // Nút Image cho phép chọn file từ máy hoặc dán link
+                    ['link', 'image'], 
                     ['clean']
                 ]
             }
+        });
+
+        // THÊM ĐOẠN CODE XỬ LÝ ẢNH DƯỚI ĐÂY
+        quill.getModule('toolbar').addHandler('image', () => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*'); // Chỉ nhận file ảnh
+            input.click();
+
+            input.onchange = async () => {
+                const file = input.files[0];
+                
+                // GIỚI HẠN DUNG LƯỢNG: 100KB (Google Sheets tối đa 50k ký tự nên ảnh cần rất nhỏ)
+                // Nếu muốn an toàn tuyệt đối, hãy để 50 * 1024
+                if (file.size > 200 * 1024) { 
+                    alert("Ảnh này quá nặng! Vui lòng nén ảnh dưới 100KB hoặc dán link ảnh từ web khác để không bị lỗi đăng bài.");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const range = quill.getSelection();
+                    // Chèn ảnh vào vị trí con trỏ dưới dạng Base64 đã kiểm tra dung lượng
+                    quill.insertEmbed(range.index, 'image', reader.result);
+                };
+                reader.readAsDataURL(file);
+            };
         });
 
         const API_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
@@ -639,7 +666,7 @@
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Đang tải dữ liệu...</td></tr>';
             
             try {
-                const res = await fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=QuizResults");
+                const res = await fetch("https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=QuizResults");
                 const data = await res.json();
 
                 window.allQuizData = data.reverse();
