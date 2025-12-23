@@ -2,4 +2,8 @@ User-agent: *
 Disallow: /admin.html
 Disallow: /ivyenglish-maintenance.html
 
+Allow: /
+Allow: /images/
+Allow: /css/
+
 Sitemap: https://ivyenglish.io.vn/sitemap.xml

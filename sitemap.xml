@@ -6,42 +6,47 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://ivyenglish.io.vn/</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>1.00</priority>
+  </url>
 
-<url>
-  <loc>https://ivyenglish.io.vn/</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/ivyenglish-level-test.html</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/ivyenglish-teacher.html</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/ivyenglish-chinh-sach-bao-mat.html</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/ivyenglish-dieu-khoan-su-dung.html</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/ivyenglish-blog.html</loc>
-  <lastmod>2025-12-19T16:08:38+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://ivyenglish.io.vn/index.html</loc>
-  <lastmod>2025-12-19T16:08:37+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-khoa-hoc.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-gioi-thieu-khoa-hoc.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-teacher.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-blog.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-level-test.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.70</priority>
+  </url>
 
-
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-chinh-sach-bao-mat.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.30</priority>
+  </url>
+  <url>
+    <loc>https://ivyenglish.io.vn/ivyenglish-dieu-khoan-su-dung.html</loc>
+    <lastmod>2024-05-20</lastmod>
+    <priority>0.30</priority>
+  </url>
 </urlset>
