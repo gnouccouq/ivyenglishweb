@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học Life A1 - ivyEnglish | Tiếng Anh Giao Tiếp Củ Chi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-life-a1.html" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
+    
+    <style>
+        :root {
+            /* Đồng bộ với style.css của bạn */
+            --p-blue: #1a237e;
+            --s-gold: #c5a059;
+            --text-dark: #1e293b;
+        }
+
+        /* 1. Hero Section */
+        .course-hero {
+            background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%);
+            padding: 150px 0 100px;
+            color: white;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            margin-bottom: 50px;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
+            color: var(--text-dark);
+            margin-top: -80px;
+        }
+
+        .book-img-wrapper { text-align: center; }
+        .book-img {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 15px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .course-info h1 {
+            color: var(--p-blue);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #f0f4f8;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-item i { color: var(--s-gold); }
+
+        .price-tag {
+            font-size: 2.2rem;
+            color: var(--s-gold);
+            font-weight: 900;
+            margin-bottom: 30px;
+        }
+
+        /* 2. Feature Box (Dành cho ai) */
+        .feature-box {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            transition: 0.4s ease;
+            height: 100%;
+            border: 1px solid #edf2f7;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            border-color: var(--s-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: #f0f4f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--p-blue);
+        }
+
+        /* 3. Syllabus Grid */
+        .syllabus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .unit-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 5px solid var(--p-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .unit-card:hover {
+            transform: scale(1.03);
+            border-left-color: var(--s-gold);
+        }
+
+        .unit-number {
+            font-weight: 900;
+            color: var(--s-gold);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* 4. FAQ Section */
+        .faq-container { max-width: 850px; margin: 0 auto; }
+        .faq-item-new {
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+        .faq-question-new {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--p-blue);
+        }
+        .faq-answer-new {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0 25px;
+            color: #64748b;
+        }
+        .faq-item-new.active .faq-answer-new {
+            padding: 0 25px 20px;
+            max-height: 300px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .hero-card { grid-template-columns: 1fr; text-align: center; margin-top: -120px; }
+            .course-meta { justify-content: center; }
+            .course-info h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <section class="course-hero">
+        <div class="container">
+            <h2 style="color:var(--s-gold); text-align: center; margin-bottom: 40px;">CHI TIẾT KHÓA HỌC</h2>
+            <nav style="margin-bottom: 20px; font-size: 0.9rem;">
+                <a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Trang chủ</a> / 
+                <a href="ivyenglish-khoa-hoc.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Khóa học</a> / 
+                <span style="color: var(--s-gold);">Life A1</span>
+            </nav>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="hero-card" data-aos="fade-up">
+            <div class="book-img-wrapper">
+                <img src="images/sach-life-a1-students-book-2nd-edition-vietnam-edition-sach-gi-y-gay-xo-n.jpg" alt="Giáo trình Life A1" class="book-img">
+                <p style="margin-top: 15px; font-style: italic; color: #777; font-size: 0.9rem;">Giáo trình chuẩn National Geographic Learning</p>
+            </div>
+            <div class="course-info">
+                <span class="badge" style="background: var(--p-blue); color: white; padding: 5px 15px; border-radius: 5px;">Cơ bản (Beginner)</span>
+                <h1>Khóa học LIFE - Trình độ A1</h1>
+                <p style="font-size: 1.1rem; line-height: 1.6; color: #475569;">Khóa học dành cho người mới bắt đầu hoặc người mất gốc muốn xây dựng lại nền tảng tiếng Anh giao tiếp chuẩn quốc tế. Học qua hình ảnh và câu chuyện thực tế từ các nhà thám hiểm National Geographic.</p>
+                
+                <div class="course-meta">
+                    <div class="meta-item"><i class="fas fa-calendar-alt"></i> 24 Buổi học</div>
+                    <div class="meta-item"><i class="fas fa-users"></i> 6-8 Học viên/lớp</div>
+                    <div class="meta-item"><i class="fas fa-medal"></i> Cam kết đầu ra</div>
+                </div>
+
+                <div class="price-tag">600.000 VNĐ <span style="font-size: 1rem; color: #777; font-weight: 400;">/ tháng</span></div>
+                
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="index.html#contact" class="btn-premium" style="background: var(--p-blue); color: white; text-decoration: none; padding: 15px 30px; border-radius: 10px; font-weight: bold;">Đăng ký tư vấn ngay</a>
+                    <a href="ivyenglish-level-test.html" class="btn-outline" style="padding: 15px 30px; text-decoration: none; border: 2px solid var(--p-blue); color: var(--p-blue); border-radius: 10px; font-weight: bold;">Thi thử miễn phí</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="section-padding">
+            <div class="section-header-new" data-aos="fade-up">
+                <h2>Đối tượng phù hợp</h2>
+                <p>Khóa học này là giải pháp hoàn hảo nếu bạn thuộc các nhóm sau:</p>
+            </div>
+            
+            <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-user-slash"></i></div>
+                    <h3>Mất gốc hoàn toàn</h3>
+                    <p>Bạn đã bỏ tiếng Anh từ lâu, cảm thấy sợ hãi khi phải nghe hoặc nói những câu đơn giản nhất.</p>
+                </div>
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-plane-departure"></i></div>
+                    <h3>Muốn đi du lịch</h3>
+                    <p>Bạn muốn tự tin đặt phòng, gọi món và hỏi đường khi đi du lịch nước ngoài mà không cần thông dịch.</p>
+                </div>
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Xây dựng nền tảng</h3>
+                    <p>Cần một nền tảng ngữ pháp và từ vựng chuẩn chỉnh trước khi học lên các lớp IELTS hoặc TOEIC.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding" style="background: #f8fafc; border-radius: 40px; margin: 40px 0;">
+            <div style="display: flex; align-items: center; gap: 50px; flex-wrap: wrap; padding: 40px;">
+                <div style="flex: 1; min-width: 300px;" data-aos="fade-right">
+                    <h2 style="color: var(--p-blue); margin-bottom: 25px; font-size: 2rem;">Học xong bạn làm được gì?</h2>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Sở hữu vốn từ vựng <b>600+ từ</b> về 12 chủ đề đời sống thông dụng nhất.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Thành thạo cách giới thiệu bản thân, gia đình, nghề nghiệp và sở thích.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Nắm chắc 3 thì cơ bản: <b>Hiện tại đơn, Quá khứ đơn và Tương lai gần</b>.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Luyện phát âm chuẩn IPA ngay từ những bài học đầu tiên.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 300px;" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800" alt="Học viên ivyEnglish" style="width: 100%; border-radius: 20px; box-shadow: 20px 20px 0 var(--p-blue);">
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding" data-aos="fade-up">
+            <div class="section-header-new">
+                <h2>Lộ trình 12 Unit chi tiết</h2>
+                <p>Nội dung được phân bổ khoa học giúp học viên tiến bộ sau từng buổi học</p>
+            </div>
+
+            <div class="syllabus-grid">
+                <div class="unit-card"> <span class="unit-number">UNIT 1</span> <h3>Hello</h3> <p>Chào hỏi, quốc tịch, số đếm và bảng chữ cái.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 2</span> <h3>People</h3> <p>Nghề nghiệp, gia đình và tính từ mô tả tính cách.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 3</span> <h3>Places</h3> <p>Mô tả thành phố, đồ vật trong nhà và giới từ chỉ vị trí.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 4</span> <h3>Food</h3> <p>Đồ ăn, thức uống, kỹ năng gọi món tại nhà hàng.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 5</span> <h3>Every Day</h3> <p>Thì hiện tại đơn, nói về thói quen và thời gian biểu.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 6</span> <h3>Activities</h3> <p>Các môn thể thao, hoạt động giải trí và sở thích cá nhân.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 7</span> <h3>Education</h3> <p>Các môn học, trường học và khả năng (Can/Can't).</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 8</span> <h3>Places to Stay</h3> <p>Đặt phòng khách sạn, mô tả các tiện nghi trong nhà.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 9</span> <h3>The Past</h3> <p>Nói về các sự kiện đã qua bằng thì quá khứ đơn.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 10</span> <h3>Health</h3> <p>Các bộ phận cơ thể và lời khuyên về sức khỏe.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 11</span> <h3>Transport</h3> <p>Phương tiện giao thông và kỹ năng hỏi đường khi di chuyển.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 12</span> <h3>Shopping</h3> <p>Mua sắm, giá cả, màu sắc và thời trang.</p> </div>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="section-header-new">
+                <h2>Câu hỏi thường gặp</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Học phí 600k đã bao gồm giáo trình chưa? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Học phí đã bao gồm tài liệu PDF và bài tập bổ trợ. Đối với sách bản in đẹp từ National Geographic, trung tâm sẽ hỗ trợ học viên đặt mua với giá ưu đãi.</div>
+                </div>
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Nếu tôi bận việc không đi học được thì sao? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Bạn sẽ được giáo viên gửi tóm tắt nội dung bài học và bài tập về nhà qua Zalo lớp. Ngoài ra, bạn có thể đăng ký học bù tại các lớp có trình độ tương đương.</div>
+                </div>
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Sau khóa A1 tôi có thể giao tiếp với người Tây chưa? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Hoàn toàn có thể! Bạn sẽ đủ khả năng thực hiện các cuộc đối thoại ngắn, cơ bản về đời sống hằng ngày, du lịch và giới thiệu bản thân một cách tự tin.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function includeHTML() {
+            const components = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+
+            for (const comp of components) {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    try {
+                        const response = await fetch(comp.file);
+                        if (response.ok) {
+                            element.innerHTML = await response.text();
+                        }
+                    } catch (err) { console.error(err); }
+                }
+            }
+
+            // Mobile menu logic (đợi header load xong)
+            setTimeout(() => {
+                const menuToggle = document.querySelector('.menu-toggle');
+                const nav = document.getElementById('main-nav');
+                if(menuToggle && nav) {
+                    menuToggle.onclick = () => {
+                        nav.classList.toggle('nav-open');
+                        menuToggle.classList.toggle('menu-active');
+                    };
+                }
+                
+                // Ẩn preloader
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => preloader.style.display = 'none', 500);
+                }
+            }, 600);
+        }
+
+        // FAQ Toggle
+        document.addEventListener('click', (e) => {
+            const question = e.target.closest('.faq-question-new');
+            if (question) {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item-new').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", includeHTML);
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
+</body>
+</html>

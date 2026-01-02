@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học Life A1-A2 (Elementary) - ivyEnglish | Tiếng Anh Giao Tiếp Củ Chi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-life-a1-a2.html" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
+    
+    <style>
+        :root {
+            --p-blue: #1a237e;
+            --s-gold: #c5a059;
+            --text-dark: #1e293b;
+        }
+
+        /* Hero Section */
+        .course-hero {
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%); /* Màu hơi khác A1 để phân biệt */
+            padding: 150px 0 100px;
+            color: white;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            margin-bottom: 50px;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
+            color: var(--text-dark);
+            margin-top: -80px;
+        }
+
+        .book-img-wrapper { text-align: center; }
+        .book-img {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 15px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .course-info h1 {
+            color: var(--p-blue);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #f0f4f8;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-item i { color: var(--s-gold); }
+
+        .price-tag {
+            font-size: 2.2rem;
+            color: var(--s-gold);
+            font-weight: 900;
+            margin-bottom: 30px;
+        }
+
+        /* Feature Box */
+        .feature-box {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            transition: 0.4s ease;
+            height: 100%;
+            border: 1px solid #edf2f7;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            border-color: var(--s-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: #f0f4f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--p-blue);
+        }
+
+        /* Syllabus Grid */
+        .syllabus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .unit-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 5px solid var(--p-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .unit-card:hover {
+            transform: scale(1.03);
+            border-left-color: var(--s-gold);
+        }
+
+        .unit-number {
+            font-weight: 900;
+            color: var(--s-gold);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* FAQ */
+        .faq-container { max-width: 850px; margin: 0 auto; }
+        .faq-item-new {
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+        .faq-question-new {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--p-blue);
+        }
+        .faq-answer-new {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0 25px;
+            color: #64748b;
+        }
+        .faq-item-new.active .faq-answer-new {
+            padding: 0 25px 20px;
+            max-height: 300px;
+        }
+
+        @media (max-width: 992px) {
+            .hero-card { grid-template-columns: 1fr; text-align: center; margin-top: -120px; }
+            .course-meta { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <section class="course-hero">
+        <div class="container">
+            <h2 style="color:var(--s-gold); text-align: center; margin-bottom: 40px;">CHI TIẾT KHÓA HỌC</h2>
+            <nav style="margin-bottom: 20px; font-size: 0.9rem;">
+                <a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Trang chủ</a> / 
+                <a href="ivyenglish-khoa-hoc.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Khóa học</a> / 
+                <span style="color: var(--s-gold);">Life A1-A2</span>
+            </nav>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="hero-card" data-aos="fade-up">
+            <div class="book-img-wrapper">
+                <img src="images/sach-life-a1-a2-students-book-2nd-edition-vietnam-edition-sach-gi-y.jpg" alt="Giáo trình Life A1-A2" class="book-img">
+                <p style="margin-top: 15px; font-style: italic; color: #777; font-size: 0.9rem;">Trình độ Elementary (Sơ cấp)</p>
+            </div>
+            <div class="course-info">
+                <span class="badge" style="background: var(--p-blue); color: white; padding: 5px 15px; border-radius: 5px;">Sơ cấp (Elementary)</span>
+                <h1>Khóa học LIFE - Trình độ A1-A2</h1>
+                <p style="font-size: 1.1rem; line-height: 1.6; color: #475569;">Dành cho những bạn đã có nền tảng cực kỳ cơ bản và muốn nâng tầm kỹ năng giao tiếp. Khóa học tập trung vào việc ghép câu phức tạp hơn, mở rộng vốn từ vựng chuyên sâu và luyện phản xạ tự nhiên.</p>
+                
+                <div class="course-meta">
+                    <div class="meta-item"><i class="fas fa-calendar-alt"></i> 24 Buổi học</div>
+                    <div class="meta-item"><i class="fas fa-users"></i> 6-8 Học viên/lớp</div>
+                    <div class="meta-item"><i class="fas fa-chart-line"></i> Lộ trình thăng tiến rõ rệt</div>
+                </div>
+
+                <div class="price-tag">600.000 VNĐ <span style="font-size: 1rem; color: #777; font-weight: 400;">/ tháng</span></div>
+                
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="index.html#contact" class="btn-premium" style="background: var(--p-blue); color: white; text-decoration: none; padding: 15px 30px; border-radius: 10px; font-weight: bold;">Đăng ký học ngay</a>
+                    <a href="ivyenglish-level-test.html" class="btn-outline" style="padding: 15px 30px; text-decoration: none; border: 2px solid var(--p-blue); color: var(--p-blue); border-radius: 10px; font-weight: bold;">Kiểm tra đầu vào</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="section-padding">
+            <div class="section-header-new" data-aos="fade-up">
+                <h2>Khóa học này dành cho ai?</h2>
+                <p>Nâng cấp trình độ tiếng Anh của bạn lên một tầm cao mới</p>
+            </div>
+            
+            <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-walking"></i></div>
+                    <h3>Đã biết "chút ít"</h3>
+                    <p>Bạn có thể chào hỏi đơn giản nhưng thường xuyên "bí từ" khi muốn nói về công việc hay sở thích sâu hơn.</p>
+                </div>
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Muốn nói lưu loát hơn</h3>
+                    <p>Bạn muốn thoát khỏi việc nói từng từ rời rạc và bắt đầu biết cách nối câu, sử dụng thì quá khứ, tương lai linh hoạt.</p>
+                </div>
+                <div class="feature-box" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3>Phục vụ công việc</h3>
+                    <p>Cần tiếng Anh để giao tiếp cơ bản với đồng nghiệp nước ngoài hoặc viết email đơn giản.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding" style="background: #f8fafc; border-radius: 40px; margin: 40px 0;">
+            <div style="display: flex; align-items: center; gap: 50px; flex-wrap: wrap; padding: 40px;">
+                <div style="flex: 1; min-width: 300px;" data-aos="fade-right">
+                    <h2 style="color: var(--p-blue); margin-bottom: 25px; font-size: 2rem;">Kết quả đạt được</h2>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Mở rộng vốn từ lên <b>1200+ từ vựng</b> thực tế.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Biết cách so sánh, mô tả sự kiện trong quá khứ và dự định tương lai.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Nghe hiểu được các đoạn hội thoại tốc độ trung bình về đời sống.</span>
+                        </li>
+                        <li style="margin-bottom: 18px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: #2ECC71; margin-top: 5px;"></i>
+                            <span>Đủ điều kiện để bắt đầu ôn luyện Pre-IELTS hoặc TOEIC 450+.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 300px;" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800" alt="Lớp học A1-A2" style="width: 100%; border-radius: 20px; box-shadow: 20px 20px 0 #2c3e50;">
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding" data-aos="fade-up">
+            <div class="section-header-new">
+                <h2>Lộ trình 12 Unit Life Elementary</h2>
+                <p>Nội dung nâng cao dần kỹ năng phản xạ và tư duy bằng tiếng Anh</p>
+            </div>
+
+            <div class="syllabus-grid">
+                <div class="unit-card"> <span class="unit-number">UNIT 1</span> <h3>People</h3> <p>Thông tin cá nhân, các loại công việc và giới thiệu bạn bè.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 2</span> <h3>Work</h3> <p>Nói về nghề nghiệp, thói quen làm việc và các hoạt động tại công sở.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 3</span> <h3>Places</h3> <p>Mô tả thị trấn, thành phố và các địa điểm du lịch nổi tiếng.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 4</span> <h3>Food</h3> <p>Thực phẩm sạch, cách nấu ăn và thói quen ăn uống lành mạnh.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 5</span> <h3>Sports</h3> <p>Các môn thể thao mạo hiểm và nói về khả năng (abilities).</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 6</span> <h3>History</h3> <p>Kể lại các sự kiện lịch sử và cuộc đời của những người nổi tiếng.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 7</span> <h3>Discovery</h3> <p>Khám phá thiên nhiên, so sánh các địa danh trên thế giới.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 8</span> <h3>The Future</h3> <p>Nói về các dự định tương lai, thời tiết và môi trường.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 9</span> <h3>Shopping</h3> <p>Mua sắm trực tuyến, quần áo và quản lý tài chính cá nhân.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 10</span> <h3>Health</h3> <p>Lối sống lành mạnh, các triệu chứng bệnh và lời khuyên y tế.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 11</span> <h3>Adventure</h3> <p>Những chuyến đi đáng nhớ và sử dụng thì hiện tại hoàn thành.</p> </div>
+                <div class="unit-card"> <span class="unit-number">UNIT 12</span> <h3>The Earth</h3> <p>Động vật hoang dã, bảo vệ trái đất và các kỷ lục thế giới.</p> </div>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="section-header-new">
+                <h2>Hỏi đáp về khóa A1-A2</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Tôi chưa học A1 có học thẳng A2 được không? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Bạn nên làm bài Test đầu vào tại ivyEnglish. Nếu bạn đã có nền tảng từ vựng cơ bản và nắm được các thì đơn giản, bạn hoàn toàn có thể vào thẳng lớp A2 để tiết kiệm thời gian.</div>
+                </div>
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Khóa học này có giáo viên nước ngoài không? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Ở trình độ A2, ivyEnglish kết hợp các buổi giao tiếp với giáo viên nước ngoài để bạn làm quen với ngữ điệu và vượt qua nỗi sợ nói chuyện với người bản xứ.</div>
+                </div>
+                <div class="faq-item-new">
+                    <div class="faq-question-new">Sau khi học xong tôi sẽ đạt trình độ nào? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer-new">Bạn sẽ đạt trình độ Elementary (Sơ cấp) theo khung Châu Âu, tương đương với việc có thể đi du lịch tự túc hoặc giao tiếp cơ bản trong môi trường làm việc quốc tế.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function includeHTML() {
+            const components = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+
+            for (const comp of components) {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    try {
+                        const response = await fetch(comp.file);
+                        if (response.ok) {
+                            element.innerHTML = await response.text();
+                        }
+                    } catch (err) { console.error(err); }
+                }
+            }
+
+            setTimeout(() => {
+                const menuToggle = document.querySelector('.menu-toggle');
+                const nav = document.getElementById('main-nav');
+                if(menuToggle && nav) {
+                    menuToggle.onclick = () => {
+                        nav.classList.toggle('nav-open');
+                        menuToggle.classList.toggle('menu-active');
+                    };
+                }
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => preloader.style.display = 'none', 500);
+                }
+            }, 600);
+        }
+
+        document.addEventListener('click', (e) => {
+            const question = e.target.closest('.faq-question-new');
+            if (question) {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item-new').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", includeHTML);
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
+</body>
+</html>
