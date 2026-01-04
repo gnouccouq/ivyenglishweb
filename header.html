@@ -28,7 +28,7 @@
                 <div class="dropdown">
                     <a href="" class="dropdown-toggle">Từ Điển & Học Thử<i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="ivyenglish-dictionary.html">Tra Từ Điển</a></li>
+                        <li><a class="logo-text-header" href="ivyenglish-dictionary.html">ivyDictionary<span class="beta-badge-header">Beta</span></a></li>
                         <li><a href="ivyenglish-hoc-thu.html">Đăng kí học thử</a></li>
                         <li><a href="ivyenglish-level-test.html">Kiểm tra trình độ</a></li>
                     </ul>
@@ -52,3 +52,39 @@
         </div>
     </div>
 </header>
+<style>
+    .logo-text-header {
+    font-weight: 900; 
+    color: #5b8cff; 
+    font-size: clamp(2.5rem, 8vw, 3.5rem); 
+    margin: 0;
+    display: inline-flex; /* Giúp căn chỉnh badge theo dòng chữ */
+    align-items: flex-start;
+    position: relative;
+}
+
+.beta-badge-header {
+    background: #5b8cff; /* Màu hồng giống tone màu shape của bạn */
+    color: white;
+    font-size: 0.5rem; /* Chữ nhỏ lại */
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    vertical-align: top;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(255, 126, 179, 0.3);
+    /* Tạo hiệu ứng hơi nghiêng cho cá tính (tùy chọn) */
+    transform: translateY(-5px) rotate(5deg); 
+}
+
+/* Fix cho mobile nếu cần */
+@media (max-width: 768px) {
+    .beta-badge-header {
+        font-size: 0.7rem;
+        padding: 1px 5px;
+        transform: translateY(-2px) rotate(5deg);
+    }
+}
+</style>

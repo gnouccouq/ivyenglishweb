@@ -45,6 +45,40 @@
         .label-small { font-size: 0.7rem; text-transform: uppercase; font-weight: 900; color: #94a3b8; margin-bottom: 8px; display: block; }
         .history-tag { background: #e0e7ff; color: #5b8cff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; margin: 4px; display: inline-block; font-weight: 700; }
         @keyframes floatShape { 0% { transform: translate(0,0); } 100% { transform: translate(60px, 80px); } }
+        .logo-text {
+            font-weight: 900; 
+            color: #5b8cff; 
+            font-size: clamp(2.5rem, 8vw, 3.5rem); 
+            margin: 0;
+            display: inline-flex; /* Giúp căn chỉnh badge theo dòng chữ */
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .beta-badge {
+            background: #5b8cff; /* Màu hồng giống tone màu shape của bạn */
+            color: white;
+            font-size: 0.9rem; /* Chữ nhỏ lại */
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            text-transform: uppercase;
+            vertical-align: top;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(255, 126, 179, 0.3);
+            /* Tạo hiệu ứng hơi nghiêng cho cá tính (tùy chọn) */
+            transform: translateY(-5px) rotate(5deg); 
+        }
+
+        /* Fix cho mobile nếu cần */
+        @media (max-width: 768px) {
+            .beta-badge {
+                font-size: 0.7rem;
+                padding: 1px 5px;
+                transform: translateY(-2px) rotate(5deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -57,8 +91,10 @@
 
         <div class="dict-container">
             <div style="text-align: center; margin-bottom: 35px;" data-aos="fade-down">
-                <h1 style="font-weight: 900; color: #5b8cff; font-size: clamp(2.5rem, 8vw, 3.5rem); margin: 0;">ivyDictionary</h1>
-                <p style="color: #64748b;">Tra cứu Anh - Việt chuẩn & Sửa lỗi AI</p>
+                <h1 class="logo-text">
+                    ivyDictionary<span class="beta-badge">Beta</span>
+                </h1>
+                <p style="color: #64748b;">Tra cứu Anh - Việt chuẩn từ Oxford</p>
             </div>
 
             <div class="search-container-premium" data-aos="zoom-in">
