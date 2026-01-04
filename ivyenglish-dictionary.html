@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ivyDictionary - Tra cứu Song ngữ Thông minh</title>
-    <meta name="description" content="Tra cứu từ điển Anh - Việt với phiên âm chuẩn, dịch nghĩa nhanh chóng và chính xác bằng công nghệ AI. Hỗ trợ phát âm và lưu lịch sử tra cứu.">
+    <meta name="description" content="Tra cứu từ điển Anh - Việt với phiên âm chuẩn, dịch nghĩa nhanh chóng và chính xác bằng công nghệ AI.">
     <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-dictionary.html" />
     <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
     <link rel="stylesheet" href="css/style.css">
@@ -17,21 +17,19 @@
         .shape { position: absolute; filter: blur(60px); z-index: 0; opacity: 0.3; pointer-events: none; animation: floatShape 20s infinite alternate; }
         .shape-1 { width: 350px; height: 350px; background: #5b8cff; top: -100px; left: -100px; }
         .shape-2 { width: 300px; height: 300px; background: #ff7eb3; bottom: 10%; right: -50px; }
-        .topic-btn {
-            background: #fff; border: 1px solid #e2e8f0; padding: 8px 18px; border-radius: 20px;
-            font-size: 0.9rem; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .topic-btn:hover {
-            background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px);
-        }
-        @keyframes floatShape { 0% { transform: translate(0,0); } 100% { transform: translate(60px, 80px); } }
-
+        
         .dict-container { position: relative; z-index: 5; max-width: 800px; margin: 0 auto; padding: 0 15px; }
         .search-container-premium { background: #fff; padding: 8px; border-radius: 50px; display: flex; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #e2e8f0; transition: 0.3s; }
         .search-container-premium:focus-within { border-color: var(--primary-color); transform: translateY(-2px); }
         .search-container-premium input { flex: 1; border: none; padding: 12px 25px; font-size: 1.1rem; outline: none; background: transparent; color: #334155; font-weight: 500; }
         .btn-main-search { background: var(--primary-color); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Style cho gợi ý sửa lỗi */
+        #suggestionBox { display: none; text-align: center; margin-top: 15px; padding: 10px; background: #f0f7ff; border-radius: 12px; color: #64748b; border: 1px dashed #5b8cff; font-size: 0.9rem; }
+        #suggestedWord { color: #5b8cff; font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 5px; }
+
+        .topic-btn { background: #fff; border: 1px solid #e2e8f0; padding: 8px 18px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .topic-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); }
 
         .result-card { margin-top: 25px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
         .word-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
@@ -39,16 +37,14 @@
         
         .speaker-group { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         .speaker-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--primary-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
-        .speaker-btn:hover { transform: scale(1.1); background: #4a7be6; }
-        
-        /* Style cho bộ chọn giọng nói */
-        .voice-selector { padding: 5px 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.8rem; color: #64748b; outline: none; cursor: pointer; background: white; max-width: 150px; }
+        .voice-selector { padding: 5px 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.8rem; color: #64748b; background: white; max-width: 150px; }
 
         .meaning-box { background: #fff; padding: 20px; border-radius: 15px; border-left: 5px solid var(--primary-color); margin-bottom: 15px; }
         .example-box { background: #f8fafc; padding: 15px; border-radius: 12px; border-left: 5px solid #cbd5e1; margin-top: 10px; }
-        .example-text { color: #475569; font-style: italic; line-height: 1.5; margin: 0; }
+        .example-vi { color: #5b8cff; font-weight: 500; margin-top: 8px; display: block; font-size: 0.95rem; }
         .label-small { font-size: 0.7rem; text-transform: uppercase; font-weight: 900; color: #94a3b8; margin-bottom: 8px; display: block; }
         .history-tag { background: #e0e7ff; color: #5b8cff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; margin: 4px; display: inline-block; font-weight: 700; }
+        @keyframes floatShape { 0% { transform: translate(0,0); } 100% { transform: translate(60px, 80px); } }
     </style>
 </head>
 <body>
@@ -62,12 +58,16 @@
         <div class="dict-container">
             <div style="text-align: center; margin-bottom: 35px;" data-aos="fade-down">
                 <h1 style="font-weight: 900; color: #5b8cff; font-size: clamp(2.5rem, 8vw, 3.5rem); margin: 0;">ivyDictionary</h1>
-                <p style="color: #64748b;">Tra cứu Anh - Việt & Phiên âm chuẩn AI</p>
+                <p style="color: #64748b;">Tra cứu Anh - Việt chuẩn & Sửa lỗi AI</p>
             </div>
 
             <div class="search-container-premium" data-aos="zoom-in">
                 <input type="text" id="dictInput" placeholder="Nhập từ cần tra..." autocomplete="off">
                 <button class="btn-main-search" id="btnSearch"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div id="suggestionBox" data-aos="fade-in">
+                <i class="fas fa-lightbulb"></i> Có phải bạn muốn tìm: <span id="suggestedWord"></span>?
             </div>
 
             <div id="historySection" style="margin: 20px 0; display: none; text-align: center;">
@@ -88,9 +88,7 @@
                         <span id="outPhonetic" class="phonetic-text"></span>
                     </div>
                     <div class="speaker-group">
-                        <select id="voiceSelect" class="voice-selector">
-                            <option value="">Đang tải giọng đọc...</option>
-                        </select>
+                        <select id="voiceSelect" class="voice-selector"></select>
                         <button class="speaker-btn" id="btnSpeak"><i class="fas fa-volume-up"></i></button>
                     </div>
                 </div>
@@ -100,7 +98,8 @@
                 </div>
                 <div id="exampleSection" class="example-box" style="display: none;">
                     <span class="label-small">Ví dụ (Example)</span>
-                    <p id="outExample" class="example-text"></p>
+                    <p id="outExample" style="color: #475569; font-style: italic; margin: 0;"></p>
+                    <span id="outExampleVi" class="example-vi"></span>
                 </div>
             </div>
 
@@ -115,9 +114,9 @@
                     <button class="speaker-btn" style="background: #ff7eb3;" onclick="speak('Persistence')"><i class="fas fa-volume-up"></i></button>
                 </div>
                 <div class="example-box">
-                    <span class="label-small">Giải thích & Ví dụ</span>
-                    <p style="font-size: 1rem; margin-bottom: 8px; color: #475569;">Sự kiên trì theo đuổi một mục tiêu bất chấp khó khăn.</p>
-                    <p class="example-text">"Her <strong>persistence</strong> finally paid off when she got the job."</p>
+                    <span class="label-small">Ví dụ</span>
+                    <p style="color: #475569; font-style: italic; margin:0;">"Her persistence finally paid off when she got the job."</p>
+                    <span class="example-vi">Sự kiên trì của cô ấy cuối cùng đã được đền đáp khi cô ấy nhận được công việc.</span>
                 </div>
             </div>
         </div>
@@ -125,126 +124,163 @@
 
     <div id="footer-placeholder"></div>
 
+        <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
+    </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // 1. TẢI COMPONENT
-        async function includeHTML() {
-            const components = [
-                { id: 'header-placeholder', file: 'header.html' },
-                { id: 'footer-placeholder', file: 'footer.html' }
-            ];
-            for (const comp of components) {
-                const element = document.getElementById(comp.id);
-                if (element) {
-                    try {
-                        const response = await fetch(comp.file);
-                        if (response.ok) { element.innerHTML = await response.text(); }
-                    } catch (err) { console.error("Lỗi tải: " + comp.file); }
+        // --- 1. KHO TỪ VỰNG & THUẬT TOÁN SỬA LỖI ---
+        const topicWords = {
+            travel: ['Itinerary', 'Accommodation', 'Sightseeing', 'Destination', 'Baggage', 'Departure', 'Expedition', 'Souvenir', 'Reservation', 'Passport'],
+            office: ['Collaborate', 'Deadline', 'Requirement', 'Procedure', 'Subordinate', 'Compensation', 'Strategy', 'Performance', 'Efficiency', 'Incentive'],
+            social: ['Fluency', 'Interaction', 'Extrovert', 'Networking', 'Etiquette', 'Expression', 'Ambiguous', 'Sympathy', 'Charismatic', 'Small talk'],
+            academic: ['Analysis', 'Hypothesis', 'Methodology', 'Definition', 'Theory', 'Evaluation', 'Significant', 'Literature', 'Objective', 'Empirical']
+        };
+
+        function getLevenshteinDistance(a, b) {
+            const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    const cost = b[i - 1] === a[j - 1] ? 0 : 1;
+                    matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost);
                 }
             }
-            initMenuLogic();
+            return matrix[b.length][a.length];
         }
 
-        function initMenuLogic() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            if (!menuToggle || !nav) return;
-            menuToggle.addEventListener('click', function() {
-                nav.classList.toggle('nav-open'); 
-                menuToggle.classList.toggle('menu-active'); 
-                document.body.classList.toggle('no-scroll');
+        function findSuggestion(wrongWord) {
+            const allWords = Object.values(topicWords).flat();
+            let bestMatch = null;
+            let minDistance = 3; 
+            allWords.forEach(word => {
+                let dist = getLevenshteinDistance(wrongWord.toLowerCase(), word.toLowerCase());
+                if (dist < minDistance && dist > 0) { minDistance = dist; bestMatch = word; }
             });
+            return bestMatch;
         }
 
-        // 2. LOGIC CHỌN GIỌNG NÓI (NEW)
+        // --- 2. GIỌNG NÓI ---
         let voices = [];
         function populateVoiceList() {
             voices = window.speechSynthesis.getVoices();
             const voiceSelect = document.getElementById('voiceSelect');
             if(!voiceSelect) return;
-            
-            // Lọc các giọng tiếng Anh
             const enVoices = voices.filter(v => v.lang.startsWith('en'));
-            
-            voiceSelect.innerHTML = enVoices
-                .map(v => `<option value="${v.name}">${v.name} (${v.lang})</option>`)
-                .join('');
-            
-            if (enVoices.length === 0) {
-                voiceSelect.innerHTML = '<option value="">Giọng mặc định</option>';
-            }
+            voiceSelect.innerHTML = enVoices.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
         }
-
-        // Cần cả 2 sự kiện vì trình duyệt load giọng nói khác nhau
         window.speechSynthesis.onvoiceschanged = populateVoiceList;
 
         function speak(text) {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
-            const voiceSelect = document.getElementById('voiceSelect');
-            
-            if (voiceSelect && voiceSelect.value) {
-                msg.voice = voices.find(v => v.name === voiceSelect.value);
-            } else {
-                msg.voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
-            }
-            
+            const voiceName = document.getElementById('voiceSelect').value;
+            msg.voice = voices.find(v => v.name === voiceName) || voices[0];
             msg.rate = 0.9;
             window.speechSynthesis.speak(msg);
         }
 
-        // 3. LOGIC TRA TỪ
+        // --- 3. TRA CỨU VÀ DỊCH VÍ DỤ ---
         let history = JSON.parse(localStorage.getItem('ivy_history')) || [];
+
+        async function translateText(text, pair) {
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`);
+                const data = await res.json();
+                return data.responseData.translatedText;
+            } catch { return ""; }
+        }
 
         async function handleSearch() {
             const query = document.getElementById('dictInput').value.trim();
             if (!query) return;
 
+            document.getElementById('suggestionBox').style.display = 'none';
             document.getElementById('dictResult').style.display = 'none';
             document.getElementById('wordOfDaySection').style.display = 'none';
-            document.getElementById('exampleSection').style.display = 'none';
 
             try {
                 const isViet = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(query);
-                const resTrans = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(query)}&langpair=${isViet ? 'vi|en' : 'en|vi'}`);
-                const dataTrans = await resTrans.json();
-                const translated = dataTrans.responseData.translatedText;
+                
+                // 1. Dịch từ chính
+                const translated = await translateText(query, isViet ? 'vi|en' : 'en|vi');
+                if (!translated || translated.includes("MYMEMORY WARNING")) throw new Error();
 
-                let phonetic = "";
-                let example = "";
+                let phonetic = ""; let exampleEn = ""; let exampleVi = "";
                 const englishWord = isViet ? translated : query;
 
-                try {
-                    const resDict = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(englishWord)}`);
-                    if (resDict.ok) {
-                        const dataDict = await resDict.json();
-                        phonetic = dataDict[0].phonetic || (dataDict[0].phonetics.find(p => p.text)?.text) || "";
-                        for (let meaning of dataDict[0].meanings) {
-                            for (let def of meaning.definitions) {
-                                if (def.example) { example = def.example; break; }
-                            }
-                            if (example) break;
+                // 2. Lấy dữ liệu Oxford/Dictionary API
+                const resDict = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(englishWord)}`);
+                if (resDict.ok) {
+                    const dataDict = await resDict.json();
+                    phonetic = dataDict[0].phonetic || (dataDict[0].phonetics.find(p => p.text)?.text) || "";
+                    for (let m of dataDict[0].meanings) {
+                        for (let d of m.definitions) { 
+                            if (d.example) { 
+                                exampleEn = d.example; 
+                                // 3. Dịch ví dụ sang tiếng Việt
+                                exampleVi = await translateText(exampleEn, 'en|vi');
+                                break; 
+                            } 
                         }
+                        if (exampleEn) break;
                     }
-                } catch(e) {}
+                }
 
+                // Hiển thị kết quả
                 document.getElementById('dictResult').style.display = 'block';
                 document.getElementById('outWord').innerText = query;
                 document.getElementById('outPhonetic').innerText = phonetic ? `[ ${phonetic} ]` : "";
                 document.getElementById('outTranslate').innerText = translated;
                 document.getElementById('btnSpeak').onclick = () => speak(englishWord);
-
-                if (example) {
+                
+                if (exampleEn) {
                     document.getElementById('exampleSection').style.display = 'block';
-                    document.getElementById('outExample').innerText = `"${example}"`;
+                    document.getElementById('outExample').innerText = `"${exampleEn}"`;
+                    document.getElementById('outExampleVi').innerText = exampleVi;
                 }
 
+                // Lưu lịch sử
                 if (!history.includes(query)) {
                     history = [query, ...history].slice(0, 5);
                     localStorage.setItem('ivy_history', JSON.stringify(history));
                     renderHistory();
                 }
-            } catch (e) { alert("Có lỗi xảy ra!"); }
+
+            } catch (e) {
+                // Xử lý khi sai từ
+                const suggestion = findSuggestion(query);
+                if (suggestion) {
+                    document.getElementById('suggestionBox').style.display = 'block';
+                    document.getElementById('suggestedWord').innerText = suggestion;
+                    document.getElementById('suggestedWord').onclick = () => {
+                        document.getElementById('dictInput').value = suggestion;
+                        handleSearch();
+                    };
+                } else {
+                    alert("Không tìm thấy từ này, hãy thử lại nhé!");
+                    document.getElementById('wordOfDaySection').style.display = 'block';
+                }
+            }
+        }
+
+        // Các hàm phụ trợ
+        function searchByTopic(cat) {
+            const words = topicWords[cat];
+            document.getElementById('dictInput').value = words[Math.floor(Math.random() * words.length)];
+            handleSearch();
         }
 
         function renderHistory() {
@@ -260,8 +296,8 @@
             handleSearch();
         }
 
+        // Khởi tạo AOS
         document.addEventListener('DOMContentLoaded', () => {
-            includeHTML();
             renderHistory();
             populateVoiceList();
             AOS.init();
@@ -269,22 +305,132 @@
             document.getElementById('dictInput').onkeypress = (e) => { if(e.key === 'Enter') handleSearch(); };
         });
 
-        const topicWords = {
-            travel: ['Itinerary', 'Accommodation', 'Sightseeing', 'Destination', 'Baggage', 'Departure', 'Expedition', 'Souvenir'],
-            office: ['Collaborate', 'Deadline', 'Requirement', 'Procedure', 'Subordinate', 'Compensation', 'Strategy', 'Performance'],
-            social: ['Fluency', 'Interaction', 'Extrovert', 'Networking', 'Etiquette', 'Expression', 'Ambiguous', 'Sympathy'],
-            academic: ['Analysis', 'Hypothesis', 'Methodology', 'Definition', 'Theory', 'Evaluation', 'Significant', 'Literature']
+        async function includeHTML() {
+        const components = [
+            { id: 'header-placeholder', file: 'header.html' },
+            { id: 'footer-placeholder', file: 'footer.html' }
+        ];
+
+        for (const comp of components) {
+            const element = document.getElementById(comp.id);
+            if (element) {
+                try {
+                    const response = await fetch(comp.file);
+                    if (response.ok) {
+                        element.innerHTML = await response.text();
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải file: " + comp.file, err);
+                }
+            }
+        }
+
+        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
+        initMenuLogic();
+
+        // Ẩn preloader
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        }, 600);
+    }
+
+    function initMenuLogic() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.getElementById('main-nav');
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        if (!menuToggle || !nav) return;
+
+        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('nav-open'); 
+            menuToggle.classList.toggle('menu-active'); 
+            
+            if (menuToggle.classList.contains('menu-active')) {
+                menuToggle.classList.replace('fa-bars', 'fa-times');
+            } else {
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+            }
+            document.body.classList.toggle('no-scroll');
+        });
+        
+        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
+        dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        
+        toggle.addEventListener('click', function(e) {
+            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
+            if (window.innerWidth <= 768) {
+                
+                // Nếu dropdown này chưa được mở (chưa có class 'active')
+                if (!dropdown.classList.contains('active')) {
+                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
+                    
+                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    dropdowns.forEach(d => d.classList.remove('active'));
+                    
+                    // Mở dropdown hiện tại
+                    dropdown.classList.add('active');
+                } 
+                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
+            }
+        });
+    });
+
+        // Đóng dropdown khi bấm ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+        });
+
+        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
+        nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+        
+        // Reset khi xoay ngang màn hình hoặc đổi kích thước
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+        });
+    }
+
+    // Chạy duy nhất một sự kiện khởi tạo
+    document.addEventListener("DOMContentLoaded", includeHTML);
+
+    const scrollToTopButton = document.querySelector('.scroll-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
         };
 
-        function searchByTopic(category) {
-            const words = topicWords[category];
-            // Chọn ngẫu nhiên 1 từ trong mảng
-            const randomWord = words[Math.floor(Math.random() * words.length)];
-            
-            // Điền vào ô input và thực hiện tra cứu
-            document.getElementById('dictInput').value = randomWord;
-            handleSearch();
-        }
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     </script>
 </body>
 </html>
