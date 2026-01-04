@@ -93,11 +93,19 @@
         /* Trên màn hình máy tính (Lớn hơn 768px) */
         @media (min-width: 768px) {
             .course-wrapper {
-                justify-content: center; /* Căn giữa 2 card */
-                overflow-x: visible;     /* Không cần lướt trên máy tính */
+                justify-content: flex-start; /* Bắt đầu từ trái sang để không bị mất nội dung bên trái */
+                overflow-x: auto;            /* BẬT LẠI khả năng lướt */
+                padding-bottom: 20px;        /* Khoảng hở cho thanh scrollbar (nếu có) */
             }
             .course-card-premium {
-                flex: 0 0 350px;        /* Hiện đủ kích thước 2 card */
+                flex: 0 0 320px;             /* Chỉnh nhỏ lại xíu cho vừa mắt trên Tablet */
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .course-wrapper {
+                justify-content: center;
+                overflow-x: visible; 
             }
         }
 

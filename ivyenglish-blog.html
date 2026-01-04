@@ -14,19 +14,16 @@
     <style>
         :root { --p-blue: #1a237e; --s-gold: #c5a059; --accent: #5b8cff; }
         
-        /* SEARCH BAR */
         .search-container { max-width: 600px; margin: -30px auto 40px; position: relative; z-index: 10; padding: 0 20px; }
         .search-wrapper { display: flex; background: white; border-radius: 50px; padding: 8px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee; }
         .search-wrapper input { border: none; outline: none; flex: 1; padding: 10px; font-size: 1rem; color: #334155; }
         .search-wrapper i { display: flex; align-items: center; color: var(--accent); font-size: 1.2rem; }
 
-        /* SKELETON */
         .skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: 12px; background-size: 200% 100%; animation: 1.5s shine linear infinite; }
         .skeleton-img { height: 220px; width: 100%; }
         .skeleton-text { height: 20px; margin-bottom: 10px; width: 80%; }
         @keyframes shine { to { background-position-x: -200%; } }
 
-        /* GRID 3 COLUMNS - Đã sửa lỗi tàng hình */
         .blog-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; min-height: 100px; }
         @media (max-width: 992px) { .blog-group { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .blog-group { grid-template-columns: 1fr; } }
@@ -40,14 +37,13 @@
         .blog-title { font-size: 1.15rem; font-weight: 700; color: var(--p-blue); line-height: 1.4; margin-bottom: 10px; }
         .btn-readmore { margin-top: auto; color: var(--accent); font-weight: 700; text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         
-        /* MODAL */
         #postModal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
         .modal-container { background: #fff; margin: 2% auto; padding: 40px; border-radius: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; }
         .close-btn {
-            position: fixed; /* Giữ cố định so với khung nhìn */
+            position: fixed;
             top: 20px;
-            right: calc(50% - 430px); /* Căn theo container 900px */
-            z-index: 10001; /* Luôn nằm trên cùng */
+            right: calc(50% - 430px);
+            z-index: 10001;
             width: 45px;
             height: 45px;
             background: #fff;
@@ -74,13 +70,18 @@
         .category-divider h2 { color: var(--p-blue); font-size: 1.5rem; white-space: nowrap; }
         .category-divider .line { height: 2px; background: #eee; flex: 1; }
 
-        @media (max-width: 768px) { .modal-container { margin: 0; width: 100%; height: 100%; border-radius: 0; padding: 20px; } .close-btn {
-            right: 20px; /* Trên mobile thì cách lề phải 20px */
-            top: 15px;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
-        }}
+        @media (max-width: 768px) { 
+            .modal-container { margin: 0; width: 100%; height: 100%; border-radius: 0; padding: 20px; padding-top: 60px; /* Thêm padding-top để nội dung không đè lên nút X */ } 
+            .close-btn {
+                right: 20px;
+                top: 20px;
+                background: rgba(255, 255, 255, 0.9);
+                width: 45px;
+                height: 45px;
+                font-size: 28px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        }
     </style>
 </head>
 <body>
@@ -169,11 +170,11 @@
                 html += `
                     <div class="category-divider" data-aos="fade-right"><h2>${cat}</h2><div class="line"></div></div>
                     <div class="blog-group">${renderCards(groups[cat].slice(0, 3))}</div>
+                    
                 `;
             }
             container.innerHTML = html || "<p style='text-align:center;'>Không có bài viết.</p>";
             
-            // QUAN TRỌNG: Làm mới AOS để hiện bài viết tàng hình
             setTimeout(() => { AOS.refresh(); }, 100);
         }
 
@@ -243,9 +244,42 @@
                     if (res.ok) el.innerHTML = await res.text();
                 }
             }
+
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.getElementById('main-nav');
+            
+            if (menuToggle && nav) {
+                menuToggle.addEventListener('click', function() {
+                    nav.classList.toggle('nav-open');
+                    this.classList.toggle('menu-active');
+                    
+                    if (this.classList.contains('fa-bars')) {
+                        this.classList.replace('fa-bars', 'fa-times');
+                    } else {
+                        this.classList.replace('fa-times', 'fa-bars');
+                    }
+                    document.body.classList.toggle('no-scroll');
+                });
+
+                const dropdowns = document.querySelectorAll('.dropdown');
+                dropdowns.forEach(dropdown => {
+                    const toggle = dropdown.querySelector('.dropdown-toggle');
+                    if (toggle) {
+                        toggle.addEventListener('click', function(e) {
+                            if (window.innerWidth <= 768) {
+                                e.preventDefault();
+                                dropdown.classList.toggle('active');
+                            }
+                        });
+                    }
+                });
+            }
             initBlog();
             AOS.init({ duration: 800, once: true });
-            setTimeout(() => { document.getElementById('preloader').style.display = 'none'; }, 500);
+            setTimeout(() => { 
+                const preloader = document.getElementById('preloader');
+                if(preloader) preloader.style.display = 'none'; 
+            }, 500);
         }
 
         document.addEventListener("DOMContentLoaded", includeHTML);
