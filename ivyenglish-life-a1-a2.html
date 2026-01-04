@@ -329,55 +329,152 @@
 
     <div id="footer-placeholder"></div>
 
-    <script>
-        async function includeHTML() {
-            const components = [
-                { id: 'header-placeholder', file: 'header.html' },
-                { id: 'footer-placeholder', file: 'footer.html' }
-            ];
+    <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
+    </div>
 
-            for (const comp of components) {
-                const element = document.getElementById(comp.id);
-                if (element) {
-                    try {
-                        const response = await fetch(comp.file);
-                        if (response.ok) {
-                            element.innerHTML = await response.text();
-                        }
-                    } catch (err) { console.error(err); }
+    <script>
+        const scrollToTopButton = document.querySelector('.scroll-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+    <script>
+    async function includeHTML() {
+        const components = [
+            { id: 'header-placeholder', file: 'header.html' },
+            { id: 'footer-placeholder', file: 'footer.html' }
+        ];
+
+        for (const comp of components) {
+            const element = document.getElementById(comp.id);
+            if (element) {
+                try {
+                    const response = await fetch(comp.file);
+                    if (response.ok) {
+                        element.innerHTML = await response.text();
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải file: " + comp.file, err);
                 }
             }
-
-            setTimeout(() => {
-                const menuToggle = document.querySelector('.menu-toggle');
-                const nav = document.getElementById('main-nav');
-                if(menuToggle && nav) {
-                    menuToggle.onclick = () => {
-                        nav.classList.toggle('nav-open');
-                        menuToggle.classList.toggle('menu-active');
-                    };
-                }
-                const preloader = document.getElementById('preloader');
-                if (preloader) {
-                    preloader.style.opacity = '0';
-                    setTimeout(() => preloader.style.display = 'none', 500);
-                }
-            }, 600);
         }
 
-        document.addEventListener('click', (e) => {
-            const question = e.target.closest('.faq-question-new');
-            if (question) {
-                const item = question.parentElement;
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.faq-item-new').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
+        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
+        initMenuLogic();
+
+        // Ẩn preloader
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        }, 600);
+    }
+
+    function initMenuLogic() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.getElementById('main-nav');
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        if (!menuToggle || !nav) return;
+
+        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('nav-open'); 
+            menuToggle.classList.toggle('menu-active'); 
+            
+            if (menuToggle.classList.contains('menu-active')) {
+                menuToggle.classList.replace('fa-bars', 'fa-times');
+            } else {
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+            }
+            document.body.classList.toggle('no-scroll');
+        });
+        
+        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
+        dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        
+        toggle.addEventListener('click', function(e) {
+            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
+            if (window.innerWidth <= 768) {
+                
+                // Nếu dropdown này chưa được mở (chưa có class 'active')
+                if (!dropdown.classList.contains('active')) {
+                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
+                    
+                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    dropdowns.forEach(d => d.classList.remove('active'));
+                    
+                    // Mở dropdown hiện tại
+                    dropdown.classList.add('active');
+                } 
+                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
+            }
+        });
+    });
+
+        // Đóng dropdown khi bấm ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
 
-        document.addEventListener("DOMContentLoaded", includeHTML);
-    </script>
+        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
+        nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+        
+        // Reset khi xoay ngang màn hình hoặc đổi kích thước
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                nav.classList.remove('nav-open');
+                menuToggle.classList.remove('menu-active');
+                menuToggle.classList.replace('fa-times', 'fa-bars');
+                document.body.classList.remove('no-scroll');
+                dropdowns.forEach(d => d.classList.remove('active'));
+            }
+        });
+    }
+
+    // Chạy duy nhất một sự kiện khởi tạo
+    document.addEventListener("DOMContentLoaded", includeHTML);
+</script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ duration: 1000, once: true });</script>
+    <script src="js/daily-word.js"></script>
 </body>
 </html>
