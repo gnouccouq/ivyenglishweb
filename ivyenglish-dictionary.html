@@ -12,57 +12,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        .dictionary-wrapper {
-            padding: 140px 0 100px;
-            background: var(--bg-body);
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Hình khối trang trí (Shape) không chặn click */
+        body, html { margin: 0; padding: 0; }
+        .dictionary-wrapper { padding: 140px 0 100px; background: var(--bg-body); min-height: 100vh; position: relative; overflow: hidden; }
         .shape { position: absolute; filter: blur(60px); z-index: 0; opacity: 0.3; pointer-events: none; animation: floatShape 20s infinite alternate; }
         .shape-1 { width: 350px; height: 350px; background: #5b8cff; top: -100px; left: -100px; }
         .shape-2 { width: 300px; height: 300px; background: #ff7eb3; bottom: 10%; right: -50px; }
+        .topic-btn {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .topic-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .topic-btn i {
+            font-size: 0.8rem;
+        }
         @keyframes floatShape { 0% { transform: translate(0,0); } 100% { transform: translate(60px, 80px); } }
 
-        /* Container nội dung tra cứu */
         .dict-container { position: relative; z-index: 5; max-width: 800px; margin: 0 auto; padding: 0 15px; }
-
-        /* Search Box */
-        .search-container-premium {
-            background: #fff; padding: 8px; border-radius: 50px;
-            display: flex; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 2px solid #e2e8f0; transition: 0.3s;
-        }
+        .search-container-premium { background: #fff; padding: 8px; border-radius: 50px; display: flex; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #e2e8f0; transition: 0.3s; }
         .search-container-premium:focus-within { border-color: var(--primary-color); transform: translateY(-2px); }
-        .search-container-premium input {
-            flex: 1; border: none; padding: 12px 25px; font-size: 1.1rem;
-            outline: none; background: transparent; color: #334155; font-weight: 500;
-        }
-        .btn-main-search {
-            background: var(--primary-color); color: #fff; border: none;
-            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        .search-container-premium input { flex: 1; border: none; padding: 12px 25px; font-size: 1.1rem; outline: none; background: transparent; color: #334155; font-weight: 500; }
+        .btn-main-search { background: var(--primary-color); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Result Card */
-        .result-card {
-            margin-top: 25px; background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px); padding: 30px; border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-        }
-        
+        .result-card { margin-top: 25px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
         .word-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
         .phonetic-text { color: #64748b; font-family: 'serif'; font-size: 1.2rem; margin-top: 5px; display: block; font-style: italic; }
         
-        .speaker-btn {
-            width: 50px; height: 50px; border-radius: 50%; border: none;
-            background: var(--primary-color); color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;
-        }
+        .speaker-group { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        .speaker-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--primary-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
         .speaker-btn:hover { transform: scale(1.1); background: #4a7be6; }
+        
+        /* Style cho bộ chọn giọng nói */
+        .voice-selector { padding: 5px 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.8rem; color: #64748b; outline: none; cursor: pointer; background: white; max-width: 150px; }
 
-        .meaning-box { background: #fff; padding: 20px; border-radius: 15px; border-left: 5px solid var(--primary-color); }
+        .meaning-box { background: #fff; padding: 20px; border-radius: 15px; border-left: 5px solid var(--primary-color); margin-bottom: 15px; }
+        .example-box { background: #f8fafc; padding: 15px; border-radius: 12px; border-left: 5px solid #cbd5e1; margin-top: 10px; }
+        .example-text { color: #475569; font-style: italic; line-height: 1.5; margin: 0; }
         .label-small { font-size: 0.7rem; text-transform: uppercase; font-weight: 900; color: #94a3b8; margin-bottom: 8px; display: block; }
         .history-tag { background: #e0e7ff; color: #5b8cff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; margin: 4px; display: inline-block; font-weight: 700; }
     </style>
@@ -90,17 +92,33 @@
                 <div id="historyList"></div>
             </div>
 
+            <div class="topic-suggestions" style="margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;" data-aos="fade-up">
+                <button class="topic-btn" onclick="searchByTopic('travel')"><i class="fas fa-plane-departure"></i> Du lịch</button>
+                <button class="topic-btn" onclick="searchByTopic('office')"><i class="fas fa-briefcase"></i> Công sở</button>
+                <button class="topic-btn" onclick="searchByTopic('social')"><i class="fas fa-comments"></i> Giao tiếp</button>
+                <button class="topic-btn" onclick="searchByTopic('academic')"><i class="fas fa-graduation-cap"></i> Học thuật</button>
+            </div>
+
             <div id="dictResult" class="result-card" style="display: none;">
                 <div class="word-header">
                     <div>
                         <h2 id="outWord" style="color: var(--primary-color); font-size: 2.2rem; margin: 0; font-weight: 900;"></h2>
                         <span id="outPhonetic" class="phonetic-text"></span>
                     </div>
-                    <button class="speaker-btn" id="btnSpeak"><i class="fas fa-volume-up"></i></button>
+                    <div class="speaker-group">
+                        <select id="voiceSelect" class="voice-selector">
+                            <option value="">Đang tải giọng đọc...</option>
+                        </select>
+                        <button class="speaker-btn" id="btnSpeak"><i class="fas fa-volume-up"></i></button>
+                    </div>
                 </div>
                 <div class="meaning-box">
                     <span class="label-small">Dịch nghĩa</span>
                     <p id="outTranslate" style="font-size: 1.3rem; margin: 0; font-weight: 700; color: #1e293b;"></p>
+                </div>
+                <div id="exampleSection" class="example-box" style="display: none;">
+                    <span class="label-small">Ví dụ (Example)</span>
+                    <p id="outExample" class="example-text"></p>
                 </div>
             </div>
 
@@ -110,11 +128,14 @@
                     <div>
                         <h2 style="color: #334155; font-size: 1.8rem; margin: 0; font-weight: 900;">Persistence</h2>
                         <span class="phonetic-text">/pəˈsɪstəns/</span>
+                        <p style="color: #ff7eb3; font-weight: 700; margin: 5px 0 0 0; font-size: 1.1rem;">Sự kiên trì / Bền bỉ</p>
                     </div>
                     <button class="speaker-btn" style="background: #ff7eb3;" onclick="speak('Persistence')"><i class="fas fa-volume-up"></i></button>
                 </div>
-                <div style="background: #fff; padding: 15px; border-radius: 10px;">
-                    <p style="font-size: 1.1rem; margin: 0; color: #475569;">Sự kiên trì, bền bỉ theo đuổi mục tiêu dù gặp khó khăn.</p>
+                <div class="example-box">
+                    <span class="label-small">Giải thích & Ví dụ</span>
+                    <p style="font-size: 1rem; margin-bottom: 8px; color: #475569;">Sự kiên trì theo đuổi một mục tiêu bất chấp khó khăn.</p>
+                    <p class="example-text">"Her <strong>persistence</strong> finally paid off when she got the job."</p>
                 </div>
             </div>
         </div>
@@ -122,60 +143,92 @@
 
     <div id="footer-placeholder"></div>
 
-        <div class="floating-contact">
-        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
-            <i class="fas fa-arrow-up"></i>
-        </a>
-        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
-            <i class="fas fa-phone-alt"></i>
-        </a>
-        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
-        </a>
-        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
-            <i class="fab fa-facebook-messenger"></i>
-        </a>
-    </div>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // --- 1. LOAD HEADER/FOOTER & MENU ---
-        async function loadComponents() {
-            const parts = [{ id: 'header-placeholder', file: 'header.html' }, { id: 'footer-placeholder', file: 'footer.html' }];
-            for (const part of parts) {
-                try {
-                    const res = await fetch(part.file);
-                    if (res.ok) {
-                        document.getElementById(part.id).innerHTML = await res.text();
-                        if(part.id === 'header-placeholder') initMobileMenu();
-                    }
-                } catch (e) { console.error("Lỗi component"); }
+        // 1. TẢI COMPONENT
+        async function includeHTML() {
+            const components = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+            for (const comp of components) {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    try {
+                        const response = await fetch(comp.file);
+                        if (response.ok) { element.innerHTML = await response.text(); }
+                    } catch (err) { console.error("Lỗi tải: " + comp.file); }
+                }
             }
+            initMenuLogic();
         }
 
-        function initMobileMenu() {
+        function initMenuLogic() {
             const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.querySelector('.nav-links');
-            if (menuToggle && nav) {
-                menuToggle.onclick = () => {
-                    nav.classList.toggle('nav-open');
-                    menuToggle.classList.toggle('fa-bars');
-                    menuToggle.classList.toggle('fa-times');
-                };
+            const nav = document.getElementById('main-nav');
+            if (!menuToggle || !nav) return;
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('nav-open'); 
+                menuToggle.classList.toggle('menu-active'); 
+                document.body.classList.toggle('no-scroll');
+            });
+        }
+
+        // 2. LOGIC CHỌN GIỌNG NÓI (NEW)
+        let voices = [];
+        function populateVoiceList() {
+            voices = window.speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById('voiceSelect');
+            if(!voiceSelect) return;
+            
+            // Lọc các giọng tiếng Anh
+            const enVoices = voices.filter(v => v.lang.startsWith('en'));
+            
+            voiceSelect.innerHTML = enVoices
+                .map(v => `<option value="${v.name}">${v.name} (${v.lang})</option>`)
+                .join('');
+            
+            if (enVoices.length === 0) {
+                voiceSelect.innerHTML = '<option value="">Giọng mặc định</option>';
             }
         }
 
-        // --- 2. PHÁT ÂM (SPEECH) ---
+        // Cần cả 2 sự kiện vì trình duyệt load giọng nói khác nhau
+        window.speechSynthesis.onvoiceschanged = populateVoiceList;
+
         function speak(text) {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
-            const voices = window.speechSynthesis.getVoices();
-            msg.voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+            const voiceSelect = document.getElementById('voiceSelect');
+            
+            if (voiceSelect && voiceSelect.value) {
+                msg.voice = voices.find(v => v.name === voiceSelect.value);
+            } else {
+                msg.voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+            }
+            
             msg.rate = 0.9;
             window.speechSynthesis.speak(msg);
         }
 
-        // --- 3. LOGIC TRA TỪ & PHIÊN ÂM ---
+        const topicWords = {
+            travel: ['Itinerary', 'Accommodation', 'Sightseeing', 'Destination', 'Baggage', 'Departure', 'Expedition', 'Souvenir'],
+            office: ['Collaborate', 'Deadline', 'Requirement', 'Procedure', 'Subordinate', 'Compensation', 'Strategy', 'Performance'],
+            social: ['Fluency', 'Interaction', 'Extrovert', 'Networking', 'Etiquette', 'Expression', 'Ambiguous', 'Sympathy'],
+            academic: ['Analysis', 'Hypothesis', 'Methodology', 'Definition', 'Theory', 'Evaluation', 'Significant', 'Literature']
+        };
+
+        function searchByTopic(category) {
+            const words = topicWords[category];
+            // Chọn ngẫu nhiên 1 từ trong mảng
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            
+            // Điền vào ô input và thực hiện tra cứu
+            document.getElementById('dictInput').value = randomWord;
+            handleSearch();
+        }
+
+        // 3. LOGIC TRA TỪ
         let history = JSON.parse(localStorage.getItem('ivy_history')) || [];
 
         async function handleSearch() {
@@ -184,40 +237,49 @@
 
             document.getElementById('dictResult').style.display = 'none';
             document.getElementById('wordOfDaySection').style.display = 'none';
+            document.getElementById('exampleSection').style.display = 'none';
 
             try {
                 const isViet = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(query);
-                
-                // API Dịch
                 const resTrans = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(query)}&langpair=${isViet ? 'vi|en' : 'en|vi'}`);
                 const dataTrans = await resTrans.json();
                 const translated = dataTrans.responseData.translatedText;
 
-                // API Phiên âm (Ưu tiên từ tiếng Anh)
                 let phonetic = "";
+                let example = "";
                 const englishWord = isViet ? translated : query;
-                try {
-                    const resPhonetic = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(englishWord)}`);
-                    if (resPhonetic.ok) {
-                        const dataPhonetic = await resPhonetic.json();
-                        phonetic = dataPhonetic[0].phonetic || (dataPhonetic[0].phonetics.find(p => p.text)?.text) || "";
-                    }
-                } catch(e) { console.log("Không tìm thấy phiên âm"); }
 
-                // Hiển thị kết quả
+                try {
+                    const resDict = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(englishWord)}`);
+                    if (resDict.ok) {
+                        const dataDict = await resDict.json();
+                        phonetic = dataDict[0].phonetic || (dataDict[0].phonetics.find(p => p.text)?.text) || "";
+                        for (let meaning of dataDict[0].meanings) {
+                            for (let def of meaning.definitions) {
+                                if (def.example) { example = def.example; break; }
+                            }
+                            if (example) break;
+                        }
+                    }
+                } catch(e) {}
+
                 document.getElementById('dictResult').style.display = 'block';
                 document.getElementById('outWord').innerText = query;
                 document.getElementById('outPhonetic').innerText = phonetic ? `[ ${phonetic} ]` : "";
                 document.getElementById('outTranslate').innerText = translated;
                 document.getElementById('btnSpeak').onclick = () => speak(englishWord);
 
-                // Lịch sử
+                if (example) {
+                    document.getElementById('exampleSection').style.display = 'block';
+                    document.getElementById('outExample').innerText = `"${example}"`;
+                }
+
                 if (!history.includes(query)) {
                     history = [query, ...history].slice(0, 5);
                     localStorage.setItem('ivy_history', JSON.stringify(history));
                     renderHistory();
                 }
-            } catch (e) { alert("Có lỗi xảy ra, vui lòng tra từ khác!"); }
+            } catch (e) { alert("Có lỗi xảy ra!"); }
         }
 
         function renderHistory() {
@@ -233,142 +295,14 @@
             handleSearch();
         }
 
-        // --- 4. KHỞI CHẠY ---
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponents();
+            includeHTML();
             renderHistory();
+            populateVoiceList();
             AOS.init();
             document.getElementById('btnSearch').onclick = handleSearch;
             document.getElementById('dictInput').onkeypress = (e) => { if(e.key === 'Enter') handleSearch(); };
-            window.speechSynthesis.getVoices(); // Nạp sẵn giọng đọc
         });
-
-        const scrollToTopButton = document.querySelector('.scroll-to-top');
-
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                scrollToTopButton.style.display = "flex";
-            } else {
-                scrollToTopButton.style.display = "none";
-            }
-        };
-
-        scrollToTopButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        async function includeHTML() {
-        const components = [
-            { id: 'header-placeholder', file: 'header.html' },
-            { id: 'footer-placeholder', file: 'footer.html' }
-        ];
-
-        for (const comp of components) {
-            const element = document.getElementById(comp.id);
-            if (element) {
-                try {
-                    const response = await fetch(comp.file);
-                    if (response.ok) {
-                        element.innerHTML = await response.text();
-                    }
-                } catch (err) {
-                    console.error("Lỗi khi tải file: " + comp.file, err);
-                }
-            }
-        }
-
-        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
-        initMenuLogic();
-
-        // Ẩn preloader
-        setTimeout(() => {
-            const preloader = document.getElementById('preloader');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden';
-                setTimeout(() => preloader.style.display = 'none', 500);
-            }
-        }, 600);
-    }
-
-    function initMenuLogic() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const nav = document.getElementById('main-nav');
-        const dropdowns = document.querySelectorAll('.dropdown');
-
-        if (!menuToggle || !nav) return;
-
-        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
-        menuToggle.addEventListener('click', function() {
-            nav.classList.toggle('nav-open'); 
-            menuToggle.classList.toggle('menu-active'); 
-            
-            if (menuToggle.classList.contains('menu-active')) {
-                menuToggle.classList.replace('fa-bars', 'fa-times');
-            } else {
-                menuToggle.classList.replace('fa-times', 'fa-bars');
-            }
-            document.body.classList.toggle('no-scroll');
-        });
-        
-        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
-        dropdowns.forEach(dropdown => {
-        const toggle = dropdown.querySelector('.dropdown-toggle');
-        
-        toggle.addEventListener('click', function(e) {
-            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
-            if (window.innerWidth <= 768) {
-                
-                // Nếu dropdown này chưa được mở (chưa có class 'active')
-                if (!dropdown.classList.contains('active')) {
-                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
-                    
-                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
-                    dropdowns.forEach(d => d.classList.remove('active'));
-                    
-                    // Mở dropdown hiện tại
-                    dropdown.classList.add('active');
-                } 
-                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
-            }
-        });
-    });
-
-        // Đóng dropdown khi bấm ra ngoài
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdowns.forEach(d => d.classList.remove('active'));
-            }
-        });
-
-        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
-        nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active');
-                menuToggle.classList.replace('fa-times', 'fa-bars');
-                document.body.classList.remove('no-scroll');
-            });
-        });
-        
-        // Reset khi xoay ngang màn hình hoặc đổi kích thước
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                nav.classList.remove('nav-open');
-                menuToggle.classList.remove('menu-active');
-                menuToggle.classList.replace('fa-times', 'fa-bars');
-                document.body.classList.remove('no-scroll');
-                dropdowns.forEach(d => d.classList.remove('active'));
-            }
-        });
-    }
-
-    // Chạy duy nhất một sự kiện khởi tạo
-    document.addEventListener("DOMContentLoaded", includeHTML);
     </script>
 </body>
 </html>
