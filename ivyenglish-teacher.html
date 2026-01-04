@@ -169,6 +169,53 @@
         .cta-box h2 { font-size: 24px; }
     }
 
+    .zoomable {
+        cursor: zoom-in;
+        transition: transform 0.3s ease;
+    }
+
+    .zoomable:hover {
+        transform: scale(1.05); /* Phóng nhẹ khi di chuột */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Modal xem ảnh toàn màn hình */
+    .full-image-modal {
+        display: none;
+        position: fixed;
+        z-index: 10001; /* Cao hơn mọi thứ */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        animation: zoomIn 0.3s ease;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    @keyframes zoomIn {
+        from { transform: scale(0.7); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
     /* Hình ảnh lớp học trên mobile */
     .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     @media (max-width: 600px) {
@@ -197,39 +244,58 @@
 <div data-aos="fade-up" class="container">  
     <div class="profile-card">
         <div class="profile-left">
-            <img src="images/avatar.jpg" alt="Lê Văn Trung (Mr. Jaime)" class="teacher-photo">
+            <img src="images/e96ced7a-2243-4783-b3bf-ad4a5f17c962.jpg" alt="Lê Văn Trung (Mr. Jaime)" class="teacher-photo">
             <h2 style="color: var(--p-blue); font-size: 50px; margin: 0;">Lê Văn Trung (Mr. Jaime)</h2>
             <p style="color: var(--s-gold); font-weight: 900; letter-spacing: 2px; margin-top: 5px;">FOUNDER & HEAD TEACHER</p>
             
             <div class="badge-list">
-                <span class="badge-item"><i class="fas fa-star"></i> IELTS 8.5</span>
+                <span class="badge-item"><i class="fas fa-star"></i> IELTS</span>
                 <span class="badge-item"><i class="fas fa-certificate"></i> TESOL</span>
-                <span class="badge-item"><i class="fas fa-university"></i> ĐH SƯ PHẠM</span>
+                <span class="badge-item"><i class="fas fa-university"></i> Đại học Quốc gia TP.HCM</span>
             </div>
         </div>
 
         <div class="profile-right">
             <h3 class="section-title"><i class="fas fa-user-graduate"></i> Giới thiệu</h3>
-            <p>Hơn 10 năm kinh nghiệm trong lĩnh vực luyện thi IELTS và tiếng Anh giao tiếp. Mr. Jaime được biết đến với phương pháp giảng dạy hiện đại, tập trung vào việc cá nhân hóa lộ trình cho từng học viên, giúp tối ưu hóa thời gian và đạt kết quả cao nhất.</p>
+            <p>"Chào các bạn, mình là Trung – người sẽ đồng hành cùng bạn trên hành trình chinh phục tiếng Anh giao tiếp.</p>
+            <p>Với nền tảng là Cử nhân Xã hội học và chứng chỉ giảng dạy TESOL quốc tế từ ASU, mình tin rằng học ngôn ngữ là để kết nối thế giới. Trong lớp của mình, chúng ta sẽ cùng khám phá bộ sách Life – không chỉ là học từ vựng hay ngữ pháp khô khan, mà là trải nghiệm những câu chuyện văn hóa, thiên nhiên và con người chân thực nhất. Dù bạn là sinh viên muốn tự tin nói chuyện với người nước ngoài, hay người đi làm cần cải thiện phản xạ công sở, mình sẽ giúp bạn xây dựng nền tảng vững chắc và cách diễn đạt tự nhiên nhất!"</p>
 
             <h3 class="section-title"><i class="fas fa-award"></i> Bằng cấp & Chứng chỉ</h3>
             <div class="cert-grid">
                 <div class="cert-card">
-                    <i class="fas fa-file-contract cert-icon"></i>
-                    <div><h4>IELTS Academic</h4><p>Overall 8.5 (British Council)</p></div>
+                    <i class="fas fa-graduation-cap cert-icon"></i>
+                    <div><h4>Bachelor's Degree</h4><p>Cử nhân Xã hội học (Bachelor of Arts in Sociology).</p><p>Trường Đại học Khoa học Xã hội và Nhân văn - Đại học Quốc gia TP.HCM.</p></div>
                 </div>
                 <div class="cert-card">
                     <i class="fas fa-medal cert-icon"></i>
-                    <div><h4>Chứng chỉ TESOL</h4><p>Giảng dạy chuẩn Quốc tế</p></div>
+                    <div><h4>Chứng chỉ TESOL</h4><p>Teaching English to Speakers of Other Languages (TESOL).</p><p>Arizona State University (ASU) - Global Launch.</p></div>
                 </div>
                 <div class="cert-card">
-                    <i class="fas fa-graduation-cap cert-icon"></i>
-                    <div><h4>Cử nhân Ngôn ngữ Anh</h4><p>ĐH Sư Phạm TP.HCM</p></div>
+                    <i class="fas fa-medal cert-icon"></i>
+                    <div><h4>Chứng chỉ Chuyên sâu IELTS (Specialization)</h4><p>IELTS Preparation Specialization.</p><p>University of California, Irvine (UCI) qua Coursera.</p></div>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-medal cert-icon"></i>
+                    <div><h4>Chứng chỉ Chuyên sâu Ngữ pháp nâng cao (Specialization)</h4><p>Learn English: Advanced Grammar and Punctuation.</p><p>University of California, Irvine (UCI) qua Coursera.</p></div>
                 </div>
                 <div class="cert-card">
                     <i class="fas fa-check-double cert-icon"></i>
-                    <div><h4>TKT Certificate</h4><p>Cambridge English</p></div>
+                    <div><h4>Teach English Now! Teaching Language Online</h4><p>Chứng chỉ về phương pháp dạy ngôn ngữ trực tuyến của Arizona State University (ASU).</p></div>
                 </div>
+                <div class="cert-card">
+                    <i class="fas fa-check-double cert-icon"></i>
+                    <div><h4>Better Business Writing in English</h4><p>Chứng chỉ về kỹ năng viết tiếng Anh trong kinh doanh của Georgia Institute of Technology (Georgia Tech).</p></div>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-images"></i> Hình ảnh bằng cấp - chứng chỉ</h3>
+            <div class="gallery-grid">
+                <img src="images/Teach English Now! Teaching Language Online.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Teach English Now! Teaching Language Online Certificate">
+                <img src="images/Better Business Writing in English.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Better Business Writing in English Certificate">
+                <img src="images/IELTS Preparation.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="IELTS Preparation Certificate">
+                <img src="images/Learn English- Advanced Grammar and Punctuation.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Learn English- Advanced Grammar and Punctuation Certificate">
+                <img src="images/Bachelor's Degree.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Bachelor's Degree Certificate">
+                <img src="images/TESOL.png" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="TESOL Certificate">
             </div>
 
             <h3 class="section-title"><i class="fas fa-lightbulb"></i> Triết lý giáo dục</h3>
@@ -242,24 +308,32 @@
             <h3 class="section-title"><i class="fas fa-history"></i> Hành trình sự nghiệp</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div style="font-weight: 900; color: var(--p-blue);">2014 - 2018</div>
-                    <div>Tốt nghiệp loại Ưu khoa Ngôn ngữ Anh - ĐH Sư Phạm TP.HCM.</div>
+                    <div style="font-weight: 900; color: var(--p-blue);">2017 - 2019</div>
+                    <div>Online English Teacher • Topica Native.</div>
                 </div>
                 <div class="timeline-item">
-                    <div style="font-weight: 900; color: var(--p-blue);">2019 - 2022</div>
-                    <div>Trưởng bộ môn IELTS tại các hệ thống Anh ngữ lớn.</div>
+                    <div style="font-weight: 900; color: var(--p-blue);">2019 - 2020</div>
+                    <div>Nhân viên học vụ • ILA English Center.</div>
                 </div>
                 <div class="timeline-item">
-                    <div style="font-weight: 900; color: var(--p-blue);">2023 - Nay</div>
-                    <div>Sáng lập ivyEnglish - Trao giá trị tri thức cho cộng đồng.</div>
+                    <div style="font-weight: 900; color: var(--p-blue);">2020 - 2023</div>
+                    <div>English Operations – Senior Staff • KDDI – Global Operations Center.</div>
+                </div>
+                <div class="timeline-item">
+                    <div style="font-weight: 900; color: var(--p-blue);">2024 - 2025</div>
+                    <div>English Teacher - IMAP - Ms. Hoa Junior.</div>
+                </div>
+                <div class="timeline-item">
+                    <div style="font-weight: 900; color: var(--p-blue);">2025 - nay</div>
+                    <div>English Teacher - Sáng lập ivyEnglish - Trao giá trị tri thức cho cộng đồng.</div>
                 </div>
             </div>
 
             <h3 class="section-title"><i class="fas fa-images"></i> Hình ảnh thực tế</h3>
             <div class="gallery-grid">
-                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img" alt="Lớp học">
-                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img" alt="Hoạt động">
-                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img" alt="Học viên">
+                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Lớp học">
+                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Hoạt động">
+                <img src="images/505129060_122112307166882760_8522197847930298430_n.jpg" class="gallery-img zoomable" onclick="openFullImage(this.src)" alt="Học viên">
             </div>
 
             <div class="cta-box">
@@ -269,6 +343,11 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="imageModal" class="full-image-modal" onclick="this.style.display='none'">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="imgFull">
 </div>
 
 <br><br>
@@ -522,6 +601,22 @@
 
     // Chạy duy nhất một sự kiện khởi tạo
     document.addEventListener("DOMContentLoaded", includeHTML);
+
+    function openFullImage(src) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('imgFull');
+        modal.style.display = "flex";
+        modalImg.src = src;
+        
+        // Ngăn cuộn trang khi đang xem ảnh
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Đóng modal khi nhấn vào vùng trống hoặc nút X
+    document.getElementById('imageModal').addEventListener('click', function() {
+        this.style.display = "none";
+        document.body.style.overflow = 'auto';
+    });
 </script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
