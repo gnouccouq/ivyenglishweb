@@ -24,7 +24,6 @@
         .search-container-premium input { flex: 1; border: none; padding: 12px 25px; font-size: 1.1rem; outline: none; background: transparent; color: #334155; font-weight: 500; }
         .btn-main-search { background: var(--primary-color); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Style cho gợi ý sửa lỗi */
         #suggestionBox { display: none; text-align: center; margin-top: 15px; padding: 10px; background: #f0f7ff; border-radius: 12px; color: #64748b; border: 1px dashed #5b8cff; font-size: 0.9rem; }
         #suggestedWord { color: #5b8cff; font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 5px; }
 
@@ -50,15 +49,15 @@
             color: #5b8cff; 
             font-size: clamp(2.5rem, 8vw, 3.5rem); 
             margin: 0;
-            display: inline-flex; /* Giúp căn chỉnh badge theo dòng chữ */
+            display: inline-flex;
             align-items: flex-start;
             position: relative;
         }
 
         .beta-badge {
-            background: #5b8cff; /* Màu hồng giống tone màu shape của bạn */
+            background: #5b8cff;
             color: white;
-            font-size: 0.9rem; /* Chữ nhỏ lại */
+            font-size: 0.9rem;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 6px;
@@ -67,11 +66,9 @@
             vertical-align: top;
             letter-spacing: 0.5px;
             box-shadow: 0 4px 10px rgba(255, 126, 179, 0.3);
-            /* Tạo hiệu ứng hơi nghiêng cho cá tính (tùy chọn) */
             transform: translateY(-5px) rotate(5deg); 
         }
 
-        /* Fix cho mobile nếu cần */
         @media (max-width: 768px) {
             .beta-badge {
                 font-size: 0.7rem;
@@ -177,7 +174,6 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // --- 1. KHO TỪ VỰNG & THUẬT TOÁN SỬA LỖI ---
         const topicWords = {
             travel: ['Itinerary', 'Accommodation', 'Sightseeing', 'Destination', 'Baggage', 'Departure', 'Expedition', 'Souvenir', 'Reservation', 'Passport'],
             office: ['Collaborate', 'Deadline', 'Requirement', 'Procedure', 'Subordinate', 'Compensation', 'Strategy', 'Performance', 'Efficiency', 'Incentive'],
@@ -208,7 +204,6 @@
             return bestMatch;
         }
 
-        // --- 2. GIỌNG NÓI ---
         let voices = [];
         function populateVoiceList() {
             voices = window.speechSynthesis.getVoices();
@@ -228,7 +223,6 @@
             window.speechSynthesis.speak(msg);
         }
 
-        // --- 3. TRA CỨU VÀ DỊCH VÍ DỤ ---
         let history = JSON.parse(localStorage.getItem('ivy_history')) || [];
 
         async function translateText(text, pair) {
@@ -250,14 +244,12 @@
             try {
                 const isViet = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(query);
                 
-                // 1. Dịch từ chính
                 const translated = await translateText(query, isViet ? 'vi|en' : 'en|vi');
                 if (!translated || translated.includes("MYMEMORY WARNING")) throw new Error();
 
                 let phonetic = ""; let exampleEn = ""; let exampleVi = "";
                 const englishWord = isViet ? translated : query;
 
-                // 2. Lấy dữ liệu Oxford/Dictionary API
                 const resDict = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(englishWord)}`);
                 if (resDict.ok) {
                     const dataDict = await resDict.json();
@@ -266,7 +258,6 @@
                         for (let d of m.definitions) { 
                             if (d.example) { 
                                 exampleEn = d.example; 
-                                // 3. Dịch ví dụ sang tiếng Việt
                                 exampleVi = await translateText(exampleEn, 'en|vi');
                                 break; 
                             } 
@@ -274,8 +265,6 @@
                         if (exampleEn) break;
                     }
                 }
-
-                // Hiển thị kết quả
                 document.getElementById('dictResult').style.display = 'block';
                 document.getElementById('outWord').innerText = query;
                 document.getElementById('outPhonetic').innerText = phonetic ? `[ ${phonetic} ]` : "";
@@ -287,8 +276,6 @@
                     document.getElementById('outExample').innerText = `"${exampleEn}"`;
                     document.getElementById('outExampleVi').innerText = exampleVi;
                 }
-
-                // Lưu lịch sử
                 if (!history.includes(query)) {
                     history = [query, ...history].slice(0, 5);
                     localStorage.setItem('ivy_history', JSON.stringify(history));
@@ -296,7 +283,6 @@
                 }
 
             } catch (e) {
-                // Xử lý khi sai từ
                 const suggestion = findSuggestion(query);
                 if (suggestion) {
                     document.getElementById('suggestionBox').style.display = 'block';
@@ -311,8 +297,6 @@
                 }
             }
         }
-
-        // Các hàm phụ trợ
         function searchByTopic(cat) {
             const words = topicWords[cat];
             document.getElementById('dictInput').value = words[Math.floor(Math.random() * words.length)];
@@ -331,8 +315,6 @@
             document.getElementById('dictInput').value = word;
             handleSearch();
         }
-
-        // Khởi tạo AOS
         document.addEventListener('DOMContentLoaded', () => {
             renderHistory();
             populateVoiceList();
@@ -360,11 +342,7 @@
                 }
             }
         }
-
-        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
         initMenuLogic();
-
-        // Ẩn preloader
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
@@ -382,7 +360,6 @@
 
         if (!menuToggle || !nav) return;
 
-        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open'); 
             menuToggle.classList.toggle('menu-active'); 
@@ -394,38 +371,25 @@
             }
             document.body.classList.toggle('no-scroll');
         });
-        
-        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
+
         dropdowns.forEach(dropdown => {
         const toggle = dropdown.querySelector('.dropdown-toggle');
         
         toggle.addEventListener('click', function(e) {
-            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
             if (window.innerWidth <= 768) {
-                
-                // Nếu dropdown này chưa được mở (chưa có class 'active')
                 if (!dropdown.classList.contains('active')) {
-                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
-                    
-                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    e.preventDefault();
                     dropdowns.forEach(d => d.classList.remove('active'));
-                    
-                    // Mở dropdown hiện tại
                     dropdown.classList.add('active');
                 } 
-                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
             }
         });
     });
-
-        // Đóng dropdown khi bấm ra ngoài
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.dropdown')) {
                 dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
-
-        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
         nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 nav.classList.remove('nav-open');
@@ -434,8 +398,6 @@
                 document.body.classList.remove('no-scroll');
             });
         });
-        
-        // Reset khi xoay ngang màn hình hoặc đổi kích thước
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 nav.classList.remove('nav-open');
@@ -446,8 +408,6 @@
             }
         });
     }
-
-    // Chạy duy nhất một sự kiện khởi tạo
     document.addEventListener("DOMContentLoaded", includeHTML);
 
     const scrollToTopButton = document.querySelector('.scroll-to-top');

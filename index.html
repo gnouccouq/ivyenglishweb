@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
 <script>
-    /* GIỮ NGUYÊN LOGIC BẢO TRÌ GỐC */
     const isMaintenance = false;
     if (isMaintenance) {
         window.location.href = "ivyenglish-maintenance.html";
@@ -24,7 +23,6 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        /* GIAO DIỆN MỚI DỰA TRÊN STYLE TRANG TEACHER */
         :root {
             --p-blue: #1a237e;
             --s-gold: #c5a059;
@@ -34,7 +32,6 @@
 
         body { background-color: #f4f7fa; color: var(--text-dark); }
 
-        /* Hero Section đồng bộ style Profile Card */
         #hero-new {
             background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%);
             padding: 160px 0 100px;
@@ -57,48 +54,43 @@
         .section-header-new h2::after { content: ''; display: block; width: 80px; height: 5px; background: var(--s-gold); margin: 15px auto; border-radius: 10px; }
 
         .swiper-slide {
-            height: auto; /* Giúp các card có chiều cao bằng nhau */
+            height: auto;
         }
         
-        /* Card Khóa học mới */
-        /* Khung chứa các card */
         .course-wrapper {
-            display: flex;            /* Xếp hàng ngang */
-            gap: 20px;               /* Khoảng cách giữa 2 card */
-            overflow-x: auto;        /* Cho phép lướt ngang khi bị tràn */
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
             padding: 20px 10px;
-            scroll-snap-type: x mandatory; /* Lướt mượt, dừng đúng card */
+            scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ẩn thanh cuộn xấu trên trình duyệt */
         .course-wrapper::-webkit-scrollbar {
             display: none;
         }
 
-        /* Định dạng Card */
         .course-card-premium {
-            flex: 0 0 85%;           /* Trên mobile: hiện 85% chiều rộng để lộ một chút card thứ 2 */
-            min-width: 280px;        /* Không để card quá nhỏ */
-            max-width: 350px;        /* Không để card quá to */
+            flex: 0 0 85%;
+            min-width: 280px;
+            max-width: 350px;
             background: #fff;
             padding: 25px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            scroll-snap-align: center; /* Khi lướt sẽ tự nhảy vào giữa */
+            scroll-snap-align: center;
             display: flex;
             flex-direction: column;
         }
 
-        /* Trên màn hình máy tính (Lớn hơn 768px) */
         @media (min-width: 768px) {
             .course-wrapper {
-                justify-content: flex-start; /* Bắt đầu từ trái sang để không bị mất nội dung bên trái */
-                overflow-x: auto;            /* BẬT LẠI khả năng lướt */
-                padding-bottom: 20px;        /* Khoảng hở cho thanh scrollbar (nếu có) */
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 20px;
             }
             .course-card-premium {
-                flex: 0 0 320px;             /* Chỉnh nhỏ lại xíu cho vừa mắt trên Tablet */
+                flex: 0 0 320px;
             }
         }
 
@@ -109,25 +101,21 @@
             }
         }
 
-        /* CSS bổ trợ cho đẹp nội dung bên trong */
         .badge { color: white; padding: 5px 15px; border-radius: 5px; display: inline-block; font-size: 0.8rem; margin-bottom: 20px; }
         .price { font-size: 28px; font-weight: 900; color: var(--s-gold); margin: 20px 0; }
         .course-card-premium ul { text-align: left; list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1; }
         .course-card-premium ul li { margin-bottom: 12px; }
         .course-card-premium ul li i { color: var(--s-gold); margin-right: 10px; }
-
-        /* FAQ Style */
         .faq-item-new { background: white; border-radius: 15px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .faq-question-new { padding: 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--p-blue); font-size: 1.1rem; }
         .faq-answer-new { padding: 0 25px; max-height: 0; overflow: hidden; transition: 0.4s ease; color: #64748b; line-height: 1.6; }
         .faq-item-new.active .faq-answer-new { padding-bottom: 25px; max-height: 500px; }
 
-        /* Buttons */
         .btn-premium {
             background: var(--s-gold); color: white; padding: 15px 35px; border-radius: 50px; 
             font-weight: 700; display: inline-block; text-decoration: none; transition: 0.3s;
             border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-            justify-content: center;  /* Căn giữa theo chiều ngang */
+            justify-content: center;
             align-items: center;    
             text-align: center;
         }
@@ -139,7 +127,6 @@
         }
         .btn-outline:hover { background: var(--p-blue); color: white; }
 
-        /* Placement Test Section */
         #placement-test-new {
             background: var(--white);
             border-radius: 30px;
@@ -174,14 +161,14 @@
         .contact-form-column input, 
         .contact-form-column select {
             width: 100% !important;
-            box-sizing: border-box; /* Rất quan trọng để không bị mất khung trên mobile */
+            box-sizing: border-box;
         }
 
         .faq-item-new.active .faq-question-new i {
             transform: rotate(180deg);
         }
         .faq-item-new.active .faq-answer-new {
-            display: block; /* Hoặc max-height nếu bạn dùng transition */
+            display: block;
         }
 
         @media (max-width: 992px) {
@@ -646,29 +633,23 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
         document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các phần tử cần thiết
         const form = document.getElementById('course-registration-form');
         const submitButton = document.getElementById('send-button');
         const successPopup = document.getElementById('success-popup');
         const snowContainer = document.body;
-        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
         const snowflakesCount = 40;
 
         for (let i = 0; i < snowflakesCount; i++) {
             createSnowflake(snowContainer);
         }
         
-        // Lấy tất cả các nút có khả năng đóng popup
         const closeBtns = document.querySelectorAll('.close-btn, #close-popup');
 
-        // --- 1. CODE FIX LỖI NÚT ĐÓNG ---
         closeBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 successPopup.style.display = 'none'; // Ẩn popup đi
             });
         });
-
-        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
         window.addEventListener('click', function(event) {
             if (event.target === successPopup) {
                 successPopup.style.display = 'none';
@@ -696,14 +677,11 @@
                 }
 
                 try {
-                    // Gửi đi Formspree (để nhận mail)
                     const promiseFormspree = fetch(form.action, {
                         method: 'POST',
                         body: formData,
                         headers: { 'Accept': 'application/json' }
                     });
-
-                    // Gửi đi SheetDB (để lưu vào Google Sheet) - Gửi biến "data" đã có ID
                     const promiseSheetDB = fetch("https://sheetdb.io/api/v1/3abfyh1liwt97", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -742,13 +720,12 @@
                 behavior: 'smooth'
             });
         });
-        
-        // --- 4. Khởi tạo Course Slider (Swiper.js) ---
+        // --- 4. KHỞI TẠO SWIPER ---
         document.addEventListener('DOMContentLoaded', function() {
             new Swiper(".course-slider", {
-            slidesPerView: 1,      /* Mobile hiện 1 khóa */
-            spaceBetween: 20,     /* Khoảng cách giữa các khóa */
-            loop: false,          /* Có lặp lại vòng tròn hay không */
+            slidesPerView: 1,
+            spaceBetween: 20, 
+            loop: false,
             navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
@@ -758,14 +735,12 @@
                 clickable: true,
             },
             breakpoints: {
-                /* Khi màn hình lớn hơn 768px (Tablet/PC) */
                 768: {
-                slidesPerView: 2, /* Hiện 2 khóa */
+                slidesPerView: 2,
                 spaceBetween: 30,
                 },
-                /* Khi màn hình lớn hơn 1024px */
                 1024: {
-                slidesPerView: 3, /* Hiện 3 khóa */
+                slidesPerView: 3,
                 spaceBetween: 30,
                 }
             }
@@ -773,43 +748,27 @@
         });
 
 
-        function createSnowflake(container) {
+        /*function createSnowflake(container) {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
-            
-            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
             snowflake.innerHTML = '❄'; 
-
-            // Random kích thước (từ 10px đến 25px)
             const size = Math.random() * 15 + 10 + 'px';
             snowflake.style.fontSize = size;
-            
-            // Random vị trí bắt đầu theo chiều ngang
             snowflake.style.left = Math.random() * 100 + 'vw';
-            
-            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
             const duration = Math.random() * 10 + 5 + 's';
             snowflake.style.animationDuration = duration;
-            
-            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
             snowflake.style.animationDelay = Math.random() * 5 + 's';
-            
-            // Random độ mờ (tạo chiều sâu)
             snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-
             container.appendChild(snowflake);
-
-            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
             snowflake.addEventListener('animationiteration', function() {
                 snowflake.remove();
                 createSnowflake(container);
             });
-            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
             snowflake.addEventListener('animationend', function() {
                 snowflake.remove();
                 createSnowflake(container);
             });
-        }
+        }*/
     </script>
 
 <script>
@@ -832,11 +791,8 @@
                 }
             }
         }
-
-        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
         initMenuLogic();
 
-        // Ẩn preloader
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
@@ -851,10 +807,8 @@
         const menuToggle = document.querySelector('.menu-toggle');
         const nav = document.getElementById('main-nav');
         const dropdowns = document.querySelectorAll('.dropdown');
-
         if (!menuToggle || !nav) return;
 
-        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open'); 
             menuToggle.classList.toggle('menu-active'); 
@@ -866,38 +820,24 @@
             }
             document.body.classList.toggle('no-scroll');
         });
-        
-        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
         dropdowns.forEach(dropdown => {
         const toggle = dropdown.querySelector('.dropdown-toggle');
         
         toggle.addEventListener('click', function(e) {
-            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
             if (window.innerWidth <= 768) {
-                
-                // Nếu dropdown này chưa được mở (chưa có class 'active')
                 if (!dropdown.classList.contains('active')) {
-                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
-                    
-                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    e.preventDefault();
                     dropdowns.forEach(d => d.classList.remove('active'));
-                    
-                    // Mở dropdown hiện tại
                     dropdown.classList.add('active');
                 } 
-                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
             }
         });
     });
-
-        // Đóng dropdown khi bấm ra ngoài
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.dropdown')) {
                 dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
-
-        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
         nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 nav.classList.remove('nav-open');
@@ -906,8 +846,6 @@
                 document.body.classList.remove('no-scroll');
             });
         });
-        
-        // Reset khi xoay ngang màn hình hoặc đổi kích thước
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 nav.classList.remove('nav-open');
@@ -918,13 +856,10 @@
             }
         });
     }
-
-    // Chạy duy nhất một sự kiện khởi tạo
     document.addEventListener("DOMContentLoaded", includeHTML);
 </script>
 
 <script>
-    // FAQ Toggle Logic
     document.addEventListener('DOMContentLoaded', function() {
         const faqItems = document.querySelectorAll('.faq-item-new');
 
@@ -943,8 +878,8 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({
-    duration: 1000, // Tốc độ hiệu ứng (1 giây)
-    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+    duration: 1000,
+    once: true,
   });
 </script>
 

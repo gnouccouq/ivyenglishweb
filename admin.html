@@ -27,7 +27,6 @@
             min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--dark-bg);
@@ -76,7 +75,6 @@
             border-left: 4px solid var(--primary-color);
         }
 
-        /* --- MAIN CONTENT --- */
         .main-content {
             margin-left: var(--sidebar-width);
             flex-grow: 1;
@@ -92,7 +90,6 @@
             display: block;
         }
 
-        /* --- STYLE TABLE (Dữ liệu gốc) --- */
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9em; }
@@ -102,7 +99,6 @@
         .btn-delete { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
         .btn-save { background: #2ECC71; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         
-        /* --- STYLE FORM ĐĂNG BÀI --- */
         .post-form-container {
             background: white;
             padding: 30px;
@@ -122,8 +118,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-top: 30px;
-            width: 100%; /* Đảm bảo không tràn khung */
-            overflow-x: auto; /* Cho phép cuộn ngang bảng nếu màn hình quá nhỏ */
+            width: 100%;
+            overflow-x: auto;
         }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
         th { background: #f8f9fa; color: #555; }
@@ -132,7 +128,7 @@
         .btn-delete { background: #e74c3c; }
         .modal-edit { display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
         .modal-edit-content { background: white; margin: 5% auto; padding: 20px; width: 80%; max-width: 700px; border-radius: 10px; }
-        /* Quill Editor Height */
+
         #editor-container {
             height: 400px;
             background: white;
@@ -143,7 +139,6 @@
             background: #f8f9fa;
         }
 
-        /* --- MODAL EDIT (Dữ liệu gốc) --- */
         .edit-modal { display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 500px; position: relative; }
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
@@ -367,7 +362,6 @@
     </div>
 
     <script>
-        // --- KHỞI TẠO BỘ SOẠN THẢO THÔNG MINH (QUILL) ---
         const quill = new Quill('#editor-container', {
             theme: 'snow',
             modules: {
@@ -381,7 +375,6 @@
             }
         });
 
-        // THÊM ĐOẠN CODE XỬ LÝ ẢNH DƯỚI ĐÂY
         quill.getModule('toolbar').addHandler('image', () => {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
@@ -391,8 +384,6 @@
             input.onchange = async () => {
                 const file = input.files[0];
                 
-                // GIỚI HẠN DUNG LƯỢNG: 100KB (Google Sheets tối đa 50k ký tự nên ảnh cần rất nhỏ)
-                // Nếu muốn an toàn tuyệt đối, hãy để 50 * 1024
                 if (file.size > 200 * 1024) { 
                     alert("Ảnh này quá nặng! Vui lòng nén ảnh dưới 100KB hoặc dán link ảnh từ web khác để không bị lỗi đăng bài.");
                     return;
@@ -401,7 +392,6 @@
                 const reader = new FileReader();
                 reader.onload = () => {
                     const range = quill.getSelection();
-                    // Chèn ảnh vào vị trí con trỏ dưới dạng Base64 đã kiểm tra dung lượng
                     quill.insertEmbed(range.index, 'image', reader.result);
                 };
                 reader.readAsDataURL(file);
@@ -411,7 +401,6 @@
         const API_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
         let currentData = [];
 
-        // Hàm chuyển Tab
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
@@ -422,7 +411,6 @@
             }
         }
 
-        // --- QUẢN LÝ DỮ LIỆU HỌC VIÊN (GIỮ NGUYÊN GỐC) ---
         async function loadData() {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "<tr><td colspan='8'>Đang kết nối đến máy chủ...</td></tr>";
@@ -497,13 +485,12 @@
         async function safeDelete(id, rowIndex) {
             if (!confirm("Bạn có chắc chắn muốn xóa học viên này?")) return;
             try {
-                // Xóa dựa trên cột ID của SheetDB
                 const res = await fetch(`${API_URL}/ID/${id}`, {
                     method: 'DELETE'
                 });
                 if (res.ok) {
                     alert("Đã xóa học viên thành công!");
-                    loadData(); // Tải lại danh sách
+                    loadData();
                 } else {
                     alert("Lỗi khi xóa dữ liệu từ máy chủ.");
                 }
@@ -518,13 +505,13 @@
         document.getElementById('editForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const index = document.getElementById('currentRowIndex').value;
-            const studentId = currentData[index]["ID"]; // Lấy ID của học viên
+            const studentId = currentData[index]["ID"];
 
             const updatedData = {
                 "Họ & Tên": document.getElementById('editName').value,
                 "Số Điện Thoại": document.getElementById('editPhone').value,
                 "Email": document.getElementById('editEmail').value,
-                "Khóa Học Quan Tâm": document.getElementById('editCourse').value, // Đảm bảo đúng tên cột trên Sheet
+                "Khóa Học Quan Tâm": document.getElementById('editCourse').value,
                 "Hình Thức Học": document.getElementById('editMode').value
             };
 
@@ -544,7 +531,6 @@
             }
         });
 
-        // --- XỬ LÝ ĐĂNG BÀI (PHIÊN BẢN THÔNG MINH) ---
         document.getElementById('postForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button');
@@ -555,7 +541,7 @@
                 title: document.getElementById('postTitle').value,
                 category: document.getElementById('postCategory').value,
                 image: document.getElementById('postImage').value,
-                content: quill.root.innerHTML, // Lấy nội dung từ Quill Editor
+                content: quill.root.innerHTML,
                 time: new Date().toLocaleString('vi-VN'),
             };
 
@@ -586,7 +572,6 @@
 
         const quillEdit = new Quill('#editor-edit-container', { theme: 'snow' });
 
-        // 1. Tải danh sách bài viết
         async function loadAdminPosts() {
             try {
                 const res = await fetch("https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts");
@@ -605,7 +590,6 @@
             } catch (e) { console.error("Lỗi tải danh sách:", e); }
         }
 
-        // 2. Mở Modal Sửa
         function openEditPost(encodedData) {
             const post = JSON.parse(decodeURIComponent(encodedData));
             document.getElementById('edit-old-title').value = post.title;
@@ -615,10 +599,8 @@
             document.getElementById('editModalPost').style.display = 'block';
         }
 
-        // 3. Đóng Modal
         function closeEditModal() { document.getElementById('editModalPost').style.display = 'none'; }
 
-        // 4. Lưu bài viết sau khi sửa (Sử dụng PATCH theo Title)
         async function saveEditPost() {
             const oldTitle = document.getElementById('edit-old-title').value;
             const updateData = {
@@ -637,7 +619,6 @@
                     alert("Đã cập nhật bài viết!");
                     location.reload();
                 }else {
-                    // Thêm log để kiểm tra lỗi cụ thể từ Server nếu có
                     const errorText = await res.text();
                     console.error("Lỗi từ server:", errorText);
                     alert("Lỗi server: " + errorText);
@@ -645,7 +626,6 @@
             } catch (e) { alert("Lỗi cập nhật!"); }
         }
 
-        // 5. Xóa bài viết (Sử dụng DELETE theo Title)
         async function deletePost(title) {
             if(!confirm("Bạn có chắc chắn muốn xóa bài viết này?")) return;
             try {
@@ -658,10 +638,8 @@
                 }
             } catch (e) { alert("Lỗi xóa bài!"); }
         }
-        // Gọi hàm tải danh sách khi trang web load
         loadAdminPosts();
 
-        // --- QUẢN LÝ KẾT QUẢ TEST TRÌNH ĐỘ ---
         async function loadQuizResults() {
             const tbody = document.getElementById('quiz-list-body');
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Đang tải dữ liệu...</td></tr>';
@@ -675,9 +653,7 @@
                 tbody.innerHTML = '';
                 window.allQuizData.forEach((item, index) => {
                     const row = document.createElement('tr');
-                    // Lưu dữ liệu vào biến toàn cục hoặc dataset để popup lấy
                     const detailData = encodeURIComponent(JSON.stringify(item));
-                    
                     row.innerHTML = `
                         <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.ThoiGian || ''}</td>
                         <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold;">${item.HoTen || ''}</td>
@@ -698,20 +674,16 @@
             }
         }
 
-        // Hàm mở Modal và đổ dữ liệu
         function openQuizModal(index) {
             const item = window.allQuizData[index];
             if (!item) return;
             const content = document.getElementById('quizDetailContent');
-            
-            // Kiểm tra và lấy dữ liệu linh hoạt theo tên cột trên Sheet
             const hoTen = item["Họ & Tên"] || item.HoTen || "N/A";
             const sdt = item["Số Điện Thoại"] || item.Sdt || "N/A";
             const diem = item["Điểm Số"] || item.DiemSo || "0";
             const cauSai = item.ChiTietCauSai || item.ChiTietCauSai || "Không có dữ liệu chi tiết";
             const baiViet = item["Bài Viết"] || item.BaiViet || item["BaiViết"] || "Không có bài viết";
             const linkGhiAm = item.LinkGhiAm || "";
-
             content.innerHTML = `
                 <p><strong>Học viên:</strong> ${hoTen || "N/A"}</p>
                 <p><strong>Số điện thoại:</strong> ${sdt || "N/A"}</p>
@@ -735,8 +707,6 @@
                     </div>
                 ` : "Không có file ghi âm."}
             `;
-            
-            // Hiển thị modal
             document.getElementById('quizDetailModal').style.display = 'flex';
         }
 
