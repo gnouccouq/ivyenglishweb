@@ -1,5 +1,4 @@
 (function() {
-    // 1. CSS Giao diện (Giữ nguyên và tối ưu scannability)
     const style = document.createElement('style');
     style.innerHTML = `
         :root { --p-blue: #1a237e; --accent: #5b8cff; }
@@ -47,7 +46,6 @@
     `;
     document.head.appendChild(style);
 
-    // 2. Kho từ vựng & Chọn từ
     const seedWords = ["Innovation", "Resilient", "Eloquent", "Sustainable", "Ambiguous", "Pragmatic", "Meticulous", "Vibrant", "Proactive", "Empower", "Persistence", "Acumen", "Diligence"];
     const randomWord = seedWords[Math.floor(Math.random() * seedWords.length)];
 
@@ -61,12 +59,10 @@
         </div>`;
     document.body.appendChild(widget);
 
-    // 3. Logic phát âm (Fix giọng đọc Việt sang Anh)
     function speakEnglish(text) {
         window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         const voices = window.speechSynthesis.getVoices();
-        // Tìm giọng Mỹ (en-US) hoặc Anh (en-GB)
         const enVoice = voices.find(v => v.lang === 'en-US' || v.name.includes('Google US English')) || 
                         voices.find(v => v.lang.startsWith('en'));
         if (enVoice) msg.voice = enVoice;
@@ -75,7 +71,6 @@
         window.speechSynthesis.speak(msg);
     }
 
-    // 4. Hàm Dịch thuật & API
     async function translate(text, pair = 'en|vi') {
         try {
             const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`);
@@ -124,7 +119,6 @@
                             <span class="dw-example-vi">${exampleVi}</span>
                         </div>` : ''}
                 </div>`;
-
             document.getElementById('dwSpeakBtn').onclick = (e) => { e.stopPropagation(); speakEnglish(word); };
             document.getElementById('closeDailyWord').onclick = (e) => { e.stopPropagation(); widget.classList.remove('active'); };
         } catch (e) {
@@ -132,7 +126,6 @@
         }
     }
 
-    // 5. Tự động mở trên màn hình lớn (Desktop)
     function initWidget() {
         if (window.innerWidth > 768) {
             widget.classList.add('active');
@@ -140,7 +133,6 @@
         }
     }
 
-    // Sự kiện mở khi nhấn (cho mobile hoặc khi đã đóng)
     widget.onclick = function() {
         if (!this.classList.contains('active')) {
             this.classList.add('active');
@@ -148,13 +140,10 @@
         }
     };
 
-    // Chạy khởi tạo
     if (document.readyState === 'complete') {
         initWidget();
     } else {
         window.addEventListener('load', initWidget);
     }
-    
-    // Nạp danh sách giọng nói cho trình duyệt
     window.speechSynthesis.getVoices();
 })();
