@@ -374,23 +374,19 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các phần tử cần thiết
         const snowContainer = document.body;
-        // Số lượng bông tuyết (tăng/giảm tùy thích, khoảng 30-50 là vừa đẹp)
         const snowflakesCount = 40;
 
         for (let i = 0; i < snowflakesCount; i++) {
             createSnowflake(snowContainer);
         }
        
-        // Đóng popup khi người dùng click ra ngoài vùng trắng (vùng mờ)
         window.addEventListener('click', function(event) {
             if (event.target === successPopup) {
                 successPopup.style.display = 'none';
             }
         });
     
-        // --- 3. Xử lý Cuộn Trang (Back to Top) ---
         const scrollToTopButton = document.querySelector('.scroll-to-top');
 
         window.onscroll = function() {
@@ -409,8 +405,6 @@
             });
         });
     });
-
-         // --- 4. Xử lý Thanh Điều Hướng (Responsive Nav) ---
 
         document.addEventListener('DOMContentLoaded', function() {
             const menuToggle = document.querySelector('.menu-toggle');
@@ -456,35 +450,20 @@
         function createSnowflake(container) {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
-            
-            // Bạn có thể dùng ký tự ❄ hoặc ❅ hoặc đơn giản là dấu chấm .
             snowflake.innerHTML = '❄'; 
-
-            // Random kích thước (từ 10px đến 25px)
             const size = Math.random() * 15 + 10 + 'px';
             snowflake.style.fontSize = size;
-            
-            // Random vị trí bắt đầu theo chiều ngang
             snowflake.style.left = Math.random() * 100 + 'vw';
-            
-            // Random thời gian rơi (từ 5s đến 15s) - càng lớn rơi càng chậm
             const duration = Math.random() * 10 + 5 + 's';
             snowflake.style.animationDuration = duration;
-            
-            // Random độ trễ khi bắt đầu (để tuyết không rơi cùng lúc)
             snowflake.style.animationDelay = Math.random() * 5 + 's';
-            
-            // Random độ mờ (tạo chiều sâu)
             snowflake.style.opacity = Math.random() * 0.6 + 0.4;
 
             container.appendChild(snowflake);
-
-            // Khi bông tuyết rơi xong, xóa nó và tạo bông mới để tránh tràn bộ nhớ
             snowflake.addEventListener('animationiteration', function() {
                 snowflake.remove();
                 createSnowflake(container);
             });
-            // Lần đầu tiên khi animation kết thúc cũng reset (đề phòng)
             snowflake.addEventListener('animationend', function() {
                 snowflake.remove();
                 createSnowflake(container);
@@ -513,10 +492,8 @@
             }
         }
 
-        // Sau khi nội dung đã được chèn vào HTML, mới khởi tạo Logic Menu
         initMenuLogic();
 
-        // Ẩn preloader
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
@@ -533,8 +510,6 @@
         const dropdowns = document.querySelectorAll('.dropdown');
 
         if (!menuToggle || !nav) return;
-
-        // --- LOGIC ĐÓNG MỞ THANH MENU 3 SỌC ---
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open'); 
             menuToggle.classList.toggle('menu-active'); 
@@ -546,38 +521,24 @@
             }
             document.body.classList.toggle('no-scroll');
         });
-        
-        // --- LOGIC CHẶN CHUYỂN TRANG CHO DROPDOWN TRÊN MOBILE ---
         dropdowns.forEach(dropdown => {
         const toggle = dropdown.querySelector('.dropdown-toggle');
         
         toggle.addEventListener('click', function(e) {
-            // Chỉ can thiệp khi màn hình nhỏ (Mobile/Tablet)
             if (window.innerWidth <= 768) {
-                
-                // Nếu dropdown này chưa được mở (chưa có class 'active')
                 if (!dropdown.classList.contains('active')) {
-                    e.preventDefault(); // Chặn ngay hành động chuyển trang của thẻ <a>
-                    
-                    // Đóng tất cả các dropdown khác đang mở để tránh bị đè nhau
+                    e.preventDefault();
                     dropdowns.forEach(d => d.classList.remove('active'));
-                    
-                    // Mở dropdown hiện tại
                     dropdown.classList.add('active');
                 } 
-                // Nếu đã có class 'active' (đã mở rồi), bấm lần nữa sẽ chuyển trang bình thường
             }
         });
     });
-
-        // Đóng dropdown khi bấm ra ngoài
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.dropdown')) {
                 dropdowns.forEach(d => d.classList.remove('active'));
             }
         });
-
-        // Tự động đóng menu khi bấm vào một link (dành cho anchor link #)
         nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 nav.classList.remove('nav-open');
@@ -586,8 +547,6 @@
                 document.body.classList.remove('no-scroll');
             });
         });
-        
-        // Reset khi xoay ngang màn hình hoặc đổi kích thước
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 nav.classList.remove('nav-open');
@@ -598,8 +557,6 @@
             }
         });
     }
-
-    // Chạy duy nhất một sự kiện khởi tạo
     document.addEventListener("DOMContentLoaded", includeHTML);
 
     function openFullImage(src) {
@@ -607,12 +564,8 @@
         const modalImg = document.getElementById('imgFull');
         modal.style.display = "flex";
         modalImg.src = src;
-        
-        // Ngăn cuộn trang khi đang xem ảnh
         document.body.style.overflow = 'hidden';
     }
-
-    // Đóng modal khi nhấn vào vùng trống hoặc nút X
     document.getElementById('imageModal').addEventListener('click', function() {
         this.style.display = "none";
         document.body.style.overflow = 'auto';
@@ -622,8 +575,8 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({
-    duration: 1000, // Tốc độ hiệu ứng (1 giây)
-    once: true,     // Chỉ chạy hiệu ứng 1 lần khi cuộn xuống
+    duration: 1000,
+    once: true,
   });
 </script>
 <script src="js/daily-word.js"></script>

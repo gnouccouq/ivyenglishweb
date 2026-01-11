@@ -135,25 +135,22 @@
             z-index: 2;
         }
 
-        /* Vòng tròn xoay */
         .spinner {
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 4px solid #f0f0f0; /* Màu nền vòng tròn */
-            border-top: 4px solid var(--p-blue); /* Màu thanh xoay (Xanh Navy của bạn) */
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid var(--p-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             z-index: 1;
         }
 
-        /* Hiệu ứng xoay */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Hiệu ứng chữ nhấp nháy */
         @keyframes fadeText {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -264,7 +261,7 @@
     let timeLeft = 600; 
     let timerInterval;
     let selectedIdx = null;
-    let userWrongAnswers = []; // ĐÃ THÊM: Khai báo mảng lưu câu sai
+    let userWrongAnswers = [];
 
     function startExam() {
         const name = document.getElementById('userName').value.trim();
@@ -341,7 +338,7 @@
         `;
         container.insertAdjacentHTML('beforeend', voiceHTML);
     
-        selectedIdx = "writing"; // Đánh dấu đã chọn (để qua câu tiếp theo)
+        selectedIdx = "writing";
         } else {
             q.options.forEach((opt, idx) => {
                 const div = document.createElement('div');
@@ -365,7 +362,6 @@
             if (selectedIdx === currentQ.answer) {
                 score++;
             } else {
-                // Sửa lỗi: Đảm bảo userWrongAnswers đã tồn tại
                 userWrongAnswers.push(`${currentQ.q} (Chọn: ${currentQ.options[selectedIdx]} | Đúng: ${currentQ.options[currentQ.answer]})`);
             }
         }
@@ -380,7 +376,7 @@
 
     async function uploadAudioToCloudinary(blob) {
         const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
-        const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload'; // ví dụ: ivy_upload
+        const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload';
         
         const formData = new FormData();
         formData.append('file', blob);
@@ -405,18 +401,14 @@
         const aiFeedbackElement = document.getElementById('ai-feedback');
         const nameVal = document.getElementById('userName').value;
         const phoneVal = document.getElementById('userPhone').value;
-        
-        // 1. CHẤM ĐIỂM CÂU 15 (WRITING)
         const writingVal = document.getElementById('writing-task') ? document.getElementById('writing-task').value.trim() : "";
         let writingScore = 0;
         if (writingVal.length > 0) {
-            writingScore = 1; // Có nhập là được 1 điểm theo yêu cầu của bạn
+            writingScore = 1;
         }
 
         const finalScore = score + writingScore;
         if (scoreElement) scoreElement.innerText = finalScore;
-
-        // 2. PHÂN LOẠI TRÌNH ĐỘ VÀ NHẬN XÉT TÙY BIẾN
         let level = "", desc = "", customComment = "";
 
         if (finalScore <= 5) { 
@@ -437,7 +429,6 @@
             customComment = "Tuyệt vời! Bạn có tư duy ngôn ngữ rất sắc bén. Bạn hoàn toàn có thể chinh phục các chứng chỉ quốc tế như IELTS 6.5+ hoặc làm việc trong môi trường đa quốc gia.";
         }
 
-        // Hiển thị kết quả lên màn hình
         document.getElementById('suggested-course').innerText = level;
         document.getElementById('course-desc').innerText = desc;
         if (aiFeedbackElement) {
@@ -451,14 +442,12 @@
             try {
                 document.getElementById('recordStatus').innerText = " đang tải file ghi âm...";
                 finalAudioLink = await uploadAudioToCloudinary(window.currentAudioBlob);
-                // Quan trọng: Gán link vừa upload được vào biến để gửi lên Sheet
                 window.recordedAudioLink = finalAudioLink; 
             } catch (e) {
                 console.error("Lỗi upload âm thanh:", e);
             }
         }
 
-        // 3. GỬI DỮ LIỆU LÊN SHEETDB (Sử dụng mode no-cors để tránh lỗi chặn từ file local)
         const payload = {
             "ID": Date.now().toString(),
             "ThoiGian": new Date().toLocaleString('vi-VN'),
@@ -501,7 +490,6 @@
     let mediaRecorder;
     let audioChunks = [];
 
-    // Sử dụng Event Delegation vì các nút này được tạo động khi showQuestion
     document.addEventListener('click', async function(e) {
         if (e.target && e.target.id === 'startRecord') {
             try {
@@ -563,18 +551,16 @@
             }
         }
 
-        // Sau khi tải xong các file, ẩn vòng xoay
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
                 preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden'; // Đảm bảo không bấm nhầm vào preloader ẩn
+                preloader.style.visibility = 'hidden';
                 setTimeout(() => preloader.style.display = 'none', 500);
             }
-        }, 600); // Đợi 0.6s cho cảm giác mượt mà
+        }, 600);
 
     }
-    // Chạy hàm khi trang web tải xong
     document.addEventListener("DOMContentLoaded", includeHTML);
 </script>
 

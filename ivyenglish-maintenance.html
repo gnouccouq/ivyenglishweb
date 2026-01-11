@@ -29,7 +29,6 @@
             color: var(--text);
         }
 
-        /* Hiệu ứng nền Gradient động cho thêm phần sinh động */
         body::before {
             content: "";
             position: absolute;
@@ -121,7 +120,6 @@
             background: #4a7ae6;
         }
 
-        /* Responsive cho Mobile */
         @media (max-width: 480px) {
             .maintenance-card { padding: 40px 20px; }
             h1 { font-size: 24px; }
@@ -226,11 +224,8 @@
                 document.querySelector(".countdown-container").innerHTML = "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại!</p>";
             }
         }
-
-        // Cập nhật mỗi giây
         setInterval(updateCountdown, 1000);
         updateCountdown();
-        // Danh sách các câu quote tiếng Anh hoặc lời nhắn bớt chán
         const messages = [
             "“A different language is a different vision of life.”",
             "“Learning is a treasure that will follow its owner everywhere.”",
@@ -242,13 +237,11 @@
             "“Don’t stop until you’re proud.”",
             "“Mistakes are proof that you are trying. Keep speaking!”",
             
-            // Mẹo học tập (Study Tips)
             "💡 Tip: Try thinking in English for 5 minutes every day.",
             "💡 Tip: Learn 5 new words today and try to use them in a sentence.",
             "💡 Tip: Watching movies with English subtitles helps improve your listening.",
             "💡 Tip: Don't be afraid to make mistakes. That's how you learn!",
             
-            // Thông báo hệ thống
             "🚀 ivyEnglish is getting a makeover. We'll be back stronger!",
             "☕ Take a coffee break, we are updating the best courses for you.",
             "🔧 We are fine-tuning the system to give you a smoother experience."
