@@ -1,7 +1,6 @@
 # File Tree: ivyenglishweb
 
 **Generated:** 1/12/2026, 12:28:56 AM
-**Root Path:** `d:\ivyEnglishWeb\ivyenglishweb`
 
 ```
 ├── 📁 css
