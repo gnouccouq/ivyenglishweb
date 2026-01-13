@@ -571,6 +571,49 @@
         this.style.display = "none";
         document.body.style.overflow = 'auto';
     });
+
+    const scrollToTopButton = document.querySelector('.scroll-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        scrollToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper(".course-slider", {
+            slidesPerView: 1,
+            spaceBetween: 20, 
+            loop: false,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+                },
+                1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+                }
+            }
+            });
+        });
 </script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
