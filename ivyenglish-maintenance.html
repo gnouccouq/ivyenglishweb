@@ -204,7 +204,7 @@
 
     <script>
         // 1. Cấu hình thời gian kết thúc (Năm, Tháng-1, Ngày, Giờ, Phút)
-        const targetTime = new Date(2026, 0, 16, 10, 0, 0).getTime();
+        const targetTime = new Date(2026, 0, 14, 15, 6, 0).getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
@@ -221,10 +221,17 @@
                 document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
                 document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
             } else {
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại!</p>";
+                clearInterval(timerInterval);
+                document.querySelector(".countdown-container").innerHTML = 
+                    "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại! Đang chuyển hướng...</p>";
+                
+                // 2. TỰ ĐỘNG QUAY VỀ TRANG CHỦ SAU 1 GIÂY
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
             }
         }
-        setInterval(updateCountdown, 1000);
+        const timerInterval = setInterval(updateCountdown, 1000);
         updateCountdown();
         const messages = [
             "“A different language is a different vision of life.”",

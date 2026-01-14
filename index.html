@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <script>
-    const isMaintenance = true;
-    if (isMaintenance) {
+    const maintenanceEndTime = new Date(2026, 0, 14, 15, 6, 0).getTime();
+    const now = new Date().getTime();
+
+    // Chỉ chuyển hướng nếu thời gian hiện tại chưa vượt qua mốc kết thúc
+    if (now < maintenanceEndTime) {
         window.location.href = "ivyenglish-maintenance.html";
     }
 </script>
