@@ -574,7 +574,7 @@
 
         async function loadAdminPosts() {
             try {
-                const res = await fetch("https://script.google.com/macros/s/AKfycbxU2_wGJ7-lyME9oK7nh10suUoT08bqbykrZSJ3PpSPs1uzZjpny-ahtRkXCO1d3Ij9/exec?sheet=Posts");
+                const res = await fetch("https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts");
                 const data = await res.json();
                 const container = document.getElementById('admin-post-list');
                 container.innerHTML = data.reverse().map(p => `

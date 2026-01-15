@@ -311,19 +311,27 @@
                 return;
             }
 
+            // Lọc chỉ lấy các bài viết thuộc mục "Tài liệu miễn phí"
+            const enrollmentPosts = data.filter(post => post.category === "Tài liệu");
+
+            if (enrollmentPosts.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>Không có bài viết trong mục Tài liệu.</p>";
+                return;
+            }
+
             let html = `
                 <div class="category-divider" data-aos="fade-right">
-                    <h2>Tất cả bài viết</h2>
+                    <h2>Tài liệu miễn phí</h2>
                     <div class="line"></div>
                 </div>
                 <div class="blog-group">
-                    ${renderCards(data)}
+                    ${renderCards(enrollmentPosts)}
                 </div>
             `;
             
             container.innerHTML = html;
             
-            // Gọi thêm hàm render bài viết xem nhiều
+            // Vẫn giữ hiển thị "Xem nhiều nhất" từ tất cả bài viết để đa dạng nội dung sidebar
             renderPopular(allPosts);
             
             setTimeout(() => { AOS.refresh(); }, 100);
