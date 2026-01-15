@@ -494,36 +494,8 @@
                 <h2>BÀI VIẾT NỔI BẬT</h2>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                <div class="course-card-premium" data-aos="fade-up">
-                    <a href="ivyenglish-blog-5-loi-khuyen-hoc-tieng-anh-giao-tiep.html" style="text-decoration: none; color: inherit;">
-                        <img src="images/blog-5-loi-khuyen-hoc-tieng-anh-giao-tiep.jpg" alt="5 Lời Khuyên Học Tiếng Anh Giao Tiếp Hiệu Quả" style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
-                        <h3>5 Lời Khuyên Học Tiếng Anh Giao Tiếp Hiệu Quả</h3>
-                        <p style="color: #64748b; margin-top: 10px;">Khám phá 5 lời khuyên vàng giúp bạn nâng cao kỹ năng giao tiếp tiếng Anh một cách nhanh chóng và hiệu quả.</p>
-                    </a>
-                </div>
-                <div class="course-card-premium" data-aos="fade-up" data-aos-delay="100">
-                    <a href="ivyenglish-blog-phuong-phap-hoc-tieng-anh-giao-tiep-toi-uu.html" style="text-decoration: none; color: inherit;">
-                        <img src="images/blog-phuong-phap-hoc-tieng-anh-giao-tiep-toi-uu.jpg" alt="Phương Pháp Học Tiếng Anh Giao Tiếp Tối Ưu" style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
-                        <h3>Phương Pháp Học Tiếng Anh Giao Tiếp Tối Ưu</h3>
-                        <p style="color: #64748b; margin-top: 10px;">Tìm hiểu các phương pháp học tiếng Anh giao tiếp hiệu quả giúp bạn nhanh chóng cải thiện kỹ năng ngôn ngữ của mình.</p>
-                    </a>
-                </div>
-                <div class="course-card-premium" data-aos="fade-up" data-aos-delay="200">
-                    <a href="ivyenglish-blog-cach-luyen-phat-am-tieng-anh-chuan.html" style="text-decoration: none; color: inherit;">
-                        <img src="images/blog-cach-luyen-phat-am-tieng-anh-chuan.jpg" alt="Cách Luyện Phát Âm Tiếng Anh Chuẩn" style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
-                        <h3>Cách Luyện Phát Âm Tiếng Anh Chuẩn</h3>
-                        <p style="color: #64748b; margin-top: 10px;">Khám phá những bí quyết luyện phát âm tiếng Anh chuẩn giúp bạn tự tin giao tiếp và nâng cao kỹ năng ngôn ngữ.</p>
-                    </a>
-                </div>
-                <div>
-                    <div class="course-card-premium" data-aos="fade-up" data-aos-delay="300">
-                        <a href="ivyenglish-blog-10-phim-hay-giup-hoc-tieng-anh-hieu-qua.html" style="text-decoration: none; color: inherit;">
-                            <img src="images/blog-10-phim-hay-giup-hoc-tieng-anh-hieu-qua.jpg" alt="10 Phim Hay Giúp Học Tiếng Anh Hiệu Quả" style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
-                            <h3>10 Phim Hay Giúp Học Tiếng Anh Hiệu Quả</h3>
-                            <p style="color: #64748b; margin-top: 10px;">Khám phá danh sách 10 bộ phim hấp dẫn giúp bạn học tiếng Anh hiệu quả và nâng cao kỹ năng ngôn ngữ một cách thú vị.</p>
-                        </a>
-                    </div>
-                </div>
+                <div id="popular-posts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            </div>
         </div>
         <div style="text-align: center; margin-top: 40px;">
                 <a href="ivyenglish-blog.html" style="color: var(--p-blue); text-decoration: none; font-weight: bold; border-bottom: 2px solid var(--s-gold); padding-bottom: 5px;">Xem thêm <i class="fas fa-arrow-right"></i></a>
@@ -779,6 +751,7 @@
                 behavior: 'smooth'
             });
         });
+        
         document.addEventListener('DOMContentLoaded', function() {
             new Swiper(".course-slider", {
             slidesPerView: 1,
@@ -938,6 +911,48 @@
     duration: 1000,
     once: true,
   });
+</script>
+
+<script>
+async function loadPopularPosts() {
+    const API_URL = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
+    const container = document.getElementById('popular-posts-grid');
+
+    try {
+        const res = await fetch(API_URL);
+        const allPosts = await res.json();
+        
+        if (allPosts && allPosts.length > 0) {
+            // SẮP XẾP: Bài có views cao nhất lên đầu
+            const popular = allPosts
+                .sort((a, b) => (b.views || 0) - (a.views || 0))
+                .slice(0, 4); // Lấy top 4 bài
+
+            container.innerHTML = popular.map(post => `
+                <div class="blog-card-home" style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="position: relative;">
+                        <img src="${post.image}" alt="${post.title}" style="width: 100%; height: 180px; object-fit: cover;">
+                        <span style="position: absolute; top: 10px; left: 10px; background: rgba(26, 35, 126, 0.8); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;">
+                            🔥 ${post.views || 0} lượt xem
+                        </span>
+                    </div>
+                    <div style="padding: 15px;">
+                        <small style="color: #5b8cff; font-weight: bold;">${post.category}</small>
+                        <h3 style="font-size: 1rem; color: #1a237e; margin: 8px 0; line-height: 1.4; height: 2.8em; overflow: hidden;">${post.title}</h3>
+                        <a href="ivyenglish-blog.html?id=${encodeURIComponent(post.title)}">
+                            Xem chi tiết <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error("Lỗi:", error);
+        container.innerHTML = "<p>Không thể tải bài viết.</p>";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadPopularPosts);
 </script>
 
 <script src="js/daily-word.js"></script>

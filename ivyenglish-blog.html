@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="SIO0aKLY9cZk8-k09UBuQ6r3zaNIMu_pswgELE3FVWw" />
     <title>ivyEnglish - Blog & Chia Sẻ Kiến Thức</title>
-    <meta name="description" content="Chia sẻ kiến thức học tiếng Anh, tài liệu độc quyền và tin tức giáo dục mới nhất từ ivyEnglish. Cập nhật mẹo học IELTS, TOEIC, từ vựng và nhiều hơn nữa.">
+    <meta name="description" content="Chia sẻ kiến thức học tiếng Anh, tài liệu độc quyền và tin tức giáo dục mới nhất từ ivyEnglish.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="canonical" href="https://ivyenglish.io.vn/ivyenglish-blog.html" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,143 +15,257 @@
     <style>
         :root { --p-blue: #1a237e; --s-gold: #c5a059; --accent: #5b8cff; }
         
+        /* Cấu trúc trang chủ */
+        .home-content.hidden { display: none; }
+        
         .search-container { max-width: 600px; margin: -30px auto 40px; position: relative; z-index: 10; padding: 0 20px; }
         .search-wrapper { display: flex; background: white; border-radius: 50px; padding: 8px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee; }
         .search-wrapper input { border: none; outline: none; flex: 1; padding: 10px; font-size: 1rem; color: #334155; }
         .search-wrapper i { display: flex; align-items: center; color: var(--accent); font-size: 1.2rem; }
 
-        .skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: 12px; background-size: 200% 100%; animation: 1.5s shine linear infinite; }
-        .skeleton-img { height: 220px; width: 100%; }
-        .skeleton-text { height: 20px; margin-bottom: 10px; width: 80%; }
-        @keyframes shine { to { background-position-x: -200%; } }
-
-        .blog-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; min-height: 100px; }
+        .blog-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; }
         @media (max-width: 992px) { .blog-group { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .blog-group { grid-template-columns: 1fr; } }
 
         .blog-hero { background: linear-gradient(135deg, var(--p-blue) 0%, #2a3eb1 100%); padding: 120px 20px 80px; text-align: center; color: white; clip-path: ellipse(150% 100% at 50% 0%); }
-        .blog-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); opacity: 1 !important; } /* Ép hiển thị */
+        .blog-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); }
         .blog-card:hover { transform: translateY(-10px); }
         .blog-card img { width: 100%; height: 220px; object-fit: cover; }
         .blog-card-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
         .blog-category { background: rgba(91, 140, 255, 0.1); color: var(--accent); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 12px; text-transform: uppercase; }
         .blog-title { font-size: 1.15rem; font-weight: 700; color: var(--p-blue); line-height: 1.4; margin-bottom: 10px; }
         .btn-readmore { margin-top: auto; color: var(--accent); font-weight: 700; text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        
-        #postModal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
-        .modal-container { background: #fff; margin: 2% auto; padding: 40px; border-radius: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; }
-        .close-btn {
-            position: fixed;
-            top: 20px;
-            right: calc(50% - 430px);
-            z-index: 10001;
-            width: 45px;
-            height: 45px;
-            background: #fff;
-            color: #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            border: 1px solid #eee;
-        }
 
-        .close-btn:hover {
-            background: #f8f9fa;
-            transform: rotate(90deg);
-            color: var(--accent);
-        }
-        .cta-box { background: #f0f7ff; padding: 25px; border-radius: 15px; border-left: 5px solid var(--accent); margin-top: 40px; text-align: center; }
+        /* Cấu trúc trang chi tiết bài viết */
+        #post-detail-view { display: none; max-width: 900px; margin: 40px auto; padding: 0 20px; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        .back-btn { cursor: pointer; color: var(--accent); font-weight: 700; margin-bottom: 30px; display: inline-flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .back-btn:hover { color: var(--p-blue); }
+        .post-full-content img { max-width: 100%; border-radius: 12px; margin: 20px 0; }
+
+        .cta-box { background: #f0f7ff; padding: 30px; border-radius: 15px; border-left: 5px solid var(--accent); margin-top: 50px; text-align: center; }
         .category-divider { margin: 40px 0 20px; display: flex; align-items: center; gap: 15px; }
         .category-divider h2 { color: var(--p-blue); font-size: 1.5rem; white-space: nowrap; }
         .category-divider .line { height: 2px; background: #eee; flex: 1; }
 
-        @media (max-width: 768px) { 
-            .modal-container { margin: 0; width: 100%; height: 100%; border-radius: 0; padding: 20px; padding-top: 60px; /* Thêm padding-top để nội dung không đè lên nút X */ } 
-            .close-btn {
-                right: 20px;
-                top: 20px;
-                background: rgba(255, 255, 255, 0.9);
-                width: 45px;
-                height: 45px;
-                font-size: 28px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
+        /* Skeleton Loading */
+        .skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: 12px; background-size: 200% 100%; animation: 1.5s shine linear infinite; }
+        .skeleton-img { height: 220px; width: 100%; }
+        .skeleton-text { height: 20px; margin-bottom: 10px; width: 80%; }
+        @keyframes shine { to { background-position-x: -200%; } }
+        /* Bố cục chia cột cho Blog */
+        .blog-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .blog-main {
+            flex: 3; /* Chiếm 75% chiều rộng */
+            min-width: 0; /* Tránh lỗi tràn layout */
+        }
+
+        .blog-sidebar {
+            flex: 1; /* Chiếm 25% chiều rộng */
+            position: sticky;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .blog-layout { flex-direction: column; }
+            .blog-sidebar { width: 100%; position: static; }
+        }
+
+        /* Style cho widget xem nhiều */
+        .sidebar-widget {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--p-blue);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .popular-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popular-item:hover .popular-title { color: var(--accent); }
+
+        .popular-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .popular-info { flex: 1; }
+
+        .popular-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .popular-meta {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
+        .btn-test {
+            display:inline-block; 
+            margin-top:10px; 
+            background:var(--accent); 
+            color:white; 
+            padding:12px 25px; 
+            border-radius:50px; 
+            text-decoration:none; 
+            font-weight:bold;
+            transition: 0.3s;
+        }
+        .btn-test:hover {
+            background: var(--p-blue);
+            transform: scale(1.05);
+        }
+
+        /* Đảm bảo bài viết chi tiết không bị quá hẹp trên mobile */
+        #post-detail-view {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
 <body>
-        <div id="preloader">
-            <div class="loader-content">
-                <div class="logo-wrapper">
-                    <img src="images/logo.png" alt="Logo" class="loader-logo">
-                    <div class="spinner"></div>
-                </div>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
             </div>
-        </div>
-    <div id="header-placeholder"></div>
-
-    <section class="blog-hero">
-        <div class="container" data-aos="zoom-in">
-            <h1>Blog ivyEnglish</h1>
-            <p>Kiến thức hữu ích, tài liệu độc quyền và tin tức giáo dục mới nhất.</p>
-        </div>
-    </section>
-
-    <div class="search-container" data-aos="fade-up">
-        <div class="search-wrapper">
-            <i class="fas fa-search"></i>
-            <input type="text" id="blogSearch" placeholder="Tìm bài viết (IELTS, từ vựng, mẹo học...)" onkeyup="handleSearch()">
         </div>
     </div>
+    
+    <div id="header-placeholder"></div>
 
-    <section class="blog-section" style="padding: 0 20px 80px; max-width: 1200px; margin: auto;">
-        <div id="blog-container">
-            <div class="blog-group">
-                <div class="blog-card"><div class="skeleton skeleton-img"></div><div class="blog-card-body"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text" style="width:50%"></div></div></div>
-                <div class="blog-card"><div class="skeleton skeleton-img"></div><div class="blog-card-body"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text" style="width:50%"></div></div></div>
-                <div class="blog-card"><div class="skeleton skeleton-img"></div><div class="blog-card-body"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text" style="width:50%"></div></div></div>
+    <div class="blog-hero">
+    <div class="container" data-aos="zoom-in">
+        <h1>Blog ivyEnglish</h1>
+        <p>Kiến thức hữu ích, tài liệu độc quyền và tin tức giáo dục mới nhất.</p>
+    </div>
+</div>
+
+<div class="search-container" data-aos="fade-up">
+    <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="blogSearch" placeholder="Tìm bài viết (IELTS, từ vựng...)" onkeyup="handleSearch()">
+    </div>
+</div>
+
+<section class="blog-section" style="padding: 0 20px 80px; max-width: 1200px; margin: auto;">
+    <div class="blog-layout">
+        <div class="blog-main">
+            <div id="blog-container" class="home-content">
+                <div class="blog-group">
+                    <div class="blog-card"><div class="skeleton skeleton-img"></div><div class="blog-card-body"><div class="skeleton skeleton-text"></div></div></div>
+                </div>
             </div>
+
+            <main id="post-detail-view" style="display:none;">
+                <div class="back-btn" onclick="closePost()">
+                    <i class="fas fa-arrow-left"></i> Quay lại Blog
+                </div>
+                <article id="detail-content"></article>
+                <div class="cta-box">
+                    <h4>Bạn thấy kiến thức này hữu ích?</h4>
+                    <p>Nhận ngay lộ trình học tiếng Anh cá nhân hóa miễn phí.</p>
+                    <a href="ivyenglish-level-test.html" class="btn-test">Đăng ký Test trình độ ngay</a>
+                </div>
+            </main>
         </div>
-    </section>
+
+        <aside class="blog-sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Xem nhiều nhất</h3>
+                <div id="popular-container"></div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+    <main id="post-detail-view">
+        <div class="back-btn" onclick="closePost()">
+            <i class="fas fa-arrow-left"></i> Quay lại Blog
+        </div>
+        <article id="detail-content"></article>
+        <div class="cta-box">
+            <h4>Bạn thấy kiến thức này hữu ích?</h4>
+            <p>Nhận ngay lộ trình học tiếng Anh cá nhân hóa miễn phí tại ivyEnglish.</p>
+            <a href="ivyenglish-level-test.html" style="display:inline-block; margin-top:10px; background:var(--accent); color:white; padding:12px 25px; border-radius:50px; text-decoration:none; font-weight:bold;">Đăng ký Test trình độ ngay</a>
+        </div>
+    </main>
 
     <div id="footer-placeholder"></div>
 
-    <div id="postModal">
-        <div class="modal-container">
-            <span class="close-btn" onclick="closePost()">&times;</span>
-            <div id="modal-content"></div>
-            <div class="cta-box">
-                <h4>Bạn thấy kiến thức này hữu ích?</h4>
-                <p>Nhận ngay lộ trình học tiếng Anh cá nhân hóa miễn phí tại ivyEnglish.</p>
-                <a href="ivyenglish-level-test.html" style="display:inline-block; margin-top:10px; background:var(--accent); color:white; padding:12px 25px; border-radius:50px; text-decoration:none; font-weight:bold;">Đăng ký Test trình độ ngay</a>
-            </div>
-        </div>
+     <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         let allPosts = [];
-        const API_URL = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxU2_wGJ7-lyME9oK7nh10suUoT08bqbykrZSJ3PpSPs1uzZjpny-ahtRkXCO1d3Ij9/exec?sheet=Posts";
         const ORIGIN_TITLE = document.title;
 
         async function initBlog() {
+            // Vẫn hiện cache cho nhanh
             const cached = localStorage.getItem("ivy_blog_cache");
             if (cached) {
                 allPosts = JSON.parse(cached);
                 renderUI(allPosts);
+                checkUrlForPost();
             }
 
             try {
-                const res = await fetch(API_URL);
+                // Thêm một tham số ngẫu nhiên vào URL để tránh Google trả về kết quả cũ (Bust Cache)
+                const res = await fetch(API_URL + "&t=" + new Date().getTime());
                 const data = await res.json();
                 if (data && data.length > 0) {
                     allPosts = data.reverse();
+                    // Lưu lại cache mới
                     localStorage.setItem("ivy_blog_cache", JSON.stringify(allPosts));
                     renderUI(allPosts);
                     checkUrlForPost();
@@ -159,80 +273,189 @@
             } catch (e) { console.error(e); }
         }
 
+        function checkUrlForPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            
+            if (postId && allPosts.length > 0) {
+                // Giải mã tiếng Việt từ URL
+                const targetTitle = decodeURIComponent(postId).trim();
+                
+                // Tìm bài viết có tiêu đề khớp
+                const idx = allPosts.findIndex(p => p.title.trim() === targetTitle);
+                
+                if (idx !== -1) {
+                    // Đợi 100ms để đảm bảo DOM đã render xong rồi mới mở bài
+                    setTimeout(() => {
+                        viewPost(idx);
+                    }, 100);
+                }
+            }
+        }
+
+        // ĐÃ ĐỔI: Hàm này bây giờ hiện tất cả bài viết trong một lưới duy nhất
         function renderUI(data) {
             const container = document.getElementById('blog-container');
-            const groups = data.reduce((acc, post) => {
-                (acc[post.category] = acc[post.category] || []).push(post);
-                return acc;
-            }, {});
-
-            let html = "";
-            for (let cat in groups) {
-                html += `
-                    <div class="category-divider" data-aos="fade-right"><h2>${cat}</h2><div class="line"></div></div>
-                    <div class="blog-group">${renderCards(groups[cat].slice(0, 3))}</div>
-                    
-                `;
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>Không có bài viết.</p>";
+                return;
             }
-            container.innerHTML = html || "<p style='text-align:center;'>Không có bài viết.</p>";
+
+            let html = `
+                <div class="category-divider" data-aos="fade-right">
+                    <h2>Tất cả bài viết</h2>
+                    <div class="line"></div>
+                </div>
+                <div class="blog-group">
+                    ${renderCards(data)}
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // Gọi thêm hàm render bài viết xem nhiều
+            renderPopular(allPosts);
             
             setTimeout(() => { AOS.refresh(); }, 100);
         }
 
+        function renderPopular(posts) {
+            const popularContainer = document.getElementById('popular-container');
+            // Giả sử lấy 5 bài viết đầu tiên làm bài viết "xem nhiều" 
+            // (Hoặc bạn có thể thêm cột 'views' trong Excel và sort theo views)
+            const popularPosts = [...posts]
+                .sort((a, b) => (b.views || 0) - (a.views || 0)) 
+                .slice(0, 5); // Lấy 5 bài cao nhất
+
+            let html = popularPosts.map(post => {
+                const globalIdx = allPosts.findIndex(p => p.title === post.title);
+                return `
+                    <div class="popular-item" onclick="viewPost(${globalIdx})">
+                        <img src="${post.image}" class="popular-img">
+                        <div class="popular-info">
+                            <div class="popular-title">${post.title}</div>
+                            <div class="popular-meta">🔥 ${post.views || 0} lượt xem</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            popularContainer.innerHTML = html;
+        }
+
         function renderCards(posts) {
             return posts.map(post => {
-                const idx = allPosts.findIndex(p => p.title === post.title);
+                const globalIdx = allPosts.findIndex(p => p.title === post.title);
                 return `
                     <div class="blog-card" data-aos="zoom-in">
                         <img src="${post.image}" alt="${post.title}" loading="lazy">
                         <div class="blog-card-body">
                             <span class="blog-category">${post.category}</span>
                             <h3 class="blog-title">${post.title}</h3>
-                            <div class="blog-time">📅 ${post.time}</div>
-                            <a onclick="viewPost(${idx})" class="btn-readmore">Đọc thêm <i class="fas fa-arrow-right"></i></a>
+                            <div class="popular-meta">📅 ${post.time}</div>
+                            <a onclick="viewPost(${globalIdx})" class="btn-readmore">Đọc thêm <i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function handleSearch() {
-            const query = document.getElementById('blogSearch').value.toLowerCase();
-            const container = document.getElementById('blog-container');
-            if (!query) return renderUI(allPosts);
-            
-            const filtered = allPosts.filter(p => p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
-            container.innerHTML = `<div class="blog-group">${renderCards(filtered)}</div>`;
-            AOS.refresh();
-        }
-
         window.viewPost = function(index) {
             const post = allPosts[index];
             if (!post) return;
+
+            // 1. Tăng lượt xem tại chỗ (UI sẽ thấy thay đổi ngay)
+            if(!post.views) post.views = 0;
+            post.views++; 
+            
+            // 2. Gửi yêu cầu cập nhật lên Google Sheets (Chạy ngầm)
+            fetch(API_URL + `&action=updateView&title=${encodeURIComponent(post.title)}`)
+            .catch(err => console.log("Lỗi cập nhật view"));
+
+            // 3. Cập nhật lại Sidebar "Xem nhiều nhất" để phản ánh con số mới
+            renderPopular(allPosts);
+
+            // --- Phần hiển thị nội dung chi tiết giữ nguyên ---
             document.title = post.title + " | ivyEnglish Blog";
-            document.getElementById('modal-content').innerHTML = `
+            document.getElementById('detail-content').innerHTML = `
                 <span class="blog-category">${post.category}</span>
-                <h1 style="color:var(--p-blue); margin:15px 0; line-height:1.3;">${post.title}</h1>
-                <p style="color:#888; margin-bottom:20px;">📅 ${post.time}</p>
-                <div class="post-full-content" style="line-height:1.8;">${post.content}</div>
+                <h1 style="color:var(--p-blue); margin:15px 0;">${post.title}</h1>
+                <p style="color:#888;">📅 ${post.time} | 🔥 ${post.views} lượt xem</p>
+                <div class="post-full-content">${post.content}</div>
             `;
-            document.getElementById('postModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            window.history.pushState({}, '', `?id=${encodeURIComponent(post.title)}`);
+            
+            document.getElementById('blog-container').classList.add('hidden');
+            document.getElementById('post-detail-view').style.display = 'block';
+            window.scrollTo(0, 0);
         };
 
-        function closePost() {
-            document.getElementById('postModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        window.closePost = function() {
             document.title = ORIGIN_TITLE;
-            window.history.pushState({}, '', window.location.pathname);
-        }
+            window.history.pushState({type: 'home'}, '', window.location.pathname);
+            
+            // HIỆN danh sách, ẨN chi tiết
+            document.getElementById('blog-container').classList.remove('hidden');
+            document.getElementById('post-detail-view').style.display = 'none';
+            
+            window.scrollTo(0, 0);
+            AOS.refresh();
+        };
+
+        window.onpopstate = function() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            id ? checkUrlForPost() : closePost();
+        };
 
         function checkUrlForPost() {
             const id = new URLSearchParams(window.location.search).get('id');
             if (id) {
                 const idx = allPosts.findIndex(p => p.title === decodeURIComponent(id));
                 if (idx !== -1) viewPost(idx);
+            }
+        }
+
+        function handleSearch() {
+            const searchInput = document.getElementById('blogSearch');
+            const container = document.getElementById('blog-container');
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (!query) {
+                renderUI(allPosts);
+                return;
+            }
+            
+            const filtered = allPosts.filter(post => {
+                const titleMatch = post.title && post.title.toLowerCase().includes(query);
+                const categoryMatch = post.category && post.category.toLowerCase().includes(query);
+                return titleMatch || categoryMatch;
+            });
+            
+            if (filtered.length > 0) {
+                container.innerHTML = `
+                    <div class="category-divider">
+                        <h2>Kết quả tìm kiếm cho: "${searchInput.value}"</h2>
+                        <div class="line"></div>
+                    </div>
+                    <div class="blog-group">
+                        ${renderCards(filtered)}
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 60px 20px;">
+                        <p style="font-size: 1.2rem; color: #666;">
+                            Không tìm thấy bài viết phù hợp với "<strong>${searchInput.value}</strong>"
+                        </p>
+                        <button onclick="document.getElementById('blogSearch').value=''; handleSearch();" 
+                                style="margin-top:15px; padding:8px 20px; border-radius:50px; border:1px solid var(--accent); background:none; color:var(--accent); cursor:pointer;">
+                            Xem tất cả bài viết
+                        </button>
+                    </div>
+                `;
+            }
+
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
             }
         }
 
@@ -245,36 +468,6 @@
                     if (res.ok) el.innerHTML = await res.text();
                 }
             }
-
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.getElementById('main-nav');
-            
-            if (menuToggle && nav) {
-                menuToggle.addEventListener('click', function() {
-                    nav.classList.toggle('nav-open');
-                    this.classList.toggle('menu-active');
-                    
-                    if (this.classList.contains('fa-bars')) {
-                        this.classList.replace('fa-bars', 'fa-times');
-                    } else {
-                        this.classList.replace('fa-times', 'fa-bars');
-                    }
-                    document.body.classList.toggle('no-scroll');
-                });
-
-                const dropdowns = document.querySelectorAll('.dropdown');
-                dropdowns.forEach(dropdown => {
-                    const toggle = dropdown.querySelector('.dropdown-toggle');
-                    if (toggle) {
-                        toggle.addEventListener('click', function(e) {
-                            if (window.innerWidth <= 768) {
-                                e.preventDefault();
-                                dropdown.classList.toggle('active');
-                            }
-                        });
-                    }
-                });
-            }
             initBlog();
             AOS.init({ duration: 800, once: true });
             setTimeout(() => { 
@@ -284,11 +477,9 @@
         }
 
         document.addEventListener("DOMContentLoaded", includeHTML);
-        window.onclick = function(e) { if(e.target.id === 'postModal') closePost(); }
     </script>
-
-<script src="js/daily-word.js"></script>
-<script src="js/tet-effects.js"></script>
-
+    <script src="js/menu-scrolltop.js"></script>
+    <script src="js/daily-word.js"></script>
+    <script src="js/tet-effects.js"></script>
 </body>
 </html>
