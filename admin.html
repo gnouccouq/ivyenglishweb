@@ -162,6 +162,9 @@
             <div class="menu-item" onclick="switchTab('tab-QuizResults', this)">
                 <span>Quản lý kết quả test</span>
             </div>
+            <div class="menu-item" onclick="switchTab('tab-schedule', this)">
+                <span>Quản lý lịch học</span>
+            </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
             <span>Thoát hệ thống</span>
@@ -293,6 +296,56 @@
                         </tbody>
                 </table>
             </div>
+        </div>
+
+        <div id="tab-schedule" class="tab-content">
+            <h3 id="formTitle">Thêm Lịch Học Mới</h3>
+            <input type="hidden" id="editId">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <select id="schThu" class="form-control">
+                    <option>Thứ 2</option><option>Thứ 3</option><option>Thứ 4</option>
+                    <option>Thứ 5</option><option>Thứ 6</option><option>Thứ 7</option><option>Chủ nhật</option>
+                </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div class="input-group">
+                        <label style="font-size: 12px; color: #666;">Giờ bắt đầu:</label>
+                        <input type="time" id="schGioBatDau" class="form-control">
+                    </div>
+                    <div class="input-group">
+                        <label style="font-size: 12px; color: #666;">Giờ kết thúc:</label>
+                        <input type="time" id="schGioKetThuc" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <input type="text" id="schNoiDung" placeholder="Nội dung khóa học" class="form-control" style="margin-bottom: 10px; width: 100%;">
+            <select id="schTrangThai" class="form-control" style="margin-bottom: 10px; width: 100%;">
+                <option value="Trong">Còn trống</option>
+                <option value="Full">Đã đầy</option>
+            </select>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="input-group">
+                    <label style="font-size: 12px; color: #666;">Ngày khai giảng cụ thể:</label>
+                    <input type="date" id="schNgayKhaiGiang" class="form-control">
+                </div>
+                <div class="input-group">
+                    <label style="font-size: 12px; color: #666;">Tình trạng lớp:</label>
+                    <select id="schTinhTrang" class="form-control">
+                        <option value="Sắp khai giảng">Sắp khai giảng</option>
+                        <option value="Đang học">Đang học</option>
+                        <option value="Liên hệ">Liên hệ để biết lịch</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button id="btnSave" onclick="saveSchedule()" class="btn-save" style="flex: 2;">Lưu Lịch Học</button>
+                <button id="btnCancel" onclick="resetForm()" class="btn-action" style="flex: 1; display: none; background: #6c757d;">Hủy</button>
+            </div>
+
+            <hr style="margin: 25px 0;">
+            <h3>Danh Sách Lịch (Sheet: LichHoc)</h3>
+            <div id="adminScheduleList">Đang tải...</div>
         </div>
 
     </div>
@@ -713,6 +766,140 @@
         function closeQuizModal() {
             document.getElementById('quizDetailModal').style.display = 'none';
         }
+
+
+        // 1. Dùng chung 1 biến để dễ quản lý, thay 3abfyh1liwt97 bằng mã chuẩn của bạn nếu có thay đổi
+        const API_ID = "3abfyh1liwt97"; 
+        const SHEET_NAME = "LichHoc";
+        const SHEETDB_URL = `https://sheetdb.io/api/v1/${API_ID}?sheet=${SHEET_NAME}`;
+
+        // Tải danh sách
+        async function loadAdminSchedule() {
+            try {
+                const res = await fetch(SHEETDB_URL);
+                const data = await res.json();
+                let html = '<table style="width:100%; border-collapse: collapse;">';
+                html += '<tr style="background:#f1f5f9;"><th>Thứ</th><th>Giờ</th><th>Nội dung</th><th>Thao tác</th></tr>';
+                
+                data.forEach(item => {
+                    // Chuyển object item thành chuỗi để truyền vào hàm sửa
+                    const itemStr = JSON.stringify(item).replace(/'/g, "&apos;");
+                    html += `
+                    <tr style="border-bottom:1px solid #eee;">
+                        <td style="padding:10px;">${item.thu}</td>
+                        <td>${item.gio}</td>
+                        <td>${item.noidung}</td>
+                        <td>${item.trangthai}</td>
+                        <td>${item.khaigiang}</td>
+                        <td>${item.tinhtrang}</td>
+                        <td>
+                            <button onclick='prepareEdit(${itemStr})' style="color:blue; cursor:pointer; border:none; background:none; margin-right:10px;"><i class="fas fa-edit"></i> Sửa</button>
+                            <button onclick="deleteSchedule('${item.id}')" style="color:red; cursor:pointer; border:none; background:none;"><i class="fas fa-trash"></i> Xóa</button>
+                        </td>
+                    </tr>`;
+                });
+                html += '</table>';
+                document.getElementById('adminScheduleList').innerHTML = html;
+            } catch (err) { console.error("Lỗi tải danh sách:", err); }
+        }
+
+        // Chuẩn bị sửa
+        function prepareEdit(item) {
+            document.getElementById('formTitle').innerText = "Chỉnh Sửa Lịch Học";
+            document.getElementById('editId').value = item.id;
+            document.getElementById('schThu').value = item.thu;
+            if(item.gio.includes(" - ")) {
+                const parts = item.gio.split(" - ");
+                document.getElementById('schGioBatDau').value = parts[0];
+                document.getElementById('schGioKetThuc').value = parts[1];
+            }
+            document.getElementById('schNoiDung').value = item.noidung;
+            document.getElementById('schTrangThai').value = item.trangthai;
+            document.getElementById('schNgayKhaiGiang').value = item.khaigiang || "";
+            document.getElementById('schTinhTrang').value = item.tinhtrang || "Sắp khai giảng";
+            document.getElementById('btnSave').innerText = "Cập Nhật Ngay";
+            document.getElementById('btnCancel').style.display = "inline-block";
+        }
+
+        // Lưu (Thêm/Sửa)
+        async function saveSchedule() {
+            const id = document.getElementById('editId').value;
+            
+            // Lấy giá trị từ 2 ô chọn giờ
+            const batDau = document.getElementById('schGioBatDau').value;
+            const ketThuc = document.getElementById('schGioKetThuc').value;
+            
+            if(!batDau || !ketThuc) {
+                alert("Vui lòng chọn đầy đủ giờ bắt đầu và kết thúc!");
+                return;
+            }
+
+            const payload = {
+                thu: document.getElementById('schThu').value,
+                gio: `${batDau} - ${ketThuc}`, // Gộp lại thành định dạng HH:mm - HH:mm
+                noidung: document.getElementById('schNoiDung').value || "Lịch trống",
+                trangthai: document.getElementById('schTrangThai').value,
+                khaigiang: document.getElementById('schNgayKhaiGiang').value, 
+                tinhtrang: document.getElementById('schTinhTrang').value
+            };
+
+            try {
+                if (id) {
+                    // SỬA: Phải dùng đúng link API_ID và thêm id vào sau
+                    const res = await fetch(`https://sheetdb.io/api/v1/${API_ID}/id/${id}?sheet=${SHEET_NAME}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: payload })
+                    });
+                    if(res.ok) alert("Cập nhật thành công!");
+                } else {
+                    // THÊM
+                    payload.id = Date.now().toString();
+                    const res = await fetch(SHEETDB_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: [payload] })
+                    });
+                    if(res.ok) alert("Thêm mới thành công!");
+                }
+                resetForm();
+                loadAdminSchedule();
+            } catch (err) { alert("Lỗi khi lưu dữ liệu!"); }
+        }
+
+        // Xóa
+        async function deleteSchedule(id) {
+            if(!id || id === "undefined") {
+                alert("Không tìm thấy ID của dòng này để xóa!");
+                return;
+            }
+            if(!confirm("Bạn có chắc muốn xóa lịch này?")) return;
+
+            try {
+                const res = await fetch(`https://sheetdb.io/api/v1/${API_ID}/id/${id}?sheet=${SHEET_NAME}`, {
+                    method: 'DELETE'
+                });
+                if(res.ok) {
+                    alert("Đã xóa xong!");
+                    loadAdminSchedule();
+                }
+            } catch (err) { alert("Lỗi khi xóa!"); }
+        }
+
+        function resetForm() {
+            document.getElementById('formTitle').innerText = "Thêm Lịch Học Mới";
+            document.getElementById('editId').value = "";
+            document.getElementById('schNoiDung').value = "";
+            document.getElementById('schGioBatDau').value = "";
+            document.getElementById('schGioKetThuc').value = "";
+            document.getElementById('schNgayKhaiGiang').value = ""; // Reset ngày
+            document.getElementById('schTinhTrang').value = "Sắp khai giảng"; // Reset dropdown
+            
+            document.getElementById('btnSave').innerText = "Lưu Lịch Học";
+            document.getElementById('btnCancel').style.display = "none";
+        }
+
+        loadAdminSchedule();
     </script>
 </body>
 </html>
