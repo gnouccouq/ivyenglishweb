@@ -331,7 +331,6 @@
             
             container.innerHTML = html;
             
-            // Vẫn giữ hiển thị "Xem nhiều nhất" từ tất cả bài viết để đa dạng nội dung sidebar
             renderPopular(allPosts);
             
             setTimeout(() => { AOS.refresh(); }, 100);
@@ -339,11 +338,10 @@
 
         function renderPopular(posts) {
             const popularContainer = document.getElementById('popular-container');
-            // Giả sử lấy 5 bài viết đầu tiên làm bài viết "xem nhiều" 
-            // (Hoặc bạn có thể thêm cột 'views' trong Excel và sort theo views)
+
             const popularPosts = [...posts]
                 .sort((a, b) => (b.views || 0) - (a.views || 0)) 
-                .slice(0, 5); // Lấy 5 bài cao nhất
+                .slice(0, 5);
 
             let html = popularPosts.map(post => {
                 const globalIdx = allPosts.findIndex(p => p.title === post.title);
@@ -381,29 +379,46 @@
         window.viewPost = function(index) {
             const post = allPosts[index];
             if (!post) return;
-
-            // 1. Tăng lượt xem tại chỗ (UI sẽ thấy thay đổi ngay)
             if(!post.views) post.views = 0;
             post.views++; 
-            
-            // 2. Gửi yêu cầu cập nhật lên Google Sheets (Chạy ngầm)
-            fetch(API_URL + `&action=updateView&title=${encodeURIComponent(post.title)}`)
-            .catch(err => console.log("Lỗi cập nhật view"));
-
-            // 3. Cập nhật lại Sidebar "Xem nhiều nhất" để phản ánh con số mới
             renderPopular(allPosts);
 
-            // --- Phần hiển thị nội dung chi tiết giữ nguyên ---
-            document.title = post.title + " | ivyEnglish Blog";
+            const postUrl = "?id=" + encodeURIComponent(post.title.trim());
+            window.history.pushState({ postIndex: index }, post.title, postUrl);
+            
             document.getElementById('detail-content').innerHTML = `
                 <span class="blog-category">${post.category}</span>
                 <h1 style="color:var(--p-blue); margin:15px 0;">${post.title}</h1>
                 <p style="color:#888;">📅 ${post.time} | 🔥 ${post.views} lượt xem</p>
                 <div class="post-full-content">${post.content}</div>
             `;
-            
             document.getElementById('blog-container').classList.add('hidden');
             document.getElementById('post-detail-view').style.display = 'block';
+
+            const SHEETDB_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
+
+            fetch(`${SHEETDB_URL}/title/${encodeURIComponent(post.title.trim())}?sheet=Posts`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: {
+                        'views': post.views 
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.updated) {
+                    console.log("Cập nhật thành công dòng:", post.title);
+                } else {
+                    console.error("Không tìm thấy bài viết trong Sheet để update:", data);
+                }
+            })
+            .catch(err => console.error("Lỗi kết nối SheetDB:", err));
+
             window.scrollTo(0, 0);
         };
 

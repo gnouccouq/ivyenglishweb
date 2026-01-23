@@ -17,6 +17,7 @@
     <meta name="description" content="Khóa học tiếng Anh giao tiếp tháng chỉ 600K/tháng. Phương pháp thực hành 100%, lớp học quy mô nhỏ tại xã Hoà Phú, Củ Chi, TP. HCM.">
     <link rel="canonical" href="https://ivyenglish.io.vn/" />
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/newyear.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,6 +93,93 @@
             gap: 40px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
             color: var(--text-dark);
+        }
+        .hero-swiper {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        .hero-swiper img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+        }
+        .hero-text-content {
+            flex: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .hero-swiper {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            
+            .hero-swiper img {
+                height: 300px;
+            }
+        }
+
+        .swiper-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+        }
+
+        .slider-caption {
+            position: absolute;
+            bottom: 40px;
+            left: 30px;
+            z-index: 10;
+            color: white;
+            text-align: left;
+        }
+
+        .slider-caption h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slider-caption p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .btn-slider {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--s-gold);
+            color: #ffffff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+        }
+
+        .btn-slider:hover {
+            background: var(--p-blue);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 35, 126, 0.4);
+            border-color: var(--s-gold);
+        }
+
+        .btn-slider:active {
+            transform: translateY(-1px);
         }
 
         .section-header-new { text-align: center; margin-bottom: 60px; }
@@ -253,8 +341,36 @@
                         <a href="ivyenglish-level-test.html" class="btn-outline">Thi Thử Miễn Phí</a>
                     </div>
                 </div>
-                <div class="hero-image-content hide-mobile" style="flex: 0.8; text-align: center;">
-                    <img src="images/yale-university-trinity-college-oxford-student-trinity-washington-university-student-png-17951a54fb8c102c271591388304a989.png" alt="ivyEnglish" style="width: 80%; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); animation: floating 3s ease-in-out infinite;">
+                <div class="hero-image-content hide-mobile" style="flex: 0.8; width: 100%;">
+                    <div class="swiper hero-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="images/student-classroom-teacher-professor-the-classroom-teacher-lectures-57e1bc8d6408cd8f46df7554cdf8d2db.png" alt="Lớp học ivyEnglish">
+                                <div class="slider-caption">
+                                    <h3>Lớp học tối đa 5 học viên</h3>
+                                    <p>Tăng 300% thời gian tương tác trực tiếp</p>
+                                    <a href="ivyenglish-schedule.html" class="btn-slider">Xem lịch học</a>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="images/world-language-foreign-language-translation-multilingualism-language-barrier-others-76a5e6f63e2a1b0c16fca61c99ce0686.png" alt="Học viên ivyEnglish">
+                                <div class="slider-caption">
+                                    <h3>Phương pháp giao tiếp toàn diện</h3>
+                                    <p>Thực hành 4 kỹ năng Nghe - Nói - Đọc - Viết</p>
+                                    <a href="ivyenglish-khoa-hoc.html" class="btn-slider">Xem khoá học</a>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="images/banner.png" alt="600K mỗi tháng">
+                                <div class="slider-caption">
+                                    <h3>Chỉ từ 600K/tháng</h3>
+                                    <p>Học trọn gói, không phí ẩn, cam kết không tăng học phí</p>
+                                    <a href="#contact" class="btn-slider">Đăng ký ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -684,18 +800,12 @@
         const form = document.getElementById('course-registration-form');
         const submitButton = document.getElementById('send-button');
         const successPopup = document.getElementById('success-popup');
-        const snowContainer = document.body;
-        const snowflakesCount = 40;
-
-        for (let i = 0; i < snowflakesCount; i++) {
-            createSnowflake(snowContainer);
-        }
         
         const closeBtns = document.querySelectorAll('.close-btn, #close-popup');
 
         closeBtns.forEach(btn => {
             btn.addEventListener('click', function() {
-                successPopup.style.display = 'none'; // Ẩn popup đi
+                successPopup.style.display = 'none';
             });
         });
         window.addEventListener('click', function(event) {
@@ -940,10 +1050,9 @@ async function loadPopularPosts() {
         const allPosts = await res.json();
         
         if (allPosts && allPosts.length > 0) {
-            // SẮP XẾP: Bài có views cao nhất lên đầu
             const popular = allPosts
                 .sort((a, b) => (b.views || 0) - (a.views || 0))
-                .slice(0, 4); // Lấy top 4 bài
+                .slice(0, 4);
 
             container.innerHTML = popular.map(post => `
                 <div class="blog-card-home" style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
@@ -972,8 +1081,30 @@ async function loadPopularPosts() {
 document.addEventListener('DOMContentLoaded', loadPopularPosts);
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.hero-swiper', {
+            loop: true,
+            speed: 1000,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    });
+</script>
+
 <script src="js/daily-word.js"></script>
 <script src="js/tet-effects.js"></script>
+<script src="js/newyear.js"></script>
 
 </body>
 </html>
