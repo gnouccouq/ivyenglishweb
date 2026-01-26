@@ -93,13 +93,6 @@
             justify-content: center;
         }
 
-        #quote {
-            font-style: italic;
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 14px;
-        }
-
         .btn-contact {
             display: inline-flex;
             align-items: center;
@@ -146,7 +139,7 @@
 
         .time-box {
             background: #f1f5f9;
-            padding:5px;
+            padding: 5px;
             border-radius: 18px;
             min-width: 70px;
             display: flex;
@@ -173,6 +166,9 @@
         <div class="icon-box">🛠️</div>
         <h1>Hệ Thống Đang Nâng Cấp</h1>
         <p>Chào bạn, <strong>ivyEnglish</strong> đang cập nhật thêm các khóa học và tính năng mới để bạn có trải nghiệm tốt nhất.</p>
+        <p style="font-size: 0.9em; color: var(--primary); font-weight: 500;">
+            Dự kiến hoàn thành lúc: <span id="expected-time">Đang tải...</span>
+        </p>
         
         <div class="countdown-container">
             <div class="time-box">
@@ -203,36 +199,62 @@
     </div>
 
     <script>
-        // 1. Cấu hình thời gian kết thúc (Năm, Tháng-1, Ngày, Giờ, Phút)
-        const targetTime = new Date(2026, 0, 14, 15, 10, 0).getTime();
+        let targetTime = null;
+        const API_ID = "3abfyh1liwt97"; 
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const diff = targetTime - now;
-
-            if (diff > 0) {
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-                document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-                document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-                document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
-            } else {
-                clearInterval(timerInterval);
-                document.querySelector(".countdown-container").innerHTML = 
-                    "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại! Đang chuyển hướng...</p>";
+        async function loadMaintenanceData() {
+            try {
+                const res = await fetch(`https://sheetdb.io/api/v1/${API_ID}?sheet=Settings`);
+                const data = await res.json();
                 
-                // 2. TỰ ĐỘNG QUAY VỀ TRANG CHỦ SAU 1 GIÂY
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
+                const until = data.find(item => item.key === 'maintenance_until')?.value;
+
+                if (until) {
+                    const dateObj = new Date(until);
+                    targetTime = dateObj.getTime();
+
+                    // Hiển thị dòng text thời gian dự kiến
+                    const formattedTime = `${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')} ngày ${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`;
+                    const timeDisplay = document.getElementById('expected-time');
+                    if (timeDisplay) timeDisplay.innerText = formattedTime;
+
+                    // Bắt đầu chạy bộ đếm
+                    startCountdown();
+                }
+            } catch (e) {
+                console.error("Không thể tải dữ liệu bảo trì:", e);
+                document.getElementById('expected-time').innerText = "Liên hệ Admin";
             }
         }
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
+
+        function startCountdown() {
+            const timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const diff = targetTime - now;
+
+                if (diff > 0) {
+                    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+                    document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+                    document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+                    document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+                } else {
+                    clearInterval(timerInterval);
+                    document.querySelector(".countdown-container").innerHTML = 
+                        "<p style='color:#2ECC71; font-weight:bold;'>Hệ thống đang mở cửa trở lại! Đang chuyển hướng...</p>";
+                    
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 1500);
+                }
+            }, 1000);
+        }
+
+        // --- Giữ nguyên mảng thông điệp và hàm ngẫu nhiên của bạn ---
         const messages = [
             "“A different language is a different vision of life.”",
             "“Learning is a treasure that will follow its owner everywhere.”",
@@ -247,7 +269,6 @@
             "“Language is the road map of a culture. It tells you where its people come from and where they are going.”",
             "“You don’t have to be perfect, just consistent.”",
             "“Every day you speak English is a step forward.”",
-
             "💡 Tip: Try thinking in English for 5 minutes every day.",
             "💡 Tip: Learn 5 new words today and try to use them in a sentence.",
             "💡 Tip: Watching movies with English subtitles helps improve your listening.",
@@ -260,13 +281,6 @@
             "💡 Tip: Record yourself speaking English and listen back to identify areas for improvement.",
             "💡 Tip: Don't worry about grammar mistakes at first – focus on communication.",
             "💡 Tip: Use apps like Duolingo or Memrise to practice vocabulary and grammar.",
-            "💡 Tip: Practice speaking English every day, even if it's just for a few minutes.",
-            "💡 Tip: Use flashcards to memorize new vocabulary.",
-            "💡 Tip: Read English books or articles daily to improve comprehension.",
-            "💡 Tip: Join an English conversation group or find a language exchange partner.",
-            "💡 Tip: Set a daily goal for learning new words or phrases.",
-            "💡 Tip: Record yourself speaking English and listen back to identify areas for improvement.",
-
             "🚀 ivyEnglish is getting a makeover. We'll be back stronger!",
             "☕ Take a coffee break, we are updating the best courses for you.",
             "🔧 We are fine-tuning the system to give you a smoother experience."
@@ -274,7 +288,6 @@
 
         function getRandomMessage() {
             const quoteElement = document.getElementById('quote');
-            
             quoteElement.style.opacity = 0;
             quoteElement.style.transform = "translateY(10px)";
 
@@ -287,6 +300,7 @@
         }
 
         window.onload = () => {
+            loadMaintenanceData(); // Tải dữ liệu từ API
             getRandomMessage();
             setInterval(getRandomMessage, 4000); 
         };

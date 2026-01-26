@@ -165,6 +165,9 @@
             <div class="menu-item" onclick="switchTab('tab-schedule', this)">
                 <span>Quản lý lịch học</span>
             </div>
+            <div class="menu-item" onclick="switchTab('tab-maintenance', this)">
+                <span>Cài đặt bảo trì</span>
+            </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
             <span>Thoát hệ thống</span>
@@ -346,6 +349,31 @@
             <hr style="margin: 25px 0;">
             <h3>Danh Sách Lịch (Sheet: LichHoc)</h3>
             <div id="adminScheduleList">Đang tải...</div>
+        </div>
+
+        <div id="tab-maintenance" class="tab-content">
+            <h2 style="margin-bottom: 20px;">Cài đặt bảo trì hệ thống</h2>
+            <div class="post-form-container">
+                <div class="form-group">
+                    <label>Trạng thái bảo trì</label>
+                    <select id="maintenanceStatus">
+                        <option value="OFF">TẮT - Hoạt động bình thường</option>
+                        <option value="ON">BẬT - Đang bảo trì</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Thời gian kết thúc dự kiến (Bảng chọn)</label>
+                    <input type="datetime-local" id="maintenanceTime" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+
+                <button class="btn-save" onclick="updateMaintenanceStatus()" style="background: #e74c3c;">CẬP NHẬT TRẠNG THÁI</button>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; color: #856404;">
+                <i class="fas fa-exclamation-triangle"></i> 
+                Lưu ý: Khi bật "ON", người dùng vào trang chủ sẽ bị chuyển hướng sang trang bảo trì cho đến hết thời gian đã chọn.
+            </div>
         </div>
 
     </div>
@@ -900,6 +928,53 @@
         }
 
         loadAdminSchedule();
+
+        // Cập nhật trạng thái bảo trì
+        // Hàm cập nhật trạng thái bảo trì
+        async function updateMaintenanceStatus() {
+            const status = document.getElementById('maintenanceStatus').value;
+            const untilTime = document.getElementById('maintenanceTime').value;
+
+            if (status === "ON" && !untilTime) {
+                alert("Vui lòng chọn thời gian kết thúc bảo trì!");
+                return;
+            }
+
+            try {
+                // 1. Cập nhật Status (Sheet: Settings, Key: maintenance_status)
+                await fetch(`${API_URL}/key/maintenance_status?sheet=Settings`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "value": status })
+                });
+
+                // 2. Cập nhật Thời gian (Sheet: Settings, Key: maintenance_until)
+                await fetch(`${API_URL}/key/maintenance_until?sheet=Settings`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "value": untilTime })
+                });
+
+                alert("Đã cập nhật cấu hình bảo trì!");
+            } catch (err) {
+                console.error(err);
+                alert("Lỗi khi kết nối máy chủ!");
+            }
+        }
+
+        // Bổ sung: Tự động load cấu hình hiện tại khi vào tab
+        async function loadMaintenanceSettings() {
+            try {
+                const res = await fetch(`${API_URL}?sheet=Settings`);
+                const data = await res.json();
+                
+                const status = data.find(item => item.key === 'maintenance_status');
+                const until = data.find(item => item.key === 'maintenance_until');
+
+                if(status) document.getElementById('maintenanceStatus').value = status.value;
+                if(until) document.getElementById('maintenanceTime').value = until.value;
+            } catch (e) { console.log("Chưa có sheet Settings hoặc lỗi tải."); }
+        }
     </script>
 </body>
 </html>
