@@ -216,7 +216,7 @@
                             <th>Họ & Tên</th>
                             <th>SĐT</th>
                             <th>Email</th>
-                            <th>Khóa Học</th>
+                            <th>Khóa Học Quan Tâm</th>
                             <th>Hình Thức Học</th> 
                             <th>Thao tác</th>
                         </tr>
@@ -530,7 +530,7 @@
                         <td><strong>${item["Họ & Tên"]}</strong></td>
                         <td><a href="https://zalo.me/${phoneDisplay}" target="_blank">${phoneDisplay}</a></td>
                         <td>${item["Email"] || ''}</td>
-                        <td>${item["Khóa Học Quan Tâm"] || item["Khóa Học"]}</td>
+                        <td>${item["Khóa Học Quan Tâm"]}</td>
                         <td>${item["Hình Thức Học"] || '---'}</td>
                         <td>
                             <button class="btn-edit" onclick="openEditModal(${originalIndex})">Sửa</button>
