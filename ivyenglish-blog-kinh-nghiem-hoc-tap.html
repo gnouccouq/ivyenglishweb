@@ -15,7 +15,6 @@
     <style>
         :root { --p-blue: #1a237e; --s-gold: #c5a059; --accent: #5b8cff; }
         
-        /* Cấu trúc trang chủ */
         .home-content.hidden { display: none !important; }
         
         .search-container { max-width: 600px; margin: -30px auto 40px; position: relative; z-index: 10; padding: 0 20px; }
@@ -36,7 +35,6 @@
         .blog-title { font-size: 1.15rem; font-weight: 700; color: var(--p-blue); line-height: 1.4; margin-bottom: 10px; }
         .btn-readmore { margin-top: auto; color: var(--accent); font-weight: 700; text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* Cấu trúc trang chi tiết bài viết */
         #post-detail-view { display: none; max-width: 900px; margin: 40px auto; padding: 0 20px; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -48,13 +46,11 @@
         .category-divider { margin: 40px 0 20px; display: flex; align-items: center; gap: 15px; }
         .category-divider h2 { color: var(--p-blue); font-size: 1.5rem; white-space: nowrap; }
         .category-divider .line { height: 2px; background: #eee; flex: 1; }
-
-        /* Skeleton Loading */
         .skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: 12px; background-size: 200% 100%; animation: 1.5s shine linear infinite; }
         .skeleton-img { height: 220px; width: 100%; }
         .skeleton-text { height: 20px; margin-bottom: 10px; width: 80%; }
         @keyframes shine { to { background-position-x: -200%; } }
-        /* Bố cục chia cột cho Blog */
+
         .blog-layout {
             display: flex;
             gap: 30px;
@@ -62,12 +58,12 @@
         }
 
         .blog-main {
-            flex: 3; /* Chiếm 75% chiều rộng */
-            min-width: 0; /* Tránh lỗi tràn layout */
+            flex: 3;
+            min-width: 0;
         }
 
         .blog-sidebar {
-            flex: 1; /* Chiếm 25% chiều rộng */
+            flex: 1;
             position: sticky;
             top: 100px;
             display: flex;
@@ -80,7 +76,6 @@
             .blog-sidebar { width: 100%; position: static; }
         }
 
-        /* Style cho widget xem nhiều */
         .sidebar-widget {
             background: #fff;
             border-radius: 16px;
@@ -150,7 +145,6 @@
             transform: scale(1.05);
         }
 
-        /* Đảm bảo bài viết chi tiết không bị quá hẹp trên mobile */
         #post-detail-view {
             max-width: 100%;
             margin: 0;
@@ -268,20 +262,16 @@
 
         async function initBlog() {
             const container = document.getElementById('blog-container');
-            
-            // 1. Kiểm tra bộ nhớ tạm (Dành cho máy cũ)
             const cached = localStorage.getItem("ivy_blog_cache");
             if (cached) {
                 allPosts = JSON.parse(cached);
-                renderUI(allPosts); // Hiện bài viết ngay lập tức
+                renderUI(allPosts);
                 checkUrlForPost();
             }
 
             try {
-                // 2. Tải dữ liệu từ Sheet (Chạy ngầm)
-                // Dùng tham số phá cache nhưng vẫn đảm bảo fetch nhanh
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000); // Quá 8s thì dừng
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
 
                 const res = await fetch(API_URL + "&t=" + Date.now(), { signal: controller.signal });
                 const data = await res.json();
@@ -289,8 +279,6 @@
                 if (data && data.length > 0) {
                     allPosts = data.reverse();
                     localStorage.setItem("ivy_blog_cache", JSON.stringify(allPosts));
-                    
-                    // Chỉ render lại nếu dữ liệu mới khác dữ liệu cũ hoặc chưa có dữ liệu
                     renderUI(allPosts); 
                     checkUrlForPost();
                 }
@@ -314,7 +302,6 @@
             }
         }
 
-        // ĐÃ ĐỔI: Hàm này bây giờ hiện tất cả bài viết trong một lưới duy nhất
         function renderUI(data) {
             const container = document.getElementById('blog-container');
             if (!data || data.length === 0) {
@@ -322,7 +309,6 @@
                 return;
             }
 
-            // Lọc chỉ lấy các bài viết thuộc mục "Kinh nghiệm học tập"
             const enrollmentPosts = data.filter(post => post.category === "Kinh nghiệm học tập");
 
             if (enrollmentPosts.length === 0) {
@@ -342,7 +328,6 @@
             
             container.innerHTML = html;
             
-            // Vẫn giữ hiển thị "Xem nhiều nhất" từ tất cả bài viết để đa dạng nội dung sidebar
             renderPopular(allPosts);
             
             setTimeout(() => { AOS.refresh(); }, 100);
@@ -350,11 +335,9 @@
 
         function renderPopular(posts) {
             const popularContainer = document.getElementById('popular-container');
-            // Giả sử lấy 5 bài viết đầu tiên làm bài viết "xem nhiều" 
-            // (Hoặc bạn có thể thêm cột 'views' trong Excel và sort theo views)
             const popularPosts = [...posts]
                 .sort((a, b) => (b.views || 0) - (a.views || 0)) 
-                .slice(0, 5); // Lấy 5 bài cao nhất
+                .slice(0, 5);
 
             let html = popularPosts.map(post => {
                 const globalIdx = allPosts.findIndex(p => p.title === post.title);
