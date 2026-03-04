@@ -250,22 +250,35 @@
         const API_URL = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
         const ORIGIN_TITLE = document.title;
 
+        function createSlug(str) {
+            if (!str) return "";
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/[^a-z0-9 ]/g, "");
+            str = str.replace(/\s+/g, "-");
+            str = str.replace(/-+/g, "-");
+            return str.trim();
+        }
+
         async function initBlog() {
             const container = document.getElementById('blog-container');
-            
-            // 1. Kiểm tra bộ nhớ tạm (Dành cho máy cũ)
             const cached = localStorage.getItem("ivy_blog_cache");
             if (cached) {
                 allPosts = JSON.parse(cached);
-                renderUI(allPosts); // Hiện bài viết ngay lập tức
+                renderUI(allPosts);
                 checkUrlForPost();
             }
 
             try {
-                // 2. Tải dữ liệu từ Sheet (Chạy ngầm)
-                // Dùng tham số phá cache nhưng vẫn đảm bảo fetch nhanh
+
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000); // Quá 8s thì dừng
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
 
                 const res = await fetch(API_URL + "&t=" + Date.now(), { signal: controller.signal });
                 const data = await res.json();
@@ -273,8 +286,6 @@
                 if (data && data.length > 0) {
                     allPosts = data.reverse();
                     localStorage.setItem("ivy_blog_cache", JSON.stringify(allPosts));
-                    
-                    // Chỉ render lại nếu dữ liệu mới khác dữ liệu cũ hoặc chưa có dữ liệu
                     renderUI(allPosts); 
                     checkUrlForPost();
                 }
@@ -285,17 +296,12 @@
 
         function checkUrlForPost() {
             const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id');
+            const slugId = urlParams.get('id');
             
-            if (postId && allPosts.length > 0) {
-                // Giải mã tiếng Việt từ URL
-                const targetTitle = decodeURIComponent(postId).trim();
-                
-                // Tìm bài viết có tiêu đề khớp
-                const idx = allPosts.findIndex(p => p.title.trim() === targetTitle);
+            if (slugId && allPosts.length > 0) {
+                const idx = allPosts.findIndex(p => createSlug(p.title) === slugId);
                 
                 if (idx !== -1) {
-                    // Đợi 100ms để đảm bảo DOM đã render xong rồi mới mở bài
                     setTimeout(() => {
                         viewPost(idx);
                     }, 100);
@@ -303,7 +309,6 @@
             }
         }
 
-        // ĐÃ ĐỔI: Hàm này bây giờ hiện tất cả bài viết trong một lưới duy nhất
         function renderUI(data) {
             const container = document.getElementById('blog-container');
             if (!data || data.length === 0) {
@@ -311,7 +316,6 @@
                 return;
             }
 
-            // Lọc chỉ lấy các bài viết thuộc mục "Tuyển Sinh"
             const enrollmentPosts = data.filter(post => post.category === "Tuyển Sinh");
 
             if (enrollmentPosts.length === 0) {
@@ -383,9 +387,12 @@
             post.views++; 
             renderPopular(allPosts);
 
-            const postUrl = "?id=" + encodeURIComponent(post.title.trim());
-            window.history.pushState({ postIndex: index }, post.title, postUrl);
+            const slug = createSlug(post.title);
+            const postUrl = "?id=" + slug;
             
+            window.history.pushState({ postIndex: index }, post.title, postUrl);
+            document.title = post.title;
+
             document.getElementById('detail-content').innerHTML = `
                 <span class="blog-category">${post.category}</span>
                 <h1 style="color:var(--p-blue); margin:15px 0;">${post.title}</h1>
@@ -396,7 +403,6 @@
             document.getElementById('post-detail-view').style.display = 'block';
 
             const SHEETDB_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
-
             fetch(`${SHEETDB_URL}/title/${encodeURIComponent(post.title.trim())}?sheet=Posts`, {
                 method: 'PATCH',
                 headers: {
@@ -404,18 +410,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    data: {
-                        'views': post.views 
-                    }
+                    data: { 'views': post.views }
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.updated) {
-                    console.log("Cập nhật thành công dòng:", post.title);
-                } else {
-                    console.error("Không tìm thấy bài viết trong Sheet để update:", data);
-                }
             })
             .catch(err => console.error("Lỗi kết nối SheetDB:", err));
 
@@ -425,8 +421,6 @@
         window.closePost = function() {
             document.title = ORIGIN_TITLE;
             window.history.pushState({type: 'home'}, '', window.location.pathname);
-            
-            // HIỆN danh sách, ẨN chi tiết
             document.getElementById('blog-container').classList.remove('hidden');
             document.getElementById('post-detail-view').style.display = 'none';
             
