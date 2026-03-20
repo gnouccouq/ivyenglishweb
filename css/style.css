@@ -102,7 +102,7 @@ h2 {
 
 /* --- 2. HEADER & NAVIGATION --- */
 header {
-    background: #1e293b !important;
+    background: #1a237e !important;
     padding: 10px 0;
     position: sticky;
     top: 0;
@@ -1042,58 +1042,73 @@ header {
 
 /* --- 8. FOOTER MỚI --- */
 #main-footer {
-    background: #1e293b;
+    background: #1a237e; /* Màu xanh đậm thương hiệu */
     color: #ffffff;
-    padding: 60px 0 20px;
-    font-size: 0.95rem;
+    padding: 60px 0 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1.5fr;
-    gap: 50px;
-    align-items: start;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 40px;
+}
+
+.footer-logo {
+    height: 60px;
+    margin-bottom: 20px;
+    filter: brightness(0) invert(1); /* Làm logo thành màu trắng nếu cần */
+}
+
+.footer-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    opacity: 0.8;
 }
 
 .footer-col h3 {
-    color: var(--primary-color);
-    margin-bottom: 25px;
     font-size: 1.2rem;
+    margin-bottom: 25px;
     position: relative;
+    padding-bottom: 10px;
 }
 
 .footer-col h3::after {
     content: '';
     position: absolute;
-    bottom: -8px;
     left: 0;
+    bottom: 0;
     width: 40px;
     height: 2px;
-    background: var(--primary-color);
+    background: #5b8cff;
 }
 
-.footer-logo {
-    width: 150px;
-    margin-bottom: 20px;
-    filter: brightness(0) invert(1);
+/* Contact List */
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.footer-desc {
-    line-height: 1.6;
-    color: #94a3b8;
-    margin-bottom: 20px;
-}
-
-.contact-list p {
-    margin-bottom: 12px;
+.contact-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #cbd5e1;
+    gap: 12px;
+    font-size: 0.9rem;
+    opacity: 0.9;
 }
 
+.contact-item i {
+    color: #5b8cff;
+    width: 20px;
+}
+
+/* Links */
 .links-col ul {
     list-style: none;
+    padding: 0;
 }
 
 .links-col ul li {
@@ -1101,32 +1116,37 @@ header {
 }
 
 .links-col ul li a {
-    color: #cbd5e1;
+    color: #ffffff;
     text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
     transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.links-col ul li a i {
+    font-size: 0.7rem;
 }
 
 .links-col ul li a:hover {
-    color: var(--primary-color);
-    padding-left: 5px;
+    opacity: 1;
+    color: #5b8cff;
+    transform: translateX(5px);
 }
 
-.map-wrapper {
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
+/* Social Icons */
 .social-links {
     display: flex;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .social-icon {
     width: 38px;
     height: 38px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1136,67 +1156,47 @@ header {
 }
 
 .social-icon:hover {
-    background: var(--primary-color);
+    background: #5b8cff;
     transform: translateY(-3px);
-}
-
-.footer-bottom {
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    text-align: center;
-    color: #64748b;
-    font-size: 0.85rem;
 }
 
 .zalo-icon img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    transition: transform 0.3s ease;
+    width: 20px;
 }
 
-.social-icon.zalo-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.05);
+/* Footer Bottom */
+.footer-bottom {
+    background: rgba(0,0,0,0.2);
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-.social-icon.zalo-icon:hover {
-    background: var(--primary-color);
-    transform: translateY(-3px);
+.footer-bottom p {
+    font-size: 0.85rem;
+    opacity: 0.7;
 }
 
-.social-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
+/* Mobile Responsive */
 @media (max-width: 992px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .footer-content {
         grid-template-columns: 1fr;
-        gap: 40px;
-    }
-    .footer-col {
         text-align: center;
     }
     .footer-col h3::after {
         left: 50%;
         transform: translateX(-50%);
     }
-    .contact-list p {
+    .contact-item {
+        justify-content: center;
+    }
+    .links-col ul li a {
         justify-content: center;
     }
     .social-links {
@@ -1769,4 +1769,139 @@ header {
 @keyframes fadeText {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
+}
+
+/* ========================================================= */
+/* --- 13. CSS CHO AVATAR VÀ MENU NGƯỜI DÙ
+/* --- ĐỒNG BỘ USER DROPDOWN VỚI NAV DROPDOWN --- */
+
+/* --- ĐỒNG BỘ USER DROPDOWN VỚI NAV DROPDOWN --- */
+
+/* Container bao quanh Avatar và Tên */
+#user-profile-nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px 12px;
+    
+    /* Khung nền trắng bo tròn */
+    background: #ffffff; 
+    border: 1px solid rgba(91, 140, 255, 0.2); /* Viền xanh nhạt mờ */
+    border-radius: 50px; /* Dạng viên thuốc */
+    
+    /* Đổ bóng nhẹ để nổi bật trên Header */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+#user-profile-nav:hover {
+    background: #1a237e; /* Đổi màu nền cực nhẹ */
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(91, 140, 255, 0.15);
+}
+
+/* Đổi màu chữ sang trắng khi hover (vì nền đã tối) */
+#user-profile-nav:hover #nav-user-name {
+    color: #ffffff !important;
+}
+
+/* Khung menu Dropdown của User */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 12px); /* Khoảng cách giống dropdown-menu */
+    right: 0px; /* Căn phải để không bị lệch khỏi màn hình */
+    background: #1e293b; /* Màu nền tối đồng bộ */
+    min-width: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    list-style: none;
+    padding: 10px 0;
+    
+    /* Hiệu ứng ẩn/hiện đồng bộ */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex; /* Dùng flex để xếp các link theo hàng dọc */
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Mũi tên nhọn phía trên (Giống hệt dropdown-menu) */
+.user-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px; /* Đặt mũi tên về phía bên phải gần Avatar */
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid rgba(255,255,255,0.1);
+}
+
+.user-dropdown::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    right: 21px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #1e293b;
+}
+
+/* Khi Hover vào vùng Avatar thì hiện Menu */
+#user-profile-nav:hover .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Style cho các đường link bên trong */
+.user-dropdown a {
+    padding: 12px 20px !important;
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    margin: 0 8px;
+    border-radius: 8px;
+    color: #ffffff !important; /* Chữ trắng trên nền tối */
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+/* Hiệu ứng hover từng mục */
+.user-dropdown a:hover {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    padding-left: 25px !important; /* Hiệu ứng trượt sang phải */
+}
+
+/* Riêng nút Đăng xuất có thể cho màu đỏ nhạt để dễ phân biệt (Tùy chọn) */
+.user-dropdown a#logout-btn:hover {
+    background: #ef4444 !important;
+}
+
+#nav-user-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1a237e; /* Màu xanh Navy đậm */
+    white-space: nowrap;
+    max-width: 120px; /* Giới hạn độ dài tên để không vỡ layout */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Style cho Avatar tròn */
+#nav-user-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--primary-color);
+    background: #eee;
+    flex-shrink: 0;
 }

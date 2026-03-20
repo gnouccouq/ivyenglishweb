@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - ivyEnglish</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --primary-auth: #1a237e;
+            --accent-auth: #5b8cff;
+            --glass-white: rgba(255, 255, 255, 0.85);
+        }
+
+        body.auth-page {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f4f7fa 0%, #dbeafe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            height: 55px;
+            margin-bottom: 15px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .auth-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .auth-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-auth);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent-auth);
+            box-shadow: 0 0 0 4px rgba(91, 140, 255, 0.1);
+        }
+
+        .input-wrapper i {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .input-wrapper input {
+            border: none;
+            background: none;
+            padding: 14px 12px;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: var(--accent-auth);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 0.85rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .forgot-link {
+            color: var(--accent-auth);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-primary-auth {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary-auth);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+        }
+
+        .btn-primary-auth:hover {
+            background: #0d124a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.3);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 15px;
+            position: relative;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            border-radius: 10px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-google:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        .btn-google img {
+            width: 20px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .auth-footer a {
+            color: var(--accent-auth);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        /* Animation khi click */
+        .btn-primary-auth:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="auth-page">
+
+    <div class="auth-container" data-aos="zoom-in" data-aos-duration="800">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="auth-logo" color: #ffffff>
+                </a>
+                <h2>Chào mừng bạn!</h2>
+                <p>Đăng nhập để tiếp tục hành trình chinh phục ngoại ngữ</p>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group" data-aos="fade-up" data-aos-delay="100">
+                    <label>Email học viên</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="example@gmail.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-options" data-aos="fade-up" data-aos-delay="300">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember"> Ghi nhớ tôi
+                    </label>
+                    <a href="#" class="forgot-link" id="btn-forgot">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-primary-auth" data-aos="fade-up" data-aos-delay="400">
+                    ĐĂNG NHẬP NGAY
+                </button>
+
+                <div class="divider" data-aos="fade-up" data-aos-delay="500">
+                    <span>Hoặc tiếp tục với</span>
+                </div>
+
+                <button type="button" class="btn-google" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+                    Google Account
+                </button>
+
+                <p class="auth-footer" data-aos="fade-up" data-aos-delay="700">
+                    Bạn là học viên mới? <a href="register.html">Đăng ký tài khoản</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script type="module">
+    // 1. Import các hàm cần thiết từ file cấu hình (Đảm bảo bạn đã tạo file js/firebase-config.js)
+    import { 
+        auth, 
+        googleProvider, 
+        signInWithPopup, 
+        getRedirectResult, 
+        signInWithEmailAndPassword,
+        sendPasswordResetEmail,      // Thêm cái này
+        setPersistence,              // Thêm cái này
+        browserLocalPersistence,     // Thêm cái này
+        browserSessionPersistence
+    } from './js/firebase-config.js';
+
+    // Khởi tạo AOS
+    AOS.init({
+        once: true
+    });
+
+    // 2. Xử lý ẩn/hiện mật khẩu (Giữ nguyên logic UI của bạn)
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+        this.style.transform = 'scale(1.2)';
+        setTimeout(() => this.style.transform = 'scale(1)', 200);
+    });
+
+    // 3. XỬ LÝ ĐĂNG NHẬP EMAIL & MẬT KHẨU (THẬT)
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+        const btn = loginForm.querySelector('.btn-primary-auth');
+
+        // Hiệu ứng Loading
+        const originalBtnText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xác thực...';
+        btn.style.opacity = '0.7';
+        btn.disabled = true;
+
+        try {
+            // Gọi lệnh đăng nhập của Firebase
+            const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
+            await setPersistence(auth, persistence);
+            await signInWithEmailAndPassword(auth, email, password);
+            
+            // Nếu thành công, chuyển hướng về trang chủ
+            window.location.href = 'index.html';
+        } catch (error) {
+            console.error("Lỗi đăng nhập:", error.code);
+            // Xử lý lỗi phổ biến
+            let message = "Đăng nhập thất bại. Vui lòng kiểm tra lại!";
+            if (error.code === 'auth/invalid-credential') {
+                message = "Email hoặc mật khẩu không chính xác.";
+            } else if (error.code === 'auth/user-not-found') {
+                message = "Tài khoản chưa tồn tại.";
+            }
+            
+            alert(message);
+            
+            // Khôi phục nút bấm nếu lỗi
+            btn.innerHTML = originalBtnText;
+            btn.style.opacity = '1';
+            btn.disabled = false;
+        }
+    });
+
+    // 4. XỬ LÝ ĐĂNG NHẬP GOOGLE (THẬT)
+    const btnGoogle = document.querySelector('.btn-google');
+    btnGoogle.addEventListener('click', async () => {
+        try {
+            // Luôn lưu trạng thái Google vào máy (Persistence mặc định là Local cho Google)
+            const result = await signInWithPopup(auth, googleProvider);
+            if (result.user) {
+                console.log("Đăng nhập Google thành công:", result.user.email);
+                window.location.href = 'index.html'; // Tự động nhảy vào trang chủ
+            }
+        } catch (error) {
+            console.error("Lỗi Google Auth:", error.code);
+            if (error.code === 'auth/unauthorized-domain') {
+                alert("Bạn chưa thêm 127.0.0.1 vào Authorized Domains trong Firebase Console!");
+            } else {
+                alert("Lỗi đăng nhập Google: " + error.message);
+            }
+        }
+    });
+
+    const btnForgot = document.getElementById('btn-forgot');
+    btnForgot.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = prompt("Vui lòng nhập email của bạn để nhận link đặt lại mật khẩu:");
+        
+        if (email) {
+            try {
+                await sendPasswordResetEmail(auth, email.trim());
+                alert("Một email hướng dẫn đặt lại mật khẩu đã được gửi đi. Hãy kiểm tra hộp thư (hoặc mục Spam) của bạn nhé!");
+            } catch (error) {
+                if (error.code === 'auth/user-not-found') {
+                    alert("Email này chưa được đăng ký trong hệ thống.");
+                } else {
+                    alert("Lỗi: " + error.message);
+                }
+            }
+        }
+    });
+</script>
+<script type="module" src="./js/auth-handler.js"></script>
+</body>
+</html>

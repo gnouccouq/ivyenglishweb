@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - ivyEnglish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root { --primary-auth: #1a237e; --glass-white: rgba(255, 255, 255, 0.85); }
+        body.auth-page {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f4f7fa 0%, #dbeafe 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0;
+        }
+        .auth-card {
+            background: var(--glass-white); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 24px; width: 100%; max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .auth-header { text-align: center; margin-bottom: 30px; }
+        .auth-logo { height: 55px; margin-bottom: 15px; }
+        .input-wrapper {
+            display: flex; align-items: center; background: #fff;
+            border: 2px solid #e2e8f0; border-radius: 12px; padding: 0 15px; margin-bottom: 20px;
+        }
+        .input-wrapper input { border: none; padding: 14px 12px; width: 100%; outline: none; }
+        .btn-primary-auth {
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            background: var(--primary-auth); color: white; font-weight: 700; cursor: pointer;
+        }
+        .btn-primary-auth:disabled { background: #94a3b8; }
+    </style>
+</head>
+<body class="auth-page">
+
+    <div class="auth-card" data-aos="zoom-in">
+        <div class="auth-header">
+            <img src="images/logo.png" alt="Logo" class="auth-logo">
+            <h2>Đăng ký</h2>
+            <p>Nhập email và mật khẩu để bắt đầu</p>
+        </div>
+
+        <form id="register-form">
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="reg-email" placeholder="Email của bạn" required>
+            </div>
+            <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="reg-password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
+            </div>
+            <button type="submit" id="btn-register" class="btn-primary-auth">TẠO TÀI KHOẢN</button>
+        </form>
+        
+        <div style="text-align:center; margin-top:20px; font-size:0.9rem;">
+            Đã có tài khoản? <a href="login.html" style="color:#5b8cff; font-weight:700; text-decoration:none;">Đăng nhập</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script type="module">
+        // IMPORT TRỰC TIẾP TỪ FIREBASE ĐỂ TRÁNH LỖI FILE RỜI
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+        // Bạn hãy copy cấu hình firebaseConfig từ file firebase-config.js của bạn dán vào đây
+        const firebaseConfig = {
+            apiKey: "AIzaSyAREfErrNqreMGKPzROSYDg2UqFKjXmBvU",
+            authDomain: "ivyenglish-chinese-web-project.firebaseapp.com",
+            projectId: "ivyenglish-chinese-web-project",
+            storageBucket: "ivyenglish-chinese-web-project.firebasestorage.app",
+            messagingSenderId: "974411213659",
+            appId: "1:974411213659:web:4bf823b46924a9d159487e",
+            measurementId: "G-6MXGKCSLSK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        AOS.init({ once: true });
+
+        const registerForm = document.getElementById('register-form');
+        const btn = document.getElementById('btn-register');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            btn.disabled = true;
+            btn.innerText = "ĐANG TẠO...";
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert("Đăng ký thành công!");
+                window.location.href = 'index.html';
+            } catch (error) {
+                alert("Lỗi: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "TẠO TÀI KHOẢN";
+            }
+        });
+    </script>
+</body>
+</html>
