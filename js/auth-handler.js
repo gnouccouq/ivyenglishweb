@@ -3,6 +3,73 @@ import { auth, onAuthStateChanged, signOut, db, doc, getDoc } from './firebase-c
 // !!! QUAN TRỌNG: Export danh sách này để dùng bên admin.html
 export const ADMIN_EMAILS = ['cuongnguyenc.n1612@gmail.com'];
 
+// --- POPUP KHÓA TÀI KHOẢN ---
+function showLockedAccountPopup(reason) {
+    let popup = document.getElementById('custom-popup');
+    if (!popup) {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <div id="custom-popup" class="popup-overlay" style="z-index: 99999;">
+                <div class="popup-content">
+                    <span id="popup-icon" class="popup-icon"></span>
+                    <h3 id="popup-title"></h3>
+                    <p id="popup-message"></p>
+                    <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
+                </div>
+            </div>`;
+        document.body.appendChild(div.firstElementChild);
+        popup = document.getElementById('custom-popup');
+    }
+
+    const iconEl = popup.querySelector('#popup-icon');
+    const titleEl = popup.querySelector('#popup-title');
+    const messageEl = popup.querySelector('#popup-message');
+    const closeBtn = popup.querySelector('#popup-close-btn');
+
+    iconEl.innerHTML = '<i class="fas fa-user-lock" style="color: #e74c3c;"></i>';
+    titleEl.innerText = 'Tài Khoản Bị Khóa';
+    messageEl.innerHTML = `Tài khoản của bạn đã bị vô hiệu hóa.<br><br><strong>Lý do:</strong> ${reason}<br><br>Vui lòng liên hệ quản trị viên.`;
+    
+    popup.style.display = 'flex';
+
+    const newBtn = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newBtn, closeBtn);
+    newBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+}
+
+const storedBanReason = sessionStorage.getItem('ivy_banned_reason');
+if (storedBanReason) {
+    sessionStorage.removeItem('ivy_banned_reason');
+    setTimeout(() => showLockedAccountPopup(storedBanReason), 500);
+}
+
+// --- GLOBAL MAINTENANCE CHECK (KIỂM TRA BẢO TRÌ TOÀN TRANG) ---
+(async () => {
+    const path = window.location.pathname;
+    // Không chặn trang Admin, Login và chính trang Bảo trì để tránh lặp vô tận
+    if (path.includes('admin.html') || path.includes('login.html') || path.includes('ivyenglish-maintenance.html')) return;
+
+    try {
+        const docRef = doc(db, "settings", "maintenance");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.status === 'ON') {
+                const now = new Date().getTime();
+                const until = new Date(data.until).getTime();
+                // Nếu đang BẬT và chưa hết giờ -> Chuyển hướng
+                if (now < until) {
+                    window.location.href = 'ivyenglish-maintenance.html';
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Maintenance check error:", error);
+    }
+})();
+
 // Hàm này sẽ chạy mỗi khi trạng thái đăng nhập thay đổi
 onAuthStateChanged(auth, async (user) => {
     const loginBtn = document.getElementById('login-nav-btn');
@@ -30,8 +97,8 @@ onAuthStateChanged(auth, async (user) => {
             const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().isBanned) {
                 const reason = userSnap.data().banReason || "Vi phạm quy định.";
+                sessionStorage.setItem('ivy_banned_reason', reason);
                 await signOut(auth);
-                alert(`Tài khoản của bạn đã bị khóa.\nLý do: ${reason}\nVui lòng liên hệ quản trị viên để biết thêm chi tiết.`);
                 window.location.href = 'index.html';
                 return;
             }

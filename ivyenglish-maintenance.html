@@ -198,18 +198,17 @@
         </a>
     </div>
 
-    <script>
+    <script type="module">
+        import { db, doc, getDoc } from './js/firebase-config.js';
+
         let targetTime = null;
-        const API_ID = "3abfyh1liwt97"; 
 
         async function loadMaintenanceData() {
             try {
-                const res = await fetch(`https://sheetdb.io/api/v1/${API_ID}?sheet=Settings`);
-                const data = await res.json();
-                
-                const until = data.find(item => item.key === 'maintenance_until')?.value;
-
-                if (until) {
+                const docSnap = await getDoc(doc(db, "settings", "maintenance"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const until = data.until;
                     const dateObj = new Date(until);
                     targetTime = dateObj.getTime();
 

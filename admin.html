@@ -977,53 +977,6 @@
         }
 
         loadAdminSchedule();
-
-        // Cập nhật trạng thái bảo trì
-        // Hàm cập nhật trạng thái bảo trì
-        async function updateMaintenanceStatus() {
-            const status = document.getElementById('maintenanceStatus').value;
-            const untilTime = document.getElementById('maintenanceTime').value;
-
-            if (status === "ON" && !untilTime) {
-                alert("Vui lòng chọn thời gian kết thúc bảo trì!");
-                return;
-            }
-
-            try {
-                // 1. Cập nhật Status (Sheet: Settings, Key: maintenance_status)
-                await fetch(`${API_URL}/key/maintenance_status?sheet=Settings`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ "value": status })
-                });
-
-                // 2. Cập nhật Thời gian (Sheet: Settings, Key: maintenance_until)
-                await fetch(`${API_URL}/key/maintenance_until?sheet=Settings`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ "value": untilTime })
-                });
-
-                alert("Đã cập nhật cấu hình bảo trì!");
-            } catch (err) {
-                console.error(err);
-                alert("Lỗi khi kết nối máy chủ!");
-            }
-        }
-
-        // Bổ sung: Tự động load cấu hình hiện tại khi vào tab
-        async function loadMaintenanceSettings() {
-            try {
-                const res = await fetch(`${API_URL}?sheet=Settings`);
-                const data = await res.json();
-                
-                const status = data.find(item => item.key === 'maintenance_status');
-                const until = data.find(item => item.key === 'maintenance_until');
-
-                if(status) document.getElementById('maintenanceStatus').value = status.value;
-                if(until) document.getElementById('maintenanceTime').value = until.value;
-            } catch (e) { console.log("Chưa có sheet Settings hoặc lỗi tải."); }
-        }
     </script>
     <script type="module" src="./js/auth-handler.js"></script>
 
@@ -1031,7 +984,7 @@
     <script type="module">
         import { auth, onAuthStateChanged } from './js/firebase-config.js';
         import { ADMIN_EMAILS } from './js/auth-handler.js';
-        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc, deleteField } from './js/firebase-config.js';
+        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc, deleteField, setDoc, getDoc } from './js/firebase-config.js';
 
         // --- HỆ THỐNG THÔNG BÁO REALTIME (TOAST) ---
         function showAdminToast(message, icon = 'fa-bell', color = '#5b8cff') {
@@ -1269,6 +1222,38 @@
             }
         };
 
+        // --- 5. CẤU HÌNH BẢO TRÌ (MAINTENANCE) ---
+        window.updateMaintenanceStatus = async function() {
+            const status = document.getElementById('maintenanceStatus').value;
+            const untilTime = document.getElementById('maintenanceTime').value;
+
+            if (status === "ON" && !untilTime) {
+                alert("Vui lòng chọn thời gian kết thúc bảo trì!");
+                return;
+            }
+
+            try {
+                await setDoc(doc(db, "settings", "maintenance"), {
+                    status: status,
+                    until: untilTime
+                });
+                showAdminToast("Đã cập nhật trạng thái bảo trì!", "fa-tools", "#e74c3c");
+            } catch (err) {
+                alert("Lỗi: " + err.message);
+            }
+        };
+
+        window.loadMaintenanceSettings = async function() {
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "maintenance"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('maintenanceStatus').value = data.status || "OFF";
+                    document.getElementById('maintenanceTime').value = data.until || "";
+                }
+            } catch (e) { console.log("Lỗi tải cấu hình bảo trì:", e); }
+        };
+
         // Xử lý form sửa (Gắn sự kiện mới)
         const editForm = document.getElementById('editForm');
         if(editForm) {
@@ -1311,6 +1296,7 @@
                 // Kích hoạt lắng nghe Realtime
                 initRealtimeReviews();
                 window.loadData(); // Tải danh sách đăng ký lần đầu
+                window.loadMaintenanceSettings(); // Tải cấu hình bảo trì
             } else {
                 // Not Admin or not logged in: redirect
                 alert("⛔ Truy cập bị từ chối! Bạn không có quyền quản trị.");
