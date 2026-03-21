@@ -249,14 +249,14 @@
         <div class="auth-card">
             <div class="auth-header">
                 <a href="index.html">
-                    <img src="images/logo.png" alt="ivyEnglish Logo" class="auth-logo" color: #ffffff>
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="auth-logo">
                 </a>
                 <h2>Chào mừng bạn!</h2>
                 <p>Đăng nhập để tiếp tục hành trình chinh phục ngoại ngữ</p>
             </div>
 
             <form id="login-form">
-                <div class="form-group" data-aos="fade-up" data-aos-delay="100">
+                <div class="form-group">
                     <label>Email học viên</label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope"></i>
@@ -264,7 +264,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                <div class="form-group">
                     <label>Mật khẩu</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
@@ -273,30 +273,53 @@
                     </div>
                 </div>
 
-                <div class="form-options" data-aos="fade-up" data-aos-delay="300">
+                <div class="form-options">
                     <label class="remember-me">
                         <input type="checkbox" id="remember"> Ghi nhớ tôi
                     </label>
                     <a href="#" class="forgot-link" id="btn-forgot">Quên mật khẩu?</a>
                 </div>
 
-                <button type="submit" class="btn-primary-auth" data-aos="fade-up" data-aos-delay="400">
+                <button type="submit" class="btn-primary-auth">
                     ĐĂNG NHẬP NGAY
                 </button>
 
-                <div class="divider" data-aos="fade-up" data-aos-delay="500">
+                <div class="divider" >
                     <span>Hoặc tiếp tục với</span>
                 </div>
 
-                <button type="button" class="btn-google" data-aos="fade-up" data-aos-delay="600">
+                <button type="button" class="btn-google">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
                     Google Account
                 </button>
 
-                <p class="auth-footer" data-aos="fade-up" data-aos-delay="700">
+                <p class="auth-footer">
                     Bạn là học viên mới? <a href="register.html">Đăng ký tài khoản</a>
                 </p>
             </form>
+        </div>
+    </div>
+
+    <!-- Custom Popup -->
+    <div id="custom-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span id="popup-icon" class="popup-icon"></span>
+            <h3 id="popup-title"></h3>
+            <p id="popup-message"></p>
+            <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Forgot Password Popup -->
+    <div id="forgot-popup" class="popup-overlay">
+        <div class="popup-content">
+            <h3>Khôi phục mật khẩu</h3>
+            <p>Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu.</p>
+            <input type="email" id="forgot-email-input" placeholder="Nhập email của bạn" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 20px; outline: none; font-family: inherit;">
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <button id="btn-cancel-forgot" class="btn-close-popup" style="background: #94a3b8;">Hủy</button>
+                <button id="btn-confirm-forgot" class="btn-close-popup">Gửi đi</button>
+            </div>
         </div>
     </div>
 
@@ -314,6 +337,41 @@
         browserLocalPersistence,     // Thêm cái này
         browserSessionPersistence
     } from './js/firebase-config.js';
+
+    // --- POPUP LOGIC ---
+    function showPopup(type, title, message) {
+        const popup = document.getElementById('custom-popup');
+        const iconEl = document.getElementById('popup-icon');
+        const titleEl = document.getElementById('popup-title');
+        const messageEl = document.getElementById('popup-message');
+
+        if (!popup || !iconEl || !titleEl || !messageEl) return;
+
+        titleEl.innerText = title;
+        messageEl.innerHTML = message;
+
+        let iconClass = 'fas fa-info-circle';
+        let iconColor = '#3498db';
+        if (type === 'success') {
+            iconClass = 'fas fa-check-circle';
+            iconColor = '#2ECC71';
+        } else if (type === 'error') {
+            iconClass = 'fas fa-times-circle';
+            iconColor = '#e74c3c';
+        }
+        iconEl.innerHTML = `<i class="${iconClass}"></i>`;
+        iconEl.style.color = iconColor;
+        
+        popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+        const popup = document.getElementById('custom-popup');
+        if (popup) popup.style.display = 'none';
+    }
+    document.getElementById('popup-close-btn').addEventListener('click', closePopup);
+    document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
+    // --- END POPUP LOGIC ---
 
     // Khởi tạo AOS
     AOS.init({
@@ -367,7 +425,7 @@
                 message = "Tài khoản chưa tồn tại.";
             }
             
-            alert(message);
+            showPopup('error', 'Đăng nhập thất bại', message);
             
             // Khôi phục nút bấm nếu lỗi
             btn.innerHTML = originalBtnText;
@@ -389,29 +447,45 @@
         } catch (error) {
             console.error("Lỗi Google Auth:", error.code);
             if (error.code === 'auth/unauthorized-domain') {
-                alert("Bạn chưa thêm 127.0.0.1 vào Authorized Domains trong Firebase Console!");
+                showPopup('error', 'Lỗi Cấu Hình', "Bạn chưa thêm domain này vào Authorized Domains trong Firebase Console!");
             } else {
-                alert("Lỗi đăng nhập Google: " + error.message);
+                showPopup('error', 'Lỗi Google', "Không thể đăng nhập bằng Google lúc này. Vui lòng thử lại sau.");
             }
         }
     });
 
     const btnForgot = document.getElementById('btn-forgot');
-    btnForgot.addEventListener('click', async (e) => {
+    const forgotPopup = document.getElementById('forgot-popup');
+    const forgotInput = document.getElementById('forgot-email-input');
+    const btnCancelForgot = document.getElementById('btn-cancel-forgot');
+    const btnConfirmForgot = document.getElementById('btn-confirm-forgot');
+
+    btnForgot.addEventListener('click', (e) => {
         e.preventDefault();
-        const email = prompt("Vui lòng nhập email của bạn để nhận link đặt lại mật khẩu:");
-        
+        forgotPopup.style.display = 'flex';
+        forgotInput.value = '';
+        forgotInput.focus();
+    });
+
+    btnCancelForgot.addEventListener('click', () => forgotPopup.style.display = 'none');
+    forgotPopup.addEventListener('click', (e) => { if(e.target === forgotPopup) forgotPopup.style.display = 'none'; });
+
+    btnConfirmForgot.addEventListener('click', async () => {
+        const email = forgotInput.value.trim();
         if (email) {
+            forgotPopup.style.display = 'none';
             try {
-                await sendPasswordResetEmail(auth, email.trim());
-                alert("Một email hướng dẫn đặt lại mật khẩu đã được gửi đi. Hãy kiểm tra hộp thư (hoặc mục Spam) của bạn nhé!");
+                await sendPasswordResetEmail(auth, email);
+                showPopup('success', 'Đã gửi Email', "Một email hướng dẫn đặt lại mật khẩu đã được gửi đi. Hãy kiểm tra hộp thư (hoặc mục Spam) của bạn nhé!");
             } catch (error) {
                 if (error.code === 'auth/user-not-found') {
-                    alert("Email này chưa được đăng ký trong hệ thống.");
+                    showPopup('error', 'Không tìm thấy', "Email này chưa được đăng ký trong hệ thống của chúng tôi.");
                 } else {
-                    alert("Lỗi: " + error.message);
+                    showPopup('error', 'Lỗi', "Có sự cố xảy ra, không thể gửi email. Vui lòng thử lại sau.");
                 }
             }
+        } else {
+            showPopup('error', 'Thiếu thông tin', "Vui lòng nhập email của bạn.");
         }
     });
 </script>

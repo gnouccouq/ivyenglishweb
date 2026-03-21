@@ -12,6 +12,24 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <style>
+        /* CSS for Auth Loading Screen */
+        #auth-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50;
+        }
+        body.admin-body { display: none; }
+
         :root {
             --sidebar-width: 260px;
             --primary-color: #5b8cff;
@@ -144,14 +162,17 @@
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
     </style>
 </head>
-<body>
-    <script>
-        const pin = prompt("Mã truy cập quản trị:");
-        if (pin !== "2025") { window.location.href = "index.html"; }
-    </script>
+<body class="admin-body">
+    <!-- Auth Loading Screen -->
+    <div id="auth-loading">
+        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+        <h3>Đang kiểm tra quyền quản trị...</h3>
+    </div>
 
     <div class="sidebar">
-        <div class="sidebar-header"><img src="images/logo.png" alt="ivyEnglish Logo" class="header-logo-img">ADMINISTRATOR</div>
+        <div class="sidebar-header">
+            <img src="images/logo.png" alt="ivyEnglish Logo" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 10px;"><br>ADMINISTRATOR
+        </div>
         <div class="sidebar-menu">
             <div class="menu-item active" onclick="switchTab('tab-students', this)">
                 <span>Quản lý đơn đăng ký</span>
@@ -977,5 +998,28 @@
         }
     </script>
     <script type="module" src="./js/auth-handler.js"></script>
+
+    <!-- New Firebase Auth Script -->
+    <script type="module">
+        import { auth, onAuthStateChanged } from './js/firebase-config.js';
+        import { ADMIN_EMAILS } from './js/auth-handler.js';
+
+        const loadingScreen = document.getElementById('auth-loading');
+        const body = document.querySelector('.admin-body');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && ADMIN_EMAILS.includes(user.email)) {
+                // Is Admin: show content
+                body.style.display = 'flex';
+                if(loadingScreen) loadingScreen.style.display = 'none';
+                console.log("Admin access granted for:", user.email);
+            } else {
+                // Not Admin or not logged in: redirect
+                alert("⛔ Truy cập bị từ chối! Bạn không có quyền quản trị.");
+                // Redirect to login page, and after login, come back here
+                window.location.href = `login.html?redirect=admin.html`;
+            }
+        });
+    </script>
 </body>
 </html>

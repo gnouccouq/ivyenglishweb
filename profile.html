@@ -25,14 +25,23 @@
         .section-title::after { content: ''; flex: 1; height: 1px; background: #e2e8f0; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .info-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
-        .info-group input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 0.95rem; box-sizing: border-box; }
+        .info-group input, .info-group select { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 0.95rem; box-sizing: border-box; }
         .btn-update { margin-top: 30px; padding: 14px 30px; background: var(--p-blue); color: white; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%; }
         .btn-update:hover { background: var(--accent); transform: translateY(-2px); }
-        @media (max-width: 850px) { .profile-card { grid-template-columns: 1fr; } }
+        @media (max-width: 850px) { 
+            .profile-card { grid-template-columns: 1fr; } 
+        }
+        @media (max-width: 600px) {
+            .profile-wrapper { padding: 100px 15px 40px; }
+            .profile-main { padding: 30px 20px; }
+            .info-grid { grid-template-columns: 1fr; gap: 15px; }
+        }
     </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
+
+    
 
     <div class="profile-wrapper">
         <div class="profile-card" data-aos="fade-up">
@@ -68,6 +77,15 @@
                             <input type="text" id="input-phone" placeholder="Số điện thoại">
                         </div>
                         <div class="info-group">
+                            <label>Giới tính</label>
+                            <select id="input-gender">
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                        <div class="info-group">
                             <label>Email</label>
                             <input type="email" id="input-email" disabled>
                         </div>
@@ -87,7 +105,7 @@
                     </div>
 
                     <button type="submit" class="btn-update" id="submit-btn">
-                        <i class="fas fa-check-circle"></i> CẬP NHẬT NGAY
+                        <i class="fas fa-check-circle"></i> CẬP NHẬT THÔNG TIN
                     </button>
                 </form>
             </div>
@@ -96,15 +114,73 @@
 
     <div id="footer-placeholder"></div>
 
+    <!-- Custom Popup -->
+    <div id="custom-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span id="popup-icon" class="popup-icon"></span>
+            <h3 id="popup-title"></h3>
+            <p id="popup-message"></p>
+            <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
+        </div>
+    </div>
+
+    <div class="floating-contact">
+        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
+            <i class="fab fa-facebook-messenger"></i>
+        </a>
+    </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script type="module">
-        import { auth, onAuthStateChanged } from './js/firebase-config.js';
+        import { auth, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, doc, getDoc, setDoc } from './js/firebase-config.js';
         
         const IMGUR_CLIENT_ID = 'd70305e7c3ac5c6';
-        const BASE_URL = 'https://sheetdb.io/api/v1/e7pi2jqqmcuri';
-        const SHEET_PARAM = 'sheet=Users';
 
         window.tempAvatarUrl = null;
+
+        // --- POPUP LOGIC ---
+        function showPopup(type, title, message) {
+            const popup = document.getElementById('custom-popup');
+            const iconEl = document.getElementById('popup-icon');
+            const titleEl = document.getElementById('popup-title');
+            const messageEl = document.getElementById('popup-message');
+
+            if (!popup || !iconEl || !titleEl || !messageEl) return;
+
+            titleEl.innerText = title;
+            messageEl.innerHTML = message;
+
+            let iconClass = 'fas fa-info-circle';
+            let iconColor = '#3498db';
+            if (type === 'success') {
+                iconClass = 'fas fa-check-circle';
+                iconColor = '#2ECC71';
+            } else if (type === 'error') {
+                iconClass = 'fas fa-times-circle';
+                iconColor = '#e74c3c';
+            }
+            iconEl.innerHTML = `<i class="${iconClass}"></i>`;
+            iconEl.style.color = iconColor;
+            
+            popup.style.display = 'flex';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('custom-popup');
+            if (popup) popup.style.display = 'none';
+        }
+        document.getElementById('popup-close-btn').addEventListener('click', closePopup);
+        document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
+        // --- END POPUP LOGIC ---
 
         // 1. UPLOAD ẢNH LÊN IMGUR
         document.getElementById('avatar-input').addEventListener('change', async (e) => {
@@ -129,13 +205,13 @@
                 if (result.success) {
                     window.tempAvatarUrl = result.data.link;
                     avatarImg.src = window.tempAvatarUrl;
-                    alert("✅ Tải ảnh lên thành công!");
+                    showPopup('success', 'Thành công', 'Ảnh đại diện đã được tải lên. Nhấn "Cập nhật" để lưu thay đổi.');
                 } else {
-                    alert("❌ Lỗi Imgur! Thử lại sau.");
+                    showPopup('error', 'Lỗi Imgur', 'Không thể tải ảnh lên lúc này. Vui lòng thử lại sau.');
                     avatarImg.src = originalSrc;
                 }
             } catch (err) {
-                alert("❌ Lỗi kết nối!");
+                showPopup('error', 'Lỗi kết nối', 'Không thể kết nối đến máy chủ Imgur.');
                 avatarImg.src = originalSrc;
             } finally {
                 avatarImg.style.opacity = "1";
@@ -150,15 +226,30 @@
 
                 try {
                     if (user.photoURL) document.getElementById('display-avatar').src = user.photoURL;
-                    const res = await fetch(`${BASE_URL}/search?ID=${user.uid}&${SHEET_PARAM}`);
-                    const data = await res.json();
                     
-                    if (data && data.length > 0) {
-                        const row = data[0];
-                        document.getElementById('display-name').innerText = row["Họ Tên"] || "Thành viên";
-                        document.getElementById('input-name').value = row["Họ Tên"] || "";
-                        document.getElementById('input-phone').value = row["Số Điện Thoại"] ? String(row["Số Điện Thoại"]).replace(/'/g, "") : "";
+                    // Mặc định lấy tên từ Google nếu có (hiển thị trước khi load Sheet để không bị trống)
+                    if(user.displayName) {
+                        document.getElementById('display-name').innerText = user.displayName;
+                        document.getElementById('input-name').value = user.displayName;
+                    }
+
+                    const docRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(docRef);
+                    
+                    if (docSnap.exists()) {
+                        const row = docSnap.data();
+                        if (row["Họ Tên"]) {
+                            document.getElementById('display-name').innerText = row["Họ Tên"];
+                            document.getElementById('input-name').value = row["Họ Tên"];
+                            
+                            // Cập nhật luôn tên trên header nếu đang ở trang Profile
+                            const headerName = document.getElementById('nav-user-name');
+                            if (headerName) headerName.innerText = row["Họ Tên"];
+                            localStorage.setItem('ivy_user_name', row["Họ Tên"]); // Lưu tên vào bộ nhớ trình duyệt
+                        }
+                        document.getElementById('input-phone').value = row["Số Điện Thoại"] || "";
                         document.getElementById('input-dob').value = row["Ngày Sinh"] || "";
+                        document.getElementById('input-gender').value = row["Giới Tính"] || "";
                         if (row["Avatar"]) document.getElementById('display-avatar').src = row["Avatar"];
                     }
                 } catch (err) { console.error("Lỗi load data:", err); }
@@ -181,40 +272,47 @@
                 "ID": user.uid,
                 "Họ Tên": document.getElementById('input-name').value.trim(),
                 "Email": user.email,
-                "Số Điện Thoại": "'" + document.getElementById('input-phone').value.trim(),
+                "Số Điện Thoại": document.getElementById('input-phone').value.trim(),
+                "Giới Tính": document.getElementById('input-gender').value,
                 "Ngày Sinh": document.getElementById('input-dob').value,
                 "Avatar": window.tempAvatarUrl || document.getElementById('display-avatar').src,
                 "Thời Gian": new Date().toLocaleString('vi-VN')
             };
 
             try {
-                // Kiểm tra tồn tại
-                const checkRes = await fetch(`${BASE_URL}/search?ID=${user.uid}&${SHEET_PARAM}`);
-                const exists = await checkRes.json();
+                await setDoc(doc(db, "users", user.uid), payload, { merge: true });
 
-                let response;
-                if (exists.length > 0) {
-                    response = await fetch(`${BASE_URL}/ID/${user.uid}?${SHEET_PARAM}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: payload })
-                    });
-                } else {
-                    response = await fetch(`${BASE_URL}?${SHEET_PARAM}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: [payload] })
-                    });
-                }
+                showPopup('success', 'Thành công', 'Thông tin cá nhân của bạn đã được cập nhật.');
+                document.getElementById('display-name').innerText = payload["Họ Tên"];
+                
+                // Cập nhật tên trên Header ngay lập tức
+                const headerName = document.getElementById('nav-user-name');
+                if(headerName) headerName.innerText = payload["Họ Tên"];
+                localStorage.setItem('ivy_user_name', payload["Họ Tên"]); // Lưu tên mới vào bộ nhớ trình duyệt
 
-                if (response.ok) {
-                    alert("✅ Cập nhật thành công!");
-                    document.getElementById('display-name').innerText = payload["Họ Tên"];
-                }
-            } catch (err) { alert("❌ Lỗi hệ thống!"); }
+                // Cập nhật tên vào Firebase Profile để đồng bộ cho các lần đăng nhập sau
+                updateProfile(user, { displayName: payload["Họ Tên"] }).catch(console.error);
+            } catch (err) { 
+                showPopup('error', 'Lỗi hệ thống', 'Không thể lưu thông tin. Vui lòng thử lại sau.');
+            }
             finally {
                 btn.disabled = false;
                 btn.innerText = "CẬP NHẬT NGAY";
+            }
+        });
+
+        // 4. ĐỔI MẬT KHẨU
+        document.getElementById('change-pass-btn').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (user && user.email) {
+                if (confirm(`Bạn có muốn gửi email đặt lại mật khẩu tới ${user.email} không?`)) {
+                    try {
+                        await sendPasswordResetEmail(auth, user.email);
+                        showPopup('success', 'Đã gửi Email', 'Một email hướng dẫn đã được gửi tới hòm thư của bạn. Vui lòng kiểm tra và làm theo hướng dẫn.');
+                    } catch (error) {
+                        showPopup('error', 'Lỗi', 'Không thể gửi email đặt lại mật khẩu lúc này. Vui lòng thử lại sau.');
+                    }
+                }
             }
         });
 
@@ -233,5 +331,7 @@
     </script>
     <script type="module" src="./js/auth-handler.js"></script>
     <script type="module" src="./js/firebase-config.js"></script>
+    <script src="js/menu-scrolltop.js"></script>
+    <script src="js/daily-word.js"></script>
 </body>
 </html>

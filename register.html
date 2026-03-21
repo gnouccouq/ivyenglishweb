@@ -8,55 +8,214 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
     <style>
-        :root { --primary-auth: #1a237e; --glass-white: rgba(255, 255, 255, 0.85); }
+        :root {
+            --primary-auth: #1a237e;
+            --accent-auth: #5b8cff;
+            --glass-white: rgba(255, 255, 255, 0.85);
+        }
+
         body.auth-page {
             font-family: 'Open Sans', sans-serif;
             background: linear-gradient(135deg, #f4f7fa 0%, #dbeafe 100%);
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow-x: hidden;
         }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
         .auth-card {
-            background: var(--glass-white); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 24px; width: 100%; max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        .auth-header { text-align: center; margin-bottom: 30px; }
-        .auth-logo { height: 55px; margin-bottom: 15px; }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            height: 55px;
+            margin-bottom: 15px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .auth-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .auth-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-auth);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
         .input-wrapper {
-            display: flex; align-items: center; background: #fff;
-            border: 2px solid #e2e8f0; border-radius: 12px; padding: 0 15px; margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0 15px;
+            transition: all 0.3s ease;
         }
-        .input-wrapper input { border: none; padding: 14px 12px; width: 100%; outline: none; }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent-auth);
+            box-shadow: 0 0 0 4px rgba(91, 140, 255, 0.1);
+        }
+
+        .input-wrapper i {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .input-wrapper input {
+            border: none;
+            background: none;
+            padding: 14px 12px;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: var(--accent-auth);
+        }
+
         .btn-primary-auth {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            background: var(--primary-auth); color: white; font-weight: 700; cursor: pointer;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary-auth);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
         }
-        .btn-primary-auth:disabled { background: #94a3b8; }
+
+        .btn-primary-auth:hover {
+            background: #0d124a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-primary-auth:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary-auth:disabled { 
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .auth-footer a {
+            color: var(--accent-auth);
+            text-decoration: none;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body class="auth-page">
 
-    <div class="auth-card" data-aos="zoom-in">
-        <div class="auth-header">
-            <img src="images/logo.png" alt="Logo" class="auth-logo">
-            <h2>Đăng ký</h2>
-            <p>Nhập email và mật khẩu để bắt đầu</p>
-        </div>
+    <div class="auth-container" data-aos="zoom-in" data-aos-duration="800">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="ivyEnglish Logo" class="auth-logo">
+                </a>
+                <h2>Đăng Ký Tài Khoản</h2>
+                <p>Tạo tài khoản để bắt đầu hành trình học tập</p>
+            </div>
 
-        <form id="register-form">
-            <div class="input-wrapper">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="reg-email" placeholder="Email của bạn" required>
-            </div>
-            <div class="input-wrapper">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="reg-password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
-            </div>
-            <button type="submit" id="btn-register" class="btn-primary-auth">TẠO TÀI KHOẢN</button>
-        </form>
-        
-        <div style="text-align:center; margin-top:20px; font-size:0.9rem;">
-            Đã có tài khoản? <a href="login.html" style="color:#5b8cff; font-weight:700; text-decoration:none;">Đăng nhập</a>
+            <form id="register-form">
+                <div class="form-group" data-aos="fade-up" data-aos-delay="100">
+                    <label>Email đăng ký</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="example@gmail.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+                        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-register" class="btn-primary-auth" data-aos="fade-up" data-aos-delay="300">
+                    TẠO TÀI KHOẢN
+                </button>
+
+                <p class="auth-footer" data-aos="fade-up" data-aos-delay="400">
+                    Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Popup -->
+    <div id="custom-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span id="popup-icon" class="popup-icon"></span>
+            <h3 id="popup-title"></h3>
+            <p id="popup-message"></p>
+            <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
         </div>
     </div>
 
@@ -67,6 +226,41 @@
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
         // Bạn hãy copy cấu hình firebaseConfig từ file firebase-config.js của bạn dán vào đây
+        // --- POPUP LOGIC ---
+        function showPopup(type, title, message) {
+            const popup = document.getElementById('custom-popup');
+            const iconEl = document.getElementById('popup-icon');
+            const titleEl = document.getElementById('popup-title');
+            const messageEl = document.getElementById('popup-message');
+
+            if (!popup || !iconEl || !titleEl || !messageEl) return;
+
+            titleEl.innerText = title;
+            messageEl.innerHTML = message;
+
+            let iconClass = 'fas fa-info-circle';
+            let iconColor = '#3498db';
+            if (type === 'success') {
+                iconClass = 'fas fa-check-circle';
+                iconColor = '#2ECC71';
+            } else if (type === 'error') {
+                iconClass = 'fas fa-times-circle';
+                iconColor = '#e74c3c';
+            }
+            iconEl.innerHTML = `<i class="${iconClass}"></i>`;
+            iconEl.style.color = iconColor;
+            
+            popup.style.display = 'flex';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('custom-popup');
+            if (popup) popup.style.display = 'none';
+        }
+        document.getElementById('popup-close-btn').addEventListener('click', closePopup);
+        document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
+        // --- END POPUP LOGIC ---
+
         const firebaseConfig = {
             apiKey: "AIzaSyAREfErrNqreMGKPzROSYDg2UqFKjXmBvU",
             authDomain: "ivyenglish-chinese-web-project.firebaseapp.com",
@@ -82,6 +276,17 @@
 
         AOS.init({ once: true });
 
+        // Toggle Password Logic
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#reg-password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
         const registerForm = document.getElementById('register-form');
         const btn = document.getElementById('btn-register');
 
@@ -95,10 +300,16 @@
 
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
-                alert("Đăng ký thành công!");
-                window.location.href = 'index.html';
+                showPopup('success', 'Đăng ký thành công!', 'Chào mừng bạn đến với ivyEnglish. Hệ thống sẽ tự động chuyển bạn về trang chủ.');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
             } catch (error) {
-                alert("Lỗi: " + error.message);
+                let message = "Có lỗi xảy ra, vui lòng thử lại.";
+                if (error.code === 'auth/email-already-in-use') {
+                    message = "Email này đã được sử dụng. Vui lòng chọn email khác hoặc đăng nhập.";
+                }
+                showPopup('error', 'Đăng ký thất bại', message);
                 btn.disabled = false;
                 btn.innerText = "TẠO TÀI KHOẢN";
             }

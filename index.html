@@ -478,7 +478,7 @@
     <section data-aos="fade-up" id="why-choose-us" class="section-padding">
         <div class="container">
             <div class="section-header-new">
-                <span style="color: var(--s-gold); font-weight: 700;">WHY CHOOSE US?</span>
+                <p style="color: var(--s-gold); font-weight: 700;">WHY CHOOSE US?</p>
                 <h2>Sự Khác Biệt Tại ivyEnglish</h2>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
@@ -512,7 +512,7 @@
 <section data-aos="fade-up" id="teachers" class="section-padding" style="background: #ffffff;">
     <div class="container">
         <div class="section-header-new" style="text-align: center; margin-bottom: 50px;">
-            <span style="color: var(--s-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Đội ngũ chuyên môn</span>
+            <p style="color: var(--s-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Đội ngũ chuyên môn</p>
             <h2 style="margin-top: 10px;">Giáo Viên Tại ivyEnglish</h2>
         </div>
 
@@ -672,7 +672,7 @@
 <section data-aos="fade-up" id="new-feed" class="section-padding" style="background: #fdfdfd;">
         <div class="container">
             <div class="section-header-new">
-                <span style="color: var(--s-gold); font-weight: 700;">Tin Tức - Sự Kiện</span>
+                <p style="color: var(--s-gold); font-weight: 700;">Tin Tức - Sự Kiện</p>
                 <h2>BÀI VIẾT NỔI BẬT</h2>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
@@ -684,10 +684,48 @@
         </div>
 </section>
 
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header-new" data-aos="fade-up">
+            <h2>Học viên nói gì về ivyEnglish</h2>
+        </div>
+        <div id="reviews-container" class="reviews-grid" data-aos="fade-up" data-aos-delay="200">
+            <!-- Đánh giá sẽ được tải vào đây bằng JavaScript -->
+            <p style="text-align: center; grid-column: 1 / -1;">Đang tải đánh giá...</p>
+        </div>
+    </div>
+</section>
+
+<section class="review-form-section">
+    <div class="review-form-container" data-aos="fade-up">
+        <div class="section-header-new">
+            <h2>Để lại đánh giá của bạn</h2>
+        </div>
+        
+        <!-- Tin nhắn cho người chưa đăng nhập -->
+        <div id="review-login-prompt">
+            <p>Vui lòng <a href="login.html" style="font-weight: bold;">đăng nhập</a> để để lại đánh giá của bạn. <br>Sự góp ý của bạn giúp chúng tôi hoàn thiện hơn!</p>
+        </div>
+
+        <!-- Form cho người đã đăng nhập -->
+        <form id="review-form" style="display: none;">
+            <div class="star-rating">
+                <input type="radio" id="5-stars" name="rating" value="5" required /><label for="5-stars">&#9733;</label>
+                <input type="radio" id="4-stars" name="rating" value="4" /><label for="4-stars">&#9733;</label>
+                <input type="radio" id="3-stars" name="rating" value="3" /><label for="3-stars">&#9733;</label>
+                <input type="radio" id="2-stars" name="rating" value="2" /><label for="2-stars">&#9733;</label>
+                <input type="radio" id="1-star" name="rating" value="1" /><label for="1-star">&#9733;</label>
+            </div>
+            <textarea id="review-comment" placeholder="Chia sẻ cảm nhận của bạn về khóa học và giáo viên..." required></textarea>
+            <button type="submit" class="btn-primary-auth">Gửi đánh giá</button>
+        </form>
+    </div>
+</section>
+
 <section  data-aos="fade-up" id="faq" class="section-padding" >
     <div class="container" style="max-width: 900px;">
         <div class="section-header-new" style="text-align: center; margin-bottom: 40px;">
-            <span style="color: var(--s-gold); font-weight: 700;">GIẢI ĐÁP THẮC MẮC</span>
+            <p style="color: var(--s-gold); font-weight: 700;">GIẢI ĐÁP THẮC MẮC</p>
             <h2>Hỏi Đáp Thường Gặp</h2>
         </div>
 
@@ -816,6 +854,16 @@
             </div>
         </div>
     </section>
+
+    <!-- Custom Popup (Dùng chung cho Đánh giá & Thông báo khác) -->
+    <div id="custom-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span id="popup-icon" class="popup-icon"></span>
+            <h3 id="popup-title"></h3>
+            <p id="popup-message"></p>
+            <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
+        </div>
+    </div>
 
     <div id="success-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; padding: 20px;">
         <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; position: relative;">
@@ -1151,6 +1199,137 @@ document.addEventListener('DOMContentLoaded', loadPopularPosts);
         });
     });
 </script>
+
+<script type="module">
+    // Import các công cụ cần thiết từ file cấu hình
+    import { auth, onAuthStateChanged, db, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from './js/firebase-config.js';
+
+    const reviewsContainer = document.getElementById('reviews-container');
+    const reviewFormWrapper = document.getElementById('review-form');
+    const loginPrompt = document.getElementById('review-login-prompt');
+
+    // --- POPUP LOGIC ---
+    function showPopup(type, title, message) {
+        const popup = document.getElementById('custom-popup');
+        const iconEl = document.getElementById('popup-icon');
+        const titleEl = document.getElementById('popup-title');
+        const messageEl = document.getElementById('popup-message');
+
+        if (!popup || !iconEl || !titleEl || !messageEl) return;
+
+        titleEl.innerText = title;
+        messageEl.innerHTML = message;
+
+        let iconClass = 'fas fa-info-circle';
+        let iconColor = '#3498db';
+        if (type === 'success') {
+            iconClass = 'fas fa-check-circle';
+            iconColor = '#2ECC71';
+        } else if (type === 'error') {
+            iconClass = 'fas fa-times-circle';
+            iconColor = '#e74c3c';
+        }
+        iconEl.innerHTML = `<i class="${iconClass}"></i>`;
+        iconEl.style.color = iconColor;
+        
+        popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+        const popup = document.getElementById('custom-popup');
+        if (popup) popup.style.display = 'none';
+    }
+    document.getElementById('popup-close-btn').addEventListener('click', closePopup);
+    document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
+
+    // --- 1. TẢI VÀ HIỂN THỊ CÁC ĐÁNH GIÁ MỚI NHẤT ---
+    async function loadReviews() {
+        try {
+            // Tạo câu lệnh truy vấn: lấy 3 bài đánh giá từ collection 'reviews', sắp xếp theo thời gian mới nhất
+            const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"), limit(3));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                reviewsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Chưa có bài đánh giá nào.</p>';
+                return;
+            }
+
+            let reviewsHTML = '';
+            querySnapshot.forEach((doc) => {
+                const review = doc.data();
+                const starsHTML = '&#9733;'.repeat(review.rating) + '&#9734;'.repeat(5 - review.rating);
+
+                reviewsHTML += `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="${review.userAvatar || 'images/avatar-profile.png'}" alt="avatar" class="review-avatar">
+                            <div class="review-author-info">
+                                <div class="review-name">${review.userName || 'Học viên'}</div>
+                                <div class="rating-stars">${starsHTML}</div>
+                            </div>
+                        </div>
+                        <p class="review-comment">"${review.comment}"</p>
+                    </div>
+                `;
+            });
+            reviewsContainer.innerHTML = reviewsHTML;
+        } catch (error) {
+            console.error("Lỗi khi tải đánh giá: ", error);
+            reviewsContainer.innerHTML = '<p style="text-align: center; color: red; grid-column: 1 / -1;">Không thể tải được đánh giá lúc này.</p>';
+        }
+    }
+
+    // --- 2. XỬ LÝ FORM KHI NGƯỜI DÙNG GỬI ĐÁNH GIÁ ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Người dùng đã đăng nhập
+            loginPrompt.style.display = 'none';
+            reviewFormWrapper.style.display = 'block';
+
+            reviewFormWrapper.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = reviewFormWrapper.querySelector('button');
+                btn.disabled = true;
+                btn.innerText = 'Đang gửi...';
+
+                const rating = reviewFormWrapper.querySelector('input[name="rating"]:checked').value;
+                const comment = document.getElementById('review-comment').value;
+
+                try {
+                    // Thêm một document mới vào collection 'reviews'
+                    await addDoc(collection(db, "reviews"), {
+                        userId: user.uid,
+                        userName: user.displayName || user.email.split('@')[0],
+                        userAvatar: user.photoURL,
+                        rating: parseInt(rating),
+                        comment: comment,
+                        timestamp: serverTimestamp() // Dùng thời gian của server
+                    });
+                    
+                    showPopup('success', 'Cảm ơn bạn!', 'Đánh giá của bạn đã được ghi nhận. Cảm ơn bạn đã đóng góp ý kiến cho ivyEnglish!');
+                    reviewFormWrapper.reset();
+                    loadReviews(); // Tải lại danh sách đánh giá để hiển thị cái mới nhất
+
+                } catch (error) {
+                    console.error("Lỗi khi gửi đánh giá: ", error);
+                    showPopup('error', 'Lỗi', 'Đã có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = 'Gửi đánh giá';
+                }
+            });
+
+        } else {
+            // Người dùng chưa đăng nhập
+            loginPrompt.style.display = 'block';
+            reviewFormWrapper.style.display = 'none';
+        }
+    });
+
+    // Chạy hàm tải đánh giá khi trang được mở
+    loadReviews();
+</script>
+
 
 <script src="js/daily-word.js"></script>
 <script type="module" src="js/auth-handler.js"></script>
