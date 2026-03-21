@@ -932,7 +932,7 @@
                     data["Số Điện Thoại"] = "'" + data["Số Điện Thoại"];
                 }
                 
-                // Gửi Firestore để có Realtime Notification
+                // Gửi Firestore để có Realtime Notification và lưu trữ
                 import('./js/firebase-config.js').then(async module => {
                     try {
                         // Tạo bản sao data sạch cho Firestore (không cần dấu ' ở sđt)

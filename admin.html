@@ -554,7 +554,7 @@
         });
 
         const API_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
-        let currentData = [];
+        window.currentData = []; // Chuyển thành biến window để module script có thể ghi đè
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -566,26 +566,11 @@
             }
         }
 
-        async function loadData() {
-            const tbody = document.getElementById('student-data');
-            tbody.innerHTML = "<tr><td colspan='8'>Đang kết nối đến máy chủ...</td></tr>";
-            try {
-                const res = await fetch(API_URL);
-                if (!res.ok) throw new Error("Không thể kết nối API");
-                currentData = await res.json();
-                document.getElementById('searchInput').value = "";
-                renderData(); 
-                updateStats();
-            } catch (e) { 
-                console.error(e);
-                tbody.innerHTML = `<tr><td colspan='8' style="color:red;">Lỗi: ${e.message}</td></tr>`; 
-            }
-        }
-
+        // Hàm renderData giữ nguyên để hiển thị giao diện
         function renderData(filter = "") {
             const tbody = document.getElementById('student-data');
             tbody.innerHTML = "";
-            const filteredData = currentData.filter(item => {
+            const filteredData = window.currentData.filter(item => {
                 const name = (item["Họ & Tên"] || "").toLowerCase();
                 const phone = (item["Số Điện Thoại"] || "").toString();
                 return name.includes(filter) || phone.includes(filter);
@@ -595,7 +580,7 @@
                 return;
             }
             filteredData.forEach((item) => {
-                const originalIndex = currentData.indexOf(item);
+                const originalIndex = window.currentData.indexOf(item);
                 const phoneDisplay = item["Số Điện Thoại"] ? item["Số Điện Thoại"].toString().replace(/'/g, "") : "";
                 tbody.innerHTML += `
                     <tr>
@@ -615,11 +600,11 @@
         }
 
         function updateStats() {
-            if (!currentData.length) return;
-            document.getElementById('stat-total').innerText = currentData.length;
-            document.getElementById('stat-online').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("ONLINE")).length;
-            document.getElementById('stat-offline').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("OFFLINE")).length;
-            document.getElementById('stat-solo').innerText = currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("1-1")).length;
+            if (!window.currentData.length) return;
+            document.getElementById('stat-total').innerText = window.currentData.length;
+            document.getElementById('stat-online').innerText = window.currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("ONLINE")).length;
+            document.getElementById('stat-offline').innerText = window.currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("OFFLINE")).length;
+            document.getElementById('stat-solo').innerText = window.currentData.filter(i => (i["Hình Thức Học"]||"").toUpperCase().includes("1-1")).length;
         }
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -627,7 +612,7 @@
         });
 
         function openEditModal(index) {
-            const student = currentData[index];
+            const student = window.currentData[index];
             document.getElementById('currentRowIndex').value = index;
             document.getElementById('editName').value = student["Họ & Tên"];
             document.getElementById('editPhone').value = (student["Số Điện Thoại"] || "").toString().replace(/'/g, "");
@@ -637,54 +622,9 @@
             document.getElementById('editModal').style.display = 'flex';
         }
 
-        async function safeDelete(id, rowIndex) {
-            if (!confirm("Bạn có chắc chắn muốn xóa học viên này?")) return;
-            try {
-                const res = await fetch(`${API_URL}/ID/${id}`, {
-                    method: 'DELETE'
-                });
-                if (res.ok) {
-                    alert("Đã xóa học viên thành công!");
-                    loadData();
-                } else {
-                    alert("Lỗi khi xóa dữ liệu từ máy chủ.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Không thể kết nối để xóa.");
-            }
-        }
-
         function closeModal() { document.getElementById('editModal').style.display = 'none'; }
 
-        document.getElementById('editForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const index = document.getElementById('currentRowIndex').value;
-            const studentId = currentData[index]["ID"];
-
-            const updatedData = {
-                "Họ & Tên": document.getElementById('editName').value,
-                "Số Điện Thoại": document.getElementById('editPhone').value,
-                "Email": document.getElementById('editEmail').value,
-                "Khóa Học Quan Tâm": document.getElementById('editCourse').value,
-                "Hình Thức Học": document.getElementById('editMode').value
-            };
-
-            try {
-                const res = await fetch(`${API_URL}/ID/${studentId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: updatedData })
-                });
-                if (res.ok) {
-                    alert("Cập nhật thông tin thành công!");
-                    closeModal();
-                    loadData();
-                }
-            } catch (e) {
-                alert("Lỗi khi cập nhật!");
-            }
-        });
+        // Đã xóa listener cũ của editForm và safeDelete để thay thế bằng Firebase logic bên dưới
 
         document.getElementById('postForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -723,7 +663,7 @@
                 btn.disabled = false;
             }
         });
-        loadData();
+        // loadData() cũ đã bị xóa, hàm mới sẽ được gọi ở module script
 
         const quillEdit = new Quill('#editor-edit-container', { theme: 'snow' });
 
@@ -1056,7 +996,7 @@
     <script type="module">
         import { auth, onAuthStateChanged } from './js/firebase-config.js';
         import { ADMIN_EMAILS } from './js/auth-handler.js';
-        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot } from './js/firebase-config.js';
+        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc } from './js/firebase-config.js';
 
         // --- HỆ THỐNG THÔNG BÁO REALTIME (TOAST) ---
         function showAdminToast(message, icon = 'fa-bell', color = '#5b8cff') {
@@ -1142,9 +1082,7 @@
                             const data = change.doc.data();
                             showAdminToast(`Học viên mới: <strong>${data["Họ & Tên"]}</strong>`, "fa-user-plus", "#2ECC71");
                             
-                            // Cập nhật lại bảng nếu đang ở tab học viên (gọi hàm loadData cũ)
-                            // Lưu ý: loadData lấy từ SheetDB nên có thể chậm hơn 1 chút
-                            setTimeout(loadData, 2000); 
+                            setTimeout(window.loadData, 1000); 
                         }
                     });
                 }
@@ -1163,6 +1101,81 @@
             }
         };
 
+        // --- 3. QUẢN LÝ ĐƠN ĐĂNG KÝ (FIREBASE) ---
+        window.loadData = async function() {
+            const tbody = document.getElementById('student-data');
+            tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>Đang tải dữ liệu từ Firebase...</td></tr>";
+            try {
+                const q = query(collection(db, "registrations"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                window.currentData = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    data.firebaseId = doc.id; // Lưu ID document để dùng cho sửa/xóa
+                    window.currentData.push(data);
+                });
+
+                document.getElementById('searchInput').value = "";
+                renderData(); // Gọi hàm render có sẵn
+                updateStats(); // Gọi hàm stats có sẵn
+            } catch (e) {
+                console.error(e);
+                tbody.innerHTML = `<tr><td colspan='8' style="color:red; text-align:center;">Lỗi tải dữ liệu: ${e.message}</td></tr>`;
+            }
+        };
+
+        // Ghi đè hàm xóa
+        window.safeDelete = async function(id, rowIndex) {
+            // Tìm document ID thực tế dựa trên dữ liệu hiện tại (vì id truyền vào có thể là random ID cũ)
+            // rowIndex trong renderData là index + 1, nên index = rowIndex - 1 (nhưng cẩn thận logic cũ)
+            // Tốt nhất tìm theo ID trong mảng currentData
+            const item = window.currentData.find(i => String(i.ID) === String(id));
+            if (!item || !item.firebaseId) {
+                alert("Không tìm thấy dữ liệu trên Firebase để xóa.");
+                return;
+            }
+
+            if (!confirm("Bạn có chắc chắn muốn xóa đơn đăng ký này vĩnh viễn khỏi Firebase?")) return;
+            
+            try {
+                await deleteDoc(doc(db, "registrations", item.firebaseId));
+                showAdminToast("Đã xóa đơn đăng ký", "fa-trash", "#e74c3c");
+                window.loadData();
+            } catch (e) {
+                alert("Lỗi xóa: " + e.message);
+            }
+        };
+
+        // Xử lý form sửa (Gắn sự kiện mới)
+        const editForm = document.getElementById('editForm');
+        if(editForm) {
+            editForm.onsubmit = async function(e) {
+                e.preventDefault();
+                const index = document.getElementById('currentRowIndex').value;
+                const item = window.currentData[index];
+                
+                if(!item || !item.firebaseId) return;
+
+                const updatedData = {
+                    "Họ & Tên": document.getElementById('editName').value,
+                    "Số Điện Thoại": document.getElementById('editPhone').value,
+                    "Email": document.getElementById('editEmail').value,
+                    "Khóa Học Quan Tâm": document.getElementById('editCourse').value,
+                    "Hình Thức Học": document.getElementById('editMode').value
+                };
+
+                try {
+                    await updateDoc(doc(db, "registrations", item.firebaseId), updatedData);
+                    alert("Cập nhật thành công!");
+                    closeModal();
+                    window.loadData();
+                } catch (e) {
+                    alert("Lỗi cập nhật: " + e.message);
+                }
+            };
+        }
+
         const loadingScreen = document.getElementById('auth-loading');
         const body = document.querySelector('.admin-body');
 
@@ -1176,6 +1189,7 @@
                 // Kích hoạt lắng nghe Realtime
                 initRealtimeReviews();
                 initRealtimeRegistrations();
+                window.loadData(); // Tải danh sách đăng ký lần đầu
             } else {
                 // Not Admin or not logged in: redirect
                 alert("⛔ Truy cập bị từ chối! Bạn không có quyền quản trị.");
