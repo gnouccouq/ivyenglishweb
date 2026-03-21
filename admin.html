@@ -219,6 +219,9 @@
             <div class="menu-item" onclick="switchTab('tab-reviews', this)">
                 <span>Quản lý đánh giá</span>
             </div>
+            <div class="menu-item" onclick="switchTab('tab-users', this)">
+                <span>Quản lý người dùng</span>
+            </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
             <span>Thoát hệ thống</span>
@@ -450,6 +453,32 @@
             </div>
         </div>
 
+        <div id="tab-users" class="tab-content">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">Danh sách người dùng hệ thống</h2>
+                <button onclick="window.loadAdminUsers()" style="padding: 10px 20px; border-radius: 20px; cursor: pointer; border: none; background: #95a5a6; color: white;">Làm mới</button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">Avatar</th>
+                            <th>Họ Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Cập nhật lần cuối</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-list">
+                        <tr><td colspan="7">Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
         <div id="editModalPost" class="modal-edit">
@@ -563,6 +592,12 @@
             element.classList.add('active');
             if (tabId === 'tab-QuizResults') {
                 loadQuizResults();
+            }
+            if (tabId === 'tab-reviews') {
+                if(window.loadAdminReviews) window.loadAdminReviews();
+            }
+            if (tabId === 'tab-users') {
+                if(window.loadAdminUsers) window.loadAdminUsers();
             }
         }
 
@@ -996,7 +1031,7 @@
     <script type="module">
         import { auth, onAuthStateChanged } from './js/firebase-config.js';
         import { ADMIN_EMAILS } from './js/auth-handler.js';
-        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc } from './js/firebase-config.js';
+        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc, deleteField } from './js/firebase-config.js';
 
         // --- HỆ THỐNG THÔNG BÁO REALTIME (TOAST) ---
         function showAdminToast(message, icon = 'fa-bell', color = '#5b8cff') {
@@ -1102,27 +1137,43 @@
         };
 
         // --- 3. QUẢN LÝ ĐƠN ĐĂNG KÝ (FIREBASE) ---
-        window.loadData = async function() {
+        let regUnsubscribe = null;
+
+        window.loadData = function() {
+            if (regUnsubscribe) return; // Đã có realtime listener rồi thì không tạo thêm
+
             const tbody = document.getElementById('student-data');
-            tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>Đang tải dữ liệu từ Firebase...</td></tr>";
-            try {
-                const q = query(collection(db, "registrations"), orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
-                
+            tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>Đang kết nối dữ liệu Realtime...</td></tr>";
+            
+            const q = query(collection(db, "registrations"), orderBy("timestamp", "desc"));
+            let isFirstLoad = true;
+
+            regUnsubscribe = onSnapshot(q, (snapshot) => {
                 window.currentData = [];
-                querySnapshot.forEach((doc) => {
+                snapshot.forEach((doc) => {
                     const data = doc.data();
                     data.firebaseId = doc.id; // Lưu ID document để dùng cho sửa/xóa
                     window.currentData.push(data);
                 });
 
-                document.getElementById('searchInput').value = "";
-                renderData(); // Gọi hàm render có sẵn
+                const currentSearch = document.getElementById('searchInput').value;
+                renderData(currentSearch); // Gọi hàm render có sẵn
                 updateStats(); // Gọi hàm stats có sẵn
-            } catch (e) {
-                console.error(e);
-                tbody.innerHTML = `<tr><td colspan='8' style="color:red; text-align:center;">Lỗi tải dữ liệu: ${e.message}</td></tr>`;
-            }
+
+                // Thông báo khi có đơn mới
+                if (!isFirstLoad) {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const data = change.doc.data();
+                            showAdminToast(`Học viên mới: <strong>${data["Họ & Tên"]}</strong>`, "fa-user-plus", "#2ECC71");
+                        }
+                    });
+                }
+                isFirstLoad = false;
+            }, (error) => {
+                console.error(error);
+                tbody.innerHTML = `<tr><td colspan='8' style="color:red; text-align:center;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+            });
         };
 
         // Ghi đè hàm xóa
@@ -1144,6 +1195,77 @@
                 window.loadData();
             } catch (e) {
                 alert("Lỗi xóa: " + e.message);
+            }
+        };
+
+        // --- 4. QUẢN LÝ NGƯỜI DÙNG (USERS) ---
+        window.loadAdminUsers = async function() {
+            const tbody = document.getElementById('admin-users-list');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Đang tải...</td></tr>';
+            
+            try {
+                const q = query(collection(db, "users"));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Chưa có người dùng nào.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const u = doc.data();
+                    const isBanned = u.isBanned || false;
+                    const statusLabel = isBanned 
+                        ? '<span style="color:#e74c3c; font-weight:bold; background:#fdecea; padding:4px 8px; border-radius:4px;">Đã khóa</span>' 
+                        : '<span style="color:#2ecc71; font-weight:bold; background:#e8f8f5; padding:4px 8px; border-radius:4px;">Hoạt động</span>';
+                    
+                    html += `
+                        <tr>
+                            <td><img src="${u.Avatar || 'images/avatar-profile.png'}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:1px solid #eee;"></td>
+                            <td><strong>${u["Họ Tên"] || 'Chưa cập nhật'}</strong></td>
+                            <td>${u.Email || ''}</td>
+                            <td>${u["Số Điện Thoại"] || ''}</td>
+                            <td>${u["Thời Gian"] || ''}</td>
+                            <td>${statusLabel}</td>
+                            <td>
+                                <button onclick="window.toggleUserBan('${doc.id}', ${isBanned})" 
+                                    style="padding: 6px 12px; cursor:pointer; background:${isBanned ? '#2ecc71' : '#e74c3c'}; color:white; border:none; border-radius:4px; transition:0.3s;">
+                                    <i class="fas ${isBanned ? 'fa-unlock' : 'fa-ban'}"></i> ${isBanned ? 'Mở' : 'Khóa'}
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (e) {
+                console.error(e);
+                tbody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Lỗi tải dữ liệu: ${e.message}</td></tr>`;
+            }
+        };
+
+        window.toggleUserBan = async function(userId, currentStatus) {
+            // currentStatus = true (đang bị khóa) -> muốn mở
+            // currentStatus = false (đang hoạt động) -> muốn khóa
+            
+            let reason = "";
+            if (!currentStatus) { // Nếu đang hoạt động -> Khóa
+                reason = prompt("Nhập lý do khóa tài khoản:", "Vi phạm quy định cộng đồng");
+                if (reason === null) return; // Nếu bấm hủy
+            } else { // Nếu đang khóa -> Mở
+                if (!confirm("Bạn có chắc chắn muốn MỞ KHÓA tài khoản này không?")) return;
+            }
+
+            try {
+                await updateDoc(doc(db, "users", userId), {
+                    isBanned: !currentStatus,
+                    banReason: !currentStatus ? reason : deleteField() // Nếu khóa thì lưu lý do, mở thì xóa trường lý do
+                });
+                showAdminToast(`Cập nhật trạng thái thành công!`, "fa-check-circle", "#2ecc71");
+                window.loadAdminUsers(); // Tải lại danh sách
+            } catch (e) {
+                console.error(e);
+                alert("Lỗi khi cập nhật trạng thái: " + e.message);
             }
         };
 
@@ -1188,7 +1310,6 @@
 
                 // Kích hoạt lắng nghe Realtime
                 initRealtimeReviews();
-                initRealtimeRegistrations();
                 window.loadData(); // Tải danh sách đăng ký lần đầu
             } else {
                 // Not Admin or not logged in: redirect

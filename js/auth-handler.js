@@ -1,10 +1,10 @@
-import { auth, onAuthStateChanged, signOut } from './firebase-config.js';
+import { auth, onAuthStateChanged, signOut, db, doc, getDoc } from './firebase-config.js';
 
 // !!! QUAN TRỌNG: Export danh sách này để dùng bên admin.html
 export const ADMIN_EMAILS = ['cuongnguyenc.n1612@gmail.com'];
 
 // Hàm này sẽ chạy mỗi khi trạng thái đăng nhập thay đổi
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
     const loginBtn = document.getElementById('login-nav-btn');
     const userProfile = document.getElementById('user-profile-nav');
     const userName = document.getElementById('nav-user-name');
@@ -24,6 +24,21 @@ onAuthStateChanged(auth, (user) => {
     });
 
     if (user) {
+        // Kiểm tra xem tài khoản có bị khóa không
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists() && userSnap.data().isBanned) {
+                const reason = userSnap.data().banReason || "Vi phạm quy định.";
+                await signOut(auth);
+                alert(`Tài khoản của bạn đã bị khóa.\nLý do: ${reason}\nVui lòng liên hệ quản trị viên để biết thêm chi tiết.`);
+                window.location.href = 'index.html';
+                return;
+            }
+        } catch (error) {
+            console.log("Lỗi kiểm tra trạng thái tài khoản:", error);
+        }
+
         // Nếu có user: Hiện avatar, ẩn nút login
         if(loginBtn) loginBtn.style.display = 'none';
         if(userProfile) userProfile.style.display = 'flex';
