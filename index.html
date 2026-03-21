@@ -931,6 +931,17 @@
                 if (data["Số Điện Thoại"]) {
                     data["Số Điện Thoại"] = "'" + data["Số Điện Thoại"];
                 }
+                
+                // Gửi Firestore để có Realtime Notification
+                import('./js/firebase-config.js').then(async module => {
+                    try {
+                        // Tạo bản sao data sạch cho Firestore (không cần dấu ' ở sđt)
+                        const firestoreData = { ...data };
+                        firestoreData["Số Điện Thoại"] = firestoreData["Số Điện Thoại"].replace(/'/g, "");
+                        firestoreData.timestamp = module.serverTimestamp();
+                        await module.addDoc(module.collection(module.db, "registrations"), firestoreData);
+                    } catch(err) { console.warn("Lỗi lưu Firestore:", err); }
+                });
 
                 try {
                     const promiseFormspree = fetch(form.action, {

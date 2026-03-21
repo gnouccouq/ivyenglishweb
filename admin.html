@@ -160,6 +160,30 @@
         .edit-modal { display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 500px; position: relative; }
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
+
+        /* TOAST NOTIFICATION */
+        #admin-toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10005;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .admin-toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-left: 5px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease-out;
+        }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body class="admin-body">
@@ -168,6 +192,9 @@
         <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
         <h3>Đang kiểm tra quyền quản trị...</h3>
     </div>
+
+    <!-- Toast Container -->
+    <div id="admin-toast-container"></div>
 
     <div class="sidebar">
         <div class="sidebar-header">
@@ -188,6 +215,9 @@
             </div>
             <div class="menu-item" onclick="switchTab('tab-maintenance', this)">
                 <span>Cài đặt bảo trì</span>
+            </div>
+            <div class="menu-item" onclick="switchTab('tab-reviews', this)">
+                <span>Quản lý đánh giá</span>
             </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
@@ -394,6 +424,29 @@
             <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; color: #856404;">
                 <i class="fas fa-exclamation-triangle"></i> 
                 Lưu ý: Khi bật "ON", người dùng vào trang chủ sẽ bị chuyển hướng sang trang bảo trì cho đến hết thời gian đã chọn.
+            </div>
+        </div>
+
+        <div id="tab-reviews" class="tab-content">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">Quản lý Đánh giá Học viên</h2>
+                <button onclick="window.loadAdminReviews()" style="padding: 10px 20px; border-radius: 20px; cursor: pointer; border: none; background: #95a5a6; color: white;">Làm mới</button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Người dùng</th>
+                            <th>Điểm (Sao)</th>
+                            <th>Nội dung đánh giá</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-reviews-list">
+                        <tr><td colspan="4">Đang tải đánh giá...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -1003,6 +1056,112 @@
     <script type="module">
         import { auth, onAuthStateChanged } from './js/firebase-config.js';
         import { ADMIN_EMAILS } from './js/auth-handler.js';
+        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot } from './js/firebase-config.js';
+
+        // --- HỆ THỐNG THÔNG BÁO REALTIME (TOAST) ---
+        function showAdminToast(message, icon = 'fa-bell', color = '#5b8cff') {
+            const container = document.getElementById('admin-toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'admin-toast';
+            toast.style.borderLeftColor = color;
+            toast.innerHTML = `
+                <i class="fas ${icon}" style="color: ${color}; font-size: 1.2rem;"></i>
+                <div>
+                    <div style="font-weight: bold; font-size: 0.95rem;">Thông báo mới</div>
+                    <div style="font-size: 0.85rem; color: #555;">${message}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            // Tự động tắt sau 5s
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+
+            // Phát âm thanh
+            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(() => {}); // Bỏ qua lỗi nếu chưa tương tác
+        }
+
+        // --- 1. REALTIME REVIEWS (ĐÁNH GIÁ) ---
+        let reviewsUnsubscribe = null;
+        
+        function initRealtimeReviews() {
+            const tbody = document.getElementById('admin-reviews-list');
+            const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+            
+            let isFirstLoad = true;
+
+            reviewsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Chưa có đánh giá nào.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach((docSnap) => {
+                    const r = docSnap.data();
+                    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                    html += `
+                        <tr>
+                            <td><strong>${r.userName || 'Ẩn danh'}</strong></td>
+                            <td style="color:#f1c40f; font-size:1.2em;">${stars}</td>
+                            <td>${r.comment || ''}</td>
+                            <td>
+                                <button onclick="window.deleteAdminReview('${docSnap.id}')" class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+
+                // Kiểm tra thay đổi để hiện thông báo
+                if (!isFirstLoad) {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            showAdminToast("Có một đánh giá mới vừa được gửi!", "fa-star", "#f1c40f");
+                        }
+                    });
+                }
+                isFirstLoad = false;
+            });
+        }
+
+        // --- 2. REALTIME REGISTRATIONS (ĐĂNG KÝ) ---
+        function initRealtimeRegistrations() {
+            const q = query(collection(db, "registrations"), orderBy("timestamp", "desc"), limit(10));
+            let isFirstLoad = true;
+
+            onSnapshot(q, (snapshot) => {
+                if (!isFirstLoad) {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const data = change.doc.data();
+                            showAdminToast(`Học viên mới: <strong>${data["Họ & Tên"]}</strong>`, "fa-user-plus", "#2ECC71");
+                            
+                            // Cập nhật lại bảng nếu đang ở tab học viên (gọi hàm loadData cũ)
+                            // Lưu ý: loadData lấy từ SheetDB nên có thể chậm hơn 1 chút
+                            setTimeout(loadData, 2000); 
+                        }
+                    });
+                }
+                isFirstLoad = false;
+            });
+        }
+
+        window.deleteAdminReview = async function(id) {
+            if(!confirm("Bạn có chắc chắn muốn xóa đánh giá này vĩnh viễn?")) return;
+            try {
+                await deleteDoc(doc(db, "reviews", id));
+                showAdminToast("Đã xóa đánh giá thành công", "fa-trash", "#e74c3c");
+            } catch (e) {
+                console.error(e);
+                alert("Lỗi khi xóa: " + e.message);
+            }
+        };
 
         const loadingScreen = document.getElementById('auth-loading');
         const body = document.querySelector('.admin-body');
@@ -1013,6 +1172,10 @@
                 body.style.display = 'flex';
                 if(loadingScreen) loadingScreen.style.display = 'none';
                 console.log("Admin access granted for:", user.email);
+
+                // Kích hoạt lắng nghe Realtime
+                initRealtimeReviews();
+                initRealtimeRegistrations();
             } else {
                 // Not Admin or not logged in: redirect
                 alert("⛔ Truy cập bị từ chối! Bạn không có quyền quản trị.");
