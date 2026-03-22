@@ -855,6 +855,18 @@
         </div>
     </div>
 
+    <!-- AD POPUP -->
+    <div id="ad-popup-overlay" class="popup-overlay" style="z-index: 10000; display: none;">
+        <div class="popup-content" style="padding: 0; background: transparent; box-shadow: none; max-width: 500px; width: 90%; animation: popup-scale-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <div style="position: relative;">
+                <span onclick="document.getElementById('ad-popup-overlay').style.display='none'; sessionStorage.setItem('ivy_ad_seen', 'true');" style="position: absolute; top: -15px; right: -15px; background: white; color: #333; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); font-size: 18px; border: 2px solid #eee;">&times;</span>
+                <a id="ad-link-wrapper" href="#" target="_blank" style="display: block;">
+                    <img id="ad-image-display" src="" alt="Advertisement" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: block;">
+                </a>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-placeholder"></div>
 
     <div class="floating-contact">
@@ -1126,7 +1138,8 @@
 </script>
 
 <script type="module">
-    import { db, collection, getDocs } from './js/firebase-config.js';
+    
+    import { db, collection, getDocs, query, orderBy, doc, getDoc } from './js/firebase-config.js';
 
     function createSlug(str) {
         if (!str) return "";
@@ -1188,7 +1201,42 @@
         }
     }
 
+        // --- HÀM KIỂM TRA QUẢNG CÁO POPUP ---
+        async function checkAdPopup() {
+            // Kiểm tra nếu đã tắt trong phiên này rồi thì không hiện lại
+            if (sessionStorage.getItem('ivy_ad_seen')) return;
+
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "ad_popup"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.status === 'ON' && data.image) {
+                        const popup = document.getElementById('ad-popup-overlay');
+                        const img = document.getElementById('ad-image-display');
+                        const link = document.getElementById('ad-link-wrapper');
+                        
+                        img.src = data.image;
+                        if (data.link) {
+                            link.href = data.link;
+                            link.style.pointerEvents = "auto";
+                        } else {
+                            link.removeAttribute("href");
+                            link.style.pointerEvents = "none";
+                        }
+                        
+                        // Hiển thị popup sau 1.5 giây để không che hero
+                        setTimeout(() => {
+                            popup.style.display = 'flex';
+                        }, 1500);
+                    }
+                }
+            } catch (e) {
+                console.error("Lỗi tải quảng cáo:", e);
+            }
+        }
+
     loadPopularPosts();
+        checkAdPopup(); // Gọi hàm kiểm tra quảng cáo
 </script>
 
 <script>

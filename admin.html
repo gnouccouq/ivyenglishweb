@@ -306,6 +306,9 @@
             <div class="menu-item" onclick="switchTab('tab-users', this)">
                 <span>Quản lý người dùng</span>
             </div>
+            <div class="menu-item" onclick="switchTab('tab-ads', this)">
+                <span>Quản lý Quảng cáo</span>
+            </div>
         </div>
         <a href="index.html" class="menu-item" style="margin-bottom: 20px; color: #e74c3c;">
             <span>Thoát hệ thống</span>
@@ -596,6 +599,37 @@
             </div>
         </div>
 
+        <div id="tab-ads" class="tab-content">
+            <div class="section-header">
+                <h2>Cấu hình Popup Quảng cáo</h2>
+            </div>
+            <div class="form-card">
+                <div class="form-group">
+                    <label>Trạng thái Popup</label>
+                    <select id="adStatus">
+                        <option value="OFF">TẮT</option>
+                        <option value="ON">BẬT</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ảnh Quảng Cáo</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="file" id="adImageFile" accept="image/*" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; flex: 1; font-size: 14px;">
+                        <input type="hidden" id="adImageUrl"> 
+                        <img id="adImagePreview" src="" style="height: 150px; object-fit: contain; display: none; border-radius: 5px; border: 1px solid #eee; background: #f0f0f0;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Liên kết khi nhấp vào ảnh (Tùy chọn)</label>
+                    <input type="text" id="adLink" placeholder="https://..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+
+                <button class="btn btn-primary" onclick="window.saveAdSettings()">LƯU CẤU HÌNH</button>
+            </div>
+        </div>
+
     </div>
 
     <div id="editModal" class="edit-modal">
@@ -755,6 +789,9 @@
             }
             if (tabId === 'tab-schedule') {
                 if(window.loadAdminSchedule) window.loadAdminSchedule();
+            }
+            if (tabId === 'tab-ads') {
+                if(window.loadAdSettings) window.loadAdSettings();
             }
         }
 
@@ -1298,6 +1335,47 @@
             document.getElementById('schTinhTrang').value = "Sắp khai giảng";
             document.getElementById('btnSave').innerText = "Lưu Lịch Học";
             document.getElementById('btnCancel').style.display = "none";
+        };
+
+        // --- 9. QUẢN LÝ QUẢNG CÁO (ADS) ---
+        window.loadAdSettings = async function() {
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "ad_popup"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('adStatus').value = data.status || "OFF";
+                    document.getElementById('adLink').value = data.link || "";
+                    document.getElementById('adImageUrl').value = data.image || "";
+                    const preview = document.getElementById('adImagePreview');
+                    if(data.image) {
+                        preview.src = data.image;
+                        preview.style.display = 'block';
+                    }
+                }
+            } catch (e) { console.log("Lỗi tải cấu hình quảng cáo:", e); }
+        };
+
+        window.saveAdSettings = async function() {
+            let imageUrl = document.getElementById('adImageUrl').value;
+            const fileInput = document.getElementById('adImageFile');
+            
+            if (fileInput.files.length > 0) {
+                showAdminToast("Đang upload ảnh...", "fa-cloud-upload-alt");
+                imageUrl = await window.uploadImageToCloudinary(fileInput.files[0]);
+                if (!imageUrl) return alert("Lỗi upload ảnh!");
+            }
+
+            const data = {
+                status: document.getElementById('adStatus').value,
+                image: imageUrl,
+                link: document.getElementById('adLink').value
+            };
+
+            try {
+                await setDoc(doc(db, "settings", "ad_popup"), data);
+                showAdminToast("Đã lưu cấu hình quảng cáo!", "fa-check", "#2ecc71");
+                window.loadAdSettings();
+            } catch (e) { alert("Lỗi lưu: " + e.message); }
         };
 
         // --- 8. QUẢN LÝ BÀI VIẾT (POSTS) - FIRESTORE ---
