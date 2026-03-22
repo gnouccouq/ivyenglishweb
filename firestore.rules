@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Hàm kiểm tra Admin (Dựa trên Email - cần khớp với file auth-handler.js)
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'cuongnguyenc.n1612@gmail.com';
+    }
+
+    // 1. Users: Người dùng đọc/sửa profile chính mình. Admin được quyền tất cả.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    // 2. Registrations (Đơn đăng ký): Khách vãng lai được gửi đơn (create). Chỉ Admin được xem/xóa.
+    match /registrations/{docId} {
+      allow create: if true; 
+      allow read, update, delete: if isAdmin();
+    }
+
+    // 3. Reviews (Đánh giá): Ai cũng xem được. Chỉ user đã đăng nhập được viết. Admin quản lý.
+    match /reviews/{docId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      // Chỉ chủ nhân bài đánh giá hoặc Admin mới được sửa/xóa
+      allow update, delete: if request.auth != null && (request.auth.uid == resource.data.userId || isAdmin());
+    }
+
+    // 4. Schedules (Lịch học): Ai cũng xem được. Chỉ Admin được thêm/sửa/xóa.
+    match /schedules/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 5. Quiz Results (Kết quả test): Ai cũng gửi bài được. Chỉ Admin xem danh sách.
+    match /quiz_results/{docId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // 6. Settings (Cấu hình bảo trì): Ai cũng đọc được để check bảo trì. Chỉ Admin được sửa.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 7. Posts (Blog): Ai cũng xem được. Chỉ Admin được thêm/sửa/xóa.
+    // Cho phép người dùng thường cập nhật duy nhất trường 'views'
+    match /posts/{docId} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']));
+    }
+  }
+}

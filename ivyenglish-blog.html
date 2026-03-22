@@ -252,6 +252,7 @@
                     <p>Nhận ngay lộ trình học tiếng Anh cá nhân hóa miễn phí.</p>
                     <a href="ivyenglish-level-test.html" class="btn-test">Đăng ký Test trình độ ngay</a>
                 </div>
+                <div id="recommended-posts-container" style="margin-top: 40px;"></div>
             </main>
         </div>
 
@@ -283,8 +284,15 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Toàn bộ script cũ đã được xóa và thay thế bằng module script bên dưới
+    </script>
+    <script src="js/menu-scrolltop.js"></script>
+    <script src="js/daily-word.js"></script>
+    <script type="module">
+        import { db, collection, getDocs, query, orderBy, doc, getDoc, updateDoc } from './js/firebase-config.js';
+        import './js/auth-handler.js'; // Chạy auth handler để xử lý đăng nhập
+
         let allPosts = [];
-        const API_URL = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
         const ORIGIN_TITLE = document.title;
 
         function createSlug(str) {
@@ -304,31 +312,24 @@
         }
 
         async function initBlog() {
-            const container = document.getElementById('blog-container');
-            const cached = localStorage.getItem("ivy_blog_cache");
-            if (cached) {
-                allPosts = JSON.parse(cached);
+            try {
+                const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                allPosts = [];
+                querySnapshot.forEach(doc => {
+                    let post = doc.data();
+                    post.id = doc.id; // Firestore document ID
+                    allPosts.push(post);
+                });
+
                 renderUI(allPosts);
                 populateFilter();
                 handleUrlParameters();
-            }
 
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-                const res = await fetch(API_URL + "&t=" + Date.now(), { signal: controller.signal });
-                const data = await res.json();
-                
-                if (data && data.length > 0) {
-                    allPosts = data.reverse();
-                    localStorage.setItem("ivy_blog_cache", JSON.stringify(allPosts));
-                    populateFilter(); 
-                    renderUI(allPosts); 
-                    handleUrlParameters();
-                }
             } catch (e) {
-                console.log("Load từ Sheet chậm, đang dùng dữ liệu tạm thời.");
+                console.error("Lỗi tải bài viết từ Firestore:", e);
+                document.getElementById('blog-container').innerHTML = `<p style="text-align:center; color:red;">Không thể tải bài viết lúc này.</p>`;
             }
         }
 
@@ -338,14 +339,13 @@
             const slugId = urlParams.get('id');
 
             if (slugId && allPosts.length > 0) {
-                const idx = allPosts.findIndex(p => createSlug(p.title) === slugId);
-                if (idx !== -1) {
-                    setTimeout(() => viewPost(idx), 100);
+                const post = allPosts.find(p => p.slug === slugId);
+                if (post) {
+                    setTimeout(() => viewPost(post.id), 100);
                 }
             } else if (category && allPosts.length > 0) {
                 const buttons = document.querySelectorAll('.filter-tab');
                 const targetButton = Array.from(buttons).find(btn => btn.innerText.trim() === category.trim());
-                
                 if (targetButton) {
                     filterByCategory(category, targetButton);
                 }
@@ -355,11 +355,7 @@
         function renderUI(data) {
             const container = document.getElementById('blog-container');
             if (!data || data.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding: 60px 20px;">
-                                <p style="font-size: 1.2rem; color: #666;">
-                                    Không có bài viết nào trong danh mục này.
-                                </p>
-                            </div>`;
+                container.innerHTML = `<div style="text-align:center; padding: 60px 20px;"><p style="font-size: 1.2rem; color: #666;">Không có bài viết nào trong danh mục này.</p></div>`;
                 return;
             }
 
@@ -379,86 +375,92 @@
             });
             
             container.innerHTML = html;
-            
             if (allPosts.length > 0) renderPopular(allPosts);
-            
             setTimeout(() => { AOS.refresh(); }, 100);
         }
 
         function renderPopular(posts) {
             const popularContainer = document.getElementById('popular-container');
-            const popularPosts = [...posts]
-                .sort((a, b) => (b.views || 0) - (a.views || 0)) 
-                .slice(0, 5);
+            const popularPosts = [...posts].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5);
 
-            let html = popularPosts.map(post => {
-                const globalIdx = allPosts.findIndex(p => p.title === post.title);
-                return `
-                    <div class="popular-item" onclick="viewPost(${globalIdx})">
-                        <img src="${post.image}" class="popular-img">
-                        <div class="popular-info">
-                            <div class="popular-title">${post.title}</div>
-                            <div class="popular-meta">🔥 ${post.views || 0} lượt xem</div>
-                        </div>
+            popularContainer.innerHTML = popularPosts.map(post => `
+                <div class="popular-item" onclick="viewPost('${post.id}')">
+                    <img src="${post.image}" class="popular-img">
+                    <div class="popular-info">
+                        <div class="popular-title">${post.title}</div>
+                        <div class="popular-meta">🔥 ${post.views || 0} lượt xem</div>
                     </div>
-                `;
-            }).join('');
-
-            popularContainer.innerHTML = html;
+                </div>
+            `).join('');
         }
 
-        function renderCards(posts) {
-            return posts.map(post => {
-                const globalIdx = allPosts.findIndex(p => p.title === post.title);
-                return `
-                    <div class="blog-card" data-aos="zoom-in">
-                        <img src="${post.image}" alt="${post.title}" loading="lazy">
-                        <div class="blog-card-body">
-                            <span class="blog-category">${post.category}</span>
-                            <h3 class="blog-title">${post.title}</h3>
-                            <div class="popular-meta">📅 ${post.time}</div>
-                            <a onclick="viewPost(${globalIdx})" class="btn-readmore">Đọc thêm <i class="fas fa-arrow-right"></i></a>
-                        </div>
+        function renderCards(posts, animation = true) {
+            return posts.map(post => `
+                <div class="blog-card" ${animation ? 'data-aos="zoom-in"' : ''}>
+                    <img src="${post.image}" alt="${post.title}" loading="lazy">
+                    <div class="blog-card-body">
+                        <span class="blog-category">${post.category}</span>
+                        <h3 class="blog-title">${post.title}</h3>
+                        <div class="popular-meta">📅 ${new Date(post.timestamp?.toDate()).toLocaleDateString('vi-VN')}</div>
+                        <a onclick="viewPost('${post.id}')" class="btn-readmore">Đọc thêm <i class="fas fa-arrow-right"></i></a>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
         }
 
-        window.viewPost = function(index) {
-            const post = allPosts[index];
+        function renderRecommended(currentPost) {
+            const container = document.getElementById('recommended-posts-container');
+            if (!container) return;
+
+            // 1. Lọc các bài cùng danh mục (trừ bài hiện tại) - Xử lý an toàn nếu category null
+            let related = allPosts.filter(p => (p.category || "") === (currentPost.category || "") && p.id !== currentPost.id);
+            
+            // 2. Nếu ít hơn 3 bài, lấy thêm các bài mới nhất từ danh mục khác để lấp đầy
+            if (related.length < 3) {
+                const others = allPosts.filter(p => (p.category || "") !== (currentPost.category || "") && p.id !== currentPost.id);
+                // Gộp mảng và lấy 3 bài đầu tiên
+                related = related.concat(others).slice(0, 3);
+            } else {
+                // Nếu có nhiều bài cùng danh mục, lấy 3 bài (có thể random hoặc lấy mới nhất)
+                related = related.slice(0, 3);
+            }
+
+            if (related.length > 0) {
+                // Gọi renderCards với tham số false để tắt hiệu ứng AOS -> Hiển thị ngay lập tức
+                container.innerHTML = `<div class="category-divider"><h2>Bài viết đề xuất cho bạn</h2><div class="line"></div></div><div class="blog-group" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">${renderCards(related, false)}</div>`;
+            } else {
+                container.innerHTML = '';
+            }
+        }
+
+        window.viewPost = async function(postId) {
+            const post = allPosts.find(p => p.id === postId);
             if (!post) return;
-            if(!post.views) post.views = 0;
-            post.views++; 
+            
+            const newViews = (post.views || 0) + 1;
+            post.views = newViews;
             renderPopular(allPosts);
 
-            const slug = createSlug(post.title);
+            const slug = post.slug || createSlug(post.title);
             const postUrl = "?id=" + slug;
-            
-            window.history.pushState({ postIndex: index }, post.title, postUrl);
+            window.history.pushState({ postId: postId }, post.title, postUrl);
             document.title = post.title;
 
             document.getElementById('detail-content').innerHTML = `
                 <span class="blog-category">${post.category}</span>
                 <h1 style="color:var(--p-blue); margin:15px 0;">${post.title}</h1>
-                <p style="color:#888;">📅 ${post.time} | 🔥 ${post.views} lượt xem</p>
+                <p style="color:#888;">📅 ${new Date(post.timestamp?.toDate()).toLocaleDateString('vi-VN')} | 🔥 ${post.views} lượt xem</p>
                 <div class="post-full-content">${post.content}</div>
             `;
             document.getElementById('blog-container').classList.add('hidden');
             document.getElementById('post-detail-view').style.display = 'block';
 
-            const SHEETDB_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97";
-            fetch(`${SHEETDB_URL}/title/${encodeURIComponent(post.title.trim())}?sheet=Posts`, {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    data: { 'views': post.views }
-                })
-            })
-            .then(res => { if(!res.ok) console.warn("Lỗi update view SheetDB:", res.status, res.statusText); })
-            .catch(err => console.error("Lỗi kết nối SheetDB:", err));
+            // Update view count in Firestore
+            const postRef = doc(db, "posts", postId);
+            await updateDoc(postRef, { views: newViews }).catch(err => console.warn("Lỗi update view:", err));
+
+            // Render Recommended Posts
+            renderRecommended(post);
 
             window.scrollTo(0, 0);
         };
@@ -468,76 +470,34 @@
             window.history.pushState({type: 'home'}, '', window.location.pathname);
             document.getElementById('blog-container').classList.remove('hidden');
             document.getElementById('post-detail-view').style.display = 'none';
-            
             window.scrollTo(0, 0);
             AOS.refresh();
         };
 
-        function handleSearch() {
+        window.handleSearch = function() {
             const searchInput = document.getElementById('blogSearch');
             const container = document.getElementById('blog-container');
             const query = searchInput.value.toLowerCase().trim();
             
-            // Reset active tab về "Tất cả" khi tìm kiếm
             document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
-            const allBtn = document.querySelector('.filter-tab:first-child');
-            if(allBtn) allBtn.classList.add('active');
+            document.querySelector('.filter-tab:first-child')?.classList.add('active');
 
             if (!query) {
                 renderUI(allPosts);
                 return;
             }
             
-            const filtered = allPosts.filter(post => {
-                const titleMatch = post.title && post.title.toLowerCase().includes(query);
-                const categoryMatch = post.category && post.category.toLowerCase().includes(query);
-                return titleMatch || categoryMatch;
-            });
+            const filtered = allPosts.filter(post => 
+                (post.title && post.title.toLowerCase().includes(query)) ||
+                (post.category && post.category.toLowerCase().includes(query))
+            );
             
             if (filtered.length > 0) {
-                container.innerHTML = `
-                    <div class="category-divider">
-                        <h2>Kết quả tìm kiếm cho: "${searchInput.value}"</h2>
-                        <div class="line"></div>
-                    </div>
-                    <div class="blog-group">
-                        ${renderCards(filtered)}
-                    </div>
-                `;
+                container.innerHTML = `<div class="category-divider"><h2>Kết quả cho: "${searchInput.value}"</h2><div class="line"></div></div><div class="blog-group">${renderCards(filtered)}</div>`;
             } else {
-                container.innerHTML = `
-                    <div style="text-align:center; padding: 60px 20px;">
-                        <p style="font-size: 1.2rem; color: #666;">
-                            Không tìm thấy bài viết phù hợp với "<strong>${searchInput.value}</strong>"
-                        </p>
-                        <button onclick="document.getElementById('blogSearch').value=''; handleSearch();" 
-                                style="margin-top:15px; padding:8px 20px; border-radius:50px; border:1px solid var(--accent); background:none; color:var(--accent); cursor:pointer;">
-                            Xem tất cả bài viết
-                        </button>
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align:center; padding: 60px 20px;"><p>Không tìm thấy bài viết phù hợp với "<strong>${searchInput.value}</strong>"</p></div>`;
             }
-
-            if (typeof AOS !== 'undefined') {
-                AOS.refresh();
-            }
-        }
-
-        async function includeHTML() {
-            const comps = [{ id: 'header-placeholder', file: 'header.html' }, { id: 'footer-placeholder', file: 'footer.html' }];
-            for (const c of comps) {
-                const el = document.getElementById(c.id);
-                if (el) {
-                    const res = await fetch(c.file);
-                    if (res.ok) el.innerHTML = await res.text();
-                }
-            }
-            initBlog();
-            AOS.init({ duration: 800, once: true });
-            setTimeout(() => { 
-                const preloader = document.getElementById('preloader');
-                if(preloader) preloader.style.display = 'none'; 
-            }, 500);
+            AOS.refresh();
         }
 
         function populateFilter() {
@@ -546,15 +506,13 @@
             if (!filterList) return;
 
             let listHtml = `<button class="filter-tab active" onclick="filterByCategory('all', this)">Tất cả</button>`;
-            
             categories.forEach(cat => {
                 listHtml += `<button class="filter-tab" onclick="filterByCategory('${cat}', this)">${cat}</button>`;
             });
-
             filterList.innerHTML = listHtml;
         }
 
-        function filterByCategory(category, btnElement) {
+        window.filterByCategory = function(category, btnElement) {
             if (btnElement) {
                 document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
                 btnElement.classList.add('active');
@@ -564,10 +522,13 @@
             renderUI(filteredPosts);
         }
 
-        document.addEventListener("DOMContentLoaded", includeHTML);
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Sử dụng hàm includeHTML chung từ js/menu-scrolltop.js
+            if(window.includeHTML) await window.includeHTML();
+            
+            initBlog();
+            AOS.init({ duration: 800, once: true });
+        });
     </script>
-    <script src="js/menu-scrolltop.js"></script>
-    <script src="js/daily-word.js"></script>
-    <script type="module" src="./js/auth-handler.js"></script>
 </body>
 </html>

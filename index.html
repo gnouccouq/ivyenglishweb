@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" /> 
     <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -654,7 +653,12 @@
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
                 <div id="popular-posts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-            </div>
+                    <!-- Loading Skeleton -->
+                    <div class="blog-card"><div style="height:180px; background:#eee; animation:pulse 1.5s infinite;"></div><div class="blog-card-body" style="padding:15px;"><div style="height:20px; width:70%; background:#eee; margin-bottom:10px;"></div><div style="height:15px; width:100%; background:#eee;"></div></div></div>
+                    <div class="blog-card"><div style="height:180px; background:#eee; animation:pulse 1.5s infinite;"></div><div class="blog-card-body" style="padding:15px;"><div style="height:20px; width:70%; background:#eee; margin-bottom:10px;"></div><div style="height:15px; width:100%; background:#eee;"></div></div></div>
+                    <div class="blog-card"><div style="height:180px; background:#eee; animation:pulse 1.5s infinite;"></div><div class="blog-card-body" style="padding:15px;"><div style="height:20px; width:70%; background:#eee; margin-bottom:10px;"></div><div style="height:15px; width:100%; background:#eee;"></div></div></div>
+                    <div class="blog-card"><div style="height:180px; background:#eee; animation:pulse 1.5s infinite;"></div><div class="blog-card-body" style="padding:15px;"><div style="height:20px; width:70%; background:#eee; margin-bottom:10px;"></div><div style="height:15px; width:100%; background:#eee;"></div></div></div>
+                </div>
         </div>
         <div style="text-align: center; margin-top: 40px;">
                 <a href="ivyenglish-blog.html" style="color: var(--p-blue); text-decoration: none; font-weight: bold; border-bottom: 2px solid var(--s-gold); padding-bottom: 5px;">Xem thêm <i class="fas fa-arrow-right"></i></a>
@@ -926,13 +930,8 @@
                         body: formData,
                         headers: { 'Accept': 'application/json' }
                     });
-                    const promiseSheetDB = fetch("https://sheetdb.io/api/v1/3abfyh1liwt97", {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: [data] }) 
-                    });
 
-                    await Promise.all([promiseFormspree, promiseSheetDB]);
+                    await promiseFormspree;
                     successPopup.style.display = 'flex';
                     form.reset();
                 } catch (error) {
@@ -1126,45 +1125,70 @@
   });
 </script>
 
-<script>
-async function loadPopularPosts() {
-    const API_URL = "https://script.google.com/macros/s/AKfycby4hbtnsT1hpHRDaQ2QEaydOSmVHy7Jle8gGZySh6tOs4R3zHo9uGitcCk4jpfhZuLD/exec?sheet=Posts";
-    const container = document.getElementById('popular-posts-grid');
+<script type="module">
+    import { db, collection, getDocs } from './js/firebase-config.js';
 
-    try {
-        const res = await fetch(API_URL);
-        const allPosts = await res.json();
-        
-        if (allPosts && allPosts.length > 0) {
-            const popular = allPosts
-                .sort((a, b) => (b.views || 0) - (a.views || 0))
-                .slice(0, 4);
-
-            container.innerHTML = popular.map(post => `
-                <div class="blog-card-home" style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                    <div style="position: relative;">
-                        <img src="${post.image}" alt="${post.title}" style="width: 100%; height: 180px; object-fit: cover;">
-                        <span style="position: absolute; top: 10px; left: 10px; background: rgba(26, 35, 126, 0.8); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;">
-                            🔥 ${post.views || 0} lượt xem
-                        </span>
-                    </div>
-                    <div style="padding: 15px;">
-                        <small style="color: #5b8cff; font-weight: bold;">${post.category}</small>
-                        <h3 style="font-size: 1rem; color: #1a237e; margin: 8px 0; line-height: 1.4; height: 2.8em; overflow: hidden;">${post.title}</h3>
-                        <a href="ivyenglish-blog.html?id=${encodeURIComponent(post.title)}">
-                            Xem chi tiết <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-        }
-    } catch (error) {
-        console.error("Lỗi:", error);
-        container.innerHTML = "<p>Không thể tải bài viết.</p>";
+    function createSlug(str) {
+        if (!str) return "";
+        str = str.toLowerCase();
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/[^a-z0-9 ]/g, "");
+        str = str.replace(/\s+/g, "-");
+        str = str.replace(/-+/g, "-");
+        return str.trim();
     }
-}
 
-document.addEventListener('DOMContentLoaded', loadPopularPosts);
+    async function loadPopularPosts() {
+        const container = document.getElementById('popular-posts-grid');
+        if (!container) return;
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "posts"));
+            const allPosts = [];
+            querySnapshot.forEach((doc) => {
+                allPosts.push(doc.data());
+            });
+            
+            if (allPosts && allPosts.length > 0) {
+                const popular = allPosts
+                    .sort((a, b) => (b.views || 0) - (a.views || 0))
+                    .slice(0, 4);
+
+                container.innerHTML = popular.map(post => {
+                    const slug = post.slug || createSlug(post.title);
+                    return `
+                    <div class="blog-card-home" style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: 0.3s; background:white; height:100%; display:flex; flex-direction:column;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="position: relative;">
+                            <img src="${post.image}" alt="${post.title}" style="width: 100%; height: 180px; object-fit: cover;">
+                            <span style="position: absolute; top: 10px; left: 10px; background: rgba(26, 35, 126, 0.8); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;">
+                                🔥 ${post.views || 0} lượt xem
+                            </span>
+                        </div>
+                        <div style="padding: 15px; flex-grow: 1; display:flex; flex-direction:column;">
+                            <small style="color: #5b8cff; font-weight: bold;">${post.category}</small>
+                            <h3 style="font-size: 1rem; color: #1a237e; margin: 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${post.title}</h3>
+                            <a href="ivyenglish-blog.html?id=${slug}" style="margin-top:auto; color: #5b8cff; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                                Xem chi tiết <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                `}).join('');
+            } else {
+                container.innerHTML = "<p style='text-align:center; width:100%;'>Chưa có bài viết nào.</p>";
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
+            container.innerHTML = "<p>Không thể tải bài viết.</p>";
+        }
+    }
+
+    loadPopularPosts();
 </script>
 
 <script>

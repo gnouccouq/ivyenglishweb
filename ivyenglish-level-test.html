@@ -30,18 +30,6 @@
             min-height: 100vh;
         }
 
-        header { 
-            position: fixed; top: 0; width: 100%; z-index: 1000; 
-            background: #1e293b; backdrop-filter: blur(10px); 
-            height: 70px; border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .nav-container { 
-            max-width: 1100px; margin: 0 auto; display: flex; 
-            justify-content: space-between; align-items: center; 
-            height: 100%; padding: 0 20px; 
-        }
-
         .main-wrapper {
             display: flex;
             justify-content: center;
@@ -156,6 +144,17 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+        /* Styles cho Popup cập nhật SĐT */
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); z-index: 10001;
+        }
+        .popup-content {
+            background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
@@ -168,11 +167,7 @@
         </div>
     </div>
 
-    <header>
-        <div class="nav-container">
-            <a href="index.html"><img src="images/logo.png" alt="Logo" style="height: 40px;"></a>
-        </div>
-    </header>
+    <div id="header-placeholder"></div>
 
     <div class="main-wrapper">
         <div id="intro-screen" class="test-container">
@@ -195,16 +190,12 @@
                 </tbody>
             </table>
 
-            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin-left: auto; margin-right: auto;">
-                <input type="text" id="userName" placeholder="Họ và Tên (*)" required style="padding: 12px; border: 1px solid #ddd; border-radius: 20px;">
-                <input type="tel" id="userPhone" placeholder="Số điện thoại (Zalo)" required style="padding: 12px; border: 1px solid #ddd; border-radius: 20px;"
-                required 
-                            pattern="^0[0-9]{9}$" 
-                            title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số (VD: 0987654321)">
+            <div style="margin-bottom: 20px; text-align: center;">
+                <p id="user-greeting" style="font-size: 1.1rem; color: #1e293b; font-weight: bold; margin-bottom: 10px;">Đang kiểm tra trạng thái đăng nhập...</p>
             </div>
 
             <div style="text-align: center; margin-top: 30px;">
-                <button class="btn-action" onclick="startExam()">BẮT ĐẦU LÀM BÀI</button>
+                <button id="start-btn" class="btn-action" onclick="window.checkLoginAndStart()">ĐANG TẢI...</button>
             </div>
         </div>
 
@@ -238,7 +229,21 @@
         </div>
     </div>
 
-<script>
+    <!-- Popup cập nhật SĐT -->
+    <div id="phone-modal" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h3 style="color: var(--primary-color); margin-top: 0;">Cập nhật thông tin</h3>
+            <p style="margin-bottom: 20px; color: #555;">Vui lòng cập nhật số điện thoại để giáo viên liên hệ tư vấn kết quả.</p>
+            <input type="tel" id="update-phone-input" placeholder="Số điện thoại (Zalo)" 
+                   style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box;"
+                   pattern="^0[0-9]{9}$">
+            <button class="btn-action" id="btn-update-phone" style="width: 100%; padding: 12px;">Lưu & Tiếp tục</button>
+        </div>
+    </div>
+
+<script type="module">
+    import { db, addDoc, collection, serverTimestamp, auth, onAuthStateChanged, doc, getDoc, updateDoc } from './js/firebase-config.js';
+
     const questions = [
         { q: "1. Hello! How ___ you?", options: ["A. is", "B. are", "C. am", "D. be"], answer: 1 },
         { q: "2. She ___ in Spain.", options: ["A. live", "B. lives", "C. is live", "D. living"], answer: 1 },
@@ -264,13 +269,70 @@
     let selectedIdx = null;
     let userWrongAnswers = [];
 
-    function startExam() {
-        const name = document.getElementById('userName').value.trim();
-        const phone = document.getElementById('userPhone').value.trim();
-        if (name === "" || phone === "") {
-            alert("Vui lòng nhập Họ tên và Số điện thoại!");
+    async function uploadAudioToCloudinary(blob) {
+        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
+        const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload';
+        
+        const formData = new FormData();
+        formData.append('file', blob);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        try {
+            const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+            const data = await response.json();
+            return data.secure_url || ""; 
+        } catch (error) {
+            console.error("Lỗi Cloudinary:", error);
+            return "";
+        }
+    }
+
+    // Biến lưu thông tin user hiện tại
+    let currentUserInfo = null;
+
+    // Lắng nghe trạng thái đăng nhập
+    onAuthStateChanged(auth, async (user) => {
+        const greetingEl = document.getElementById('user-greeting');
+        const startBtn = document.getElementById('start-btn');
+        
+        if (user) {
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const snap = await getDoc(userRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    currentUserInfo = {
+                        uid: user.uid,
+                        name: data["Họ Tên"] || user.displayName || "Bạn",
+                        phone: data["Số Điện Thoại"] || ""
+                    };
+                    greetingEl.innerHTML = `Xin chào, <span style="color:var(--primary-color)">${currentUserInfo.name}</span>`;
+                    startBtn.innerText = "BẮT ĐẦU LÀM BÀI";
+                }
+            } catch (e) { console.error("Lỗi lấy thông tin user:", e); }
+        } else {
+            currentUserInfo = null;
+            greetingEl.innerHTML = "Bạn chưa đăng nhập";
+            startBtn.innerText = "ĐĂNG NHẬP ĐỂ LÀM BÀI";
+        }
+    });
+
+    window.checkLoginAndStart = function() {
+        if (!auth.currentUser) {
+            window.location.href = 'login.html?redirect=ivyenglish-level-test.html';
             return;
         }
+        
+        if (!currentUserInfo || !currentUserInfo.phone) {
+            // Nếu chưa có SĐT thì hiện popup
+            document.getElementById('phone-modal').style.display = 'flex';
+            return;
+        }
+        
+        startExam();
+    };
+
+    window.startExam = function() {
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('exam-screen').style.display = 'block';
         startTimer();
@@ -355,7 +417,7 @@
         }
     }
 
-    function nextQuestion() {
+    window.nextQuestion = function() {
         if (selectedIdx === null) { alert("Vui lòng chọn đáp án!"); return; }
         
         const currentQ = questions[currentIdx];
@@ -375,33 +437,15 @@
         }
     }
 
-    async function uploadAudioToCloudinary(blob) {
-        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
-        const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload';
-        
-        const formData = new FormData();
-        formData.append('file', blob);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-        try {
-            const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
-            const data = await response.json();
-            return data.secure_url || ""; 
-        } catch (error) {
-            console.error("Lỗi Cloudinary:", error);
-            return "";
-        }
-    }
-
-    async function showResults() {
+    async function showResults() { // Giữ nguyên tên hàm, nhưng được gọi nội bộ
         clearInterval(timerInterval);
         document.getElementById('exam-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
         
         const scoreElement = document.getElementById('score-number');
         const aiFeedbackElement = document.getElementById('ai-feedback');
-        const nameVal = document.getElementById('userName').value;
-        const phoneVal = document.getElementById('userPhone').value;
+        const nameVal = currentUserInfo ? currentUserInfo.name : "Unknown";
+        const phoneVal = currentUserInfo ? currentUserInfo.phone : "Unknown";
         const writingVal = document.getElementById('writing-task') ? document.getElementById('writing-task').value.trim() : "";
         let writingScore = 0;
         if (writingVal.length > 0) {
@@ -449,43 +493,28 @@
             }
         }
 
+        // Thay đổi: Lưu vào Firestore thay vì SheetDB
         const payload = {
-            "ID": Date.now().toString(),
-            "ThoiGian": new Date().toLocaleString('vi-VN'),
-            "HoTen": nameVal,
-            "Sdt": phoneVal,
-            "DiemSo": finalScore + "/15",
-            "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
-            "BaiViet": writingVal,
-            "TrinhDo": level,
-            "LinkGhiAm": window.recordedAudioLink || ""
+            ID: Date.now().toString(),
+            ThoiGian: new Date().toLocaleString('vi-VN'),
+            timestamp: serverTimestamp(), // Dùng timestamp server để sắp xếp chuẩn
+            userId: currentUserInfo ? currentUserInfo.uid : null, // Thêm ID người dùng để liên kết
+            HoTen: nameVal,
+            Sdt: phoneVal,
+            DiemSo: finalScore + "/15",
+            ChiTietCauSai: `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
+            BaiViet: writingVal,
+            TrinhDo: level,
+            LinkGhiAm: window.recordedAudioLink || ""
         };
 
-        fetch("https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=QuizResults", {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json' 
-            },
-            body: JSON.stringify({ 
-                data: [
-                    {
-                        "ID": Date.now().toString(),
-                        "ThoiGian": new Date().toLocaleString('vi-VN'),
-                        "HoTen": nameVal,
-                        "Sdt": phoneVal,
-                        "DiemSo": finalScore + "/15",
-                        "ChiTietCauSai": `Trắc nghiệm: ${score}/14 - Viết: ${writingScore} \nCâu sai: ${userWrongAnswers.join("\n ")}`,
-                        "BaiViet": writingVal,
-                        "TrinhDo": level,
-                        "LinkGhiAm": window.recordedAudioLink || "" // Đảm bảo dùng đúng biến này
-                    }
-                ] 
-            })
-        })
-        .then(res => res.json())
-        .then(data => console.log("Đã lưu vào Sheet:", data))
-        .catch(err => console.error("Lỗi gửi SheetDB:", err));
+        try {
+            await addDoc(collection(db, "quiz_results"), payload);
+            console.log("Đã lưu kết quả vào Firestore");
+        } catch (err) {
+            console.error("Lỗi lưu Firestore:", err);
+            // Fallback: có thể alert nhẹ hoặc log lại, nhưng vẫn hiện kết quả cho user
+        }
     }
 
     let mediaRecorder;
@@ -529,42 +558,46 @@
             }
         }
     });
+
+    // Xử lý cập nhật SĐT
+    document.getElementById('btn-update-phone').addEventListener('click', async () => {
+        const phoneInput = document.getElementById('update-phone-input');
+        const phone = phoneInput.value.trim();
+        const phoneRegex = /^0[0-9]{9}$/;
+        
+        if (!phoneRegex.test(phone)) {
+            alert("Vui lòng nhập số điện thoại hợp lệ (10 số, bắt đầu bằng 0)");
+            return;
+        }
+        
+        const btn = document.getElementById('btn-update-phone');
+        btn.innerText = "Đang lưu...";
+        btn.disabled = true;
+        
+        try {
+            const userRef = doc(db, "users", auth.currentUser.uid);
+            await updateDoc(userRef, {
+                "Số Điện Thoại": phone
+            });
+            
+            currentUserInfo.phone = phone; // Cập nhật biến local
+            document.getElementById('phone-modal').style.display = 'none';
+            startExam(); // Vào thi ngay
+        } catch (e) {
+            alert("Lỗi cập nhật: " + e.message);
+            btn.innerText = "Lưu & Tiếp tục";
+            btn.disabled = false;
+        }
+    });
 </script>
 
 <script>
-    async function includeHTML() {
-            const components = [
-            { id: 'header-placeholder', file: 'header.html' },
-            { id: 'footer-placeholder', file: 'footer.html' }
-        ];
-
-        for (const comp of components) {
-            const element = document.getElementById(comp.id);
-            if (element) {
-                try {
-                    const response = await fetch(comp.file);
-                    if (response.ok) {
-                        element.innerHTML = await response.text();
-                    }
-                } catch (err) {
-                    console.error("Lỗi khi tải file: " + comp.file, err);
-                }
-            }
-        }
-
-        setTimeout(() => {
-            const preloader = document.getElementById('preloader');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden';
-                setTimeout(() => preloader.style.display = 'none', 500);
-            }
-        }, 600);
-
-    }
-    document.addEventListener("DOMContentLoaded", includeHTML);
+    document.addEventListener("DOMContentLoaded", function() {
+        if(window.includeHTML) window.includeHTML();
+    });
 </script>
 
+<script src="js/menu-scrolltop.js"></script>
 <script type="module" src="./js/auth-handler.js"></script>
 
 </body>

@@ -3,7 +3,7 @@
  * Quản lý: Header/Footer, Menu Mobile, Scroll to Top
  */
 
-async function includeHTML() {
+window.includeHTML = async function() {
     const components = [
         { id: 'header-placeholder', file: 'header.html' },
         { id: 'footer-placeholder', file: 'footer.html' }
@@ -24,9 +24,9 @@ async function includeHTML() {
     }
 
     // Khởi tạo logic Menu sau khi Header đã tải xong
-    initMenuLogic();
+    if(window.initMenuLogic) window.initMenuLogic();
     // Khởi tạo nút Scroll To Top sau khi Footer đã tải xong
-    initScrollToTop();
+    if(window.initScrollToTop) window.initScrollToTop();
 
     // Ẩn Preloader
     setTimeout(() => {
@@ -39,10 +39,11 @@ async function includeHTML() {
     }, 600);
 }
 
-function initMenuLogic() {
+window.initMenuLogic = function() {
     const menuToggle = document.querySelector('.menu-toggle');
     const nav = document.getElementById('main-nav');
     const dropdowns = document.querySelectorAll('.dropdown');
+    const userProfileNav = document.getElementById('user-profile-nav');
     
     if (!menuToggle || !nav) return;
 
@@ -102,9 +103,18 @@ function initMenuLogic() {
             dropdowns.forEach(d => d.classList.remove('active'));
         }
     });
-}
 
-function initScrollToTop() {
+    // Xử lý click User Profile trên Mobile (Thay vì hover)
+    if (userProfileNav) {
+        userProfileNav.addEventListener('click', function(e) {
+            // Nếu click vào chính nó hoặc hình ảnh/tên, toggle class active
+            // Class active sẽ được CSS xử lý để hiện dropdown
+            this.classList.toggle('active');
+        });
+    }
+};
+
+window.initScrollToTop = function() {
     const scrollToTopButton = document.querySelector('.scroll-to-top');
     if (!scrollToTopButton) return;
 
@@ -125,7 +135,6 @@ function initScrollToTop() {
             behavior: 'smooth'
         });
     });
-}
+};
 
 // Chạy hàm chính khi trang đã load xong DOM
-document.addEventListener("DOMContentLoaded", includeHTML);

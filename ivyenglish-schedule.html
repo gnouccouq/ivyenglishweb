@@ -456,13 +456,7 @@
                         headers: { 'Accept': 'application/json' }
                     });
 
-                    const promiseSheetDB = fetch("https://sheetdb.io/api/v1/3abfyh1liwt97", {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: [data] }) 
-                    });
-
-                    await Promise.all([promiseFormspree, promiseSheetDB]);
+                    await promiseFormspree;
                     successPopup.style.display = 'flex';
                     form.reset();
                 } catch (error) {
@@ -476,18 +470,30 @@
         
         });
 
-        async function loadSchedule() {
-            const SHEETDB_URL = "https://sheetdb.io/api/v1/3abfyh1liwt97?sheet=LichHoc";
-            try {
-                const res = await fetch(SHEETDB_URL);
-                const data = await res.json();
+    </script>
 
-                data.sort((a, b) => {
-                    // Lấy 2 chữ số đầu của giờ để so sánh (ví dụ "08:00" -> 08)
-                    return a.gio.localeCompare(b.gio);
-                });
+    <script type="module">
+        import { db, collection, getDocs, query, orderBy } from './js/firebase-config.js';
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gọi hàm includeHTML từ script chung
+            if(window.includeHTML) window.includeHTML();
+        });
+
+        async function loadSchedule() {
+            const container = document.getElementById('schedule-grid');
+            try {
+                const q = query(collection(db, "schedules"));
+                const querySnapshot = await getDocs(q);
                 
-                // Luôn hiển thị đủ 7 ngày theo đúng thứ tự
+                const data = [];
+                querySnapshot.forEach((doc) => {
+                    data.push(doc.data());
+                });
+
+                // Sắp xếp theo giờ
+                data.sort((a, b) => (a.gio || "").localeCompare(b.gio || ""));
+                
                 const daysOfWeek = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"];
                 let html = '';
 
@@ -495,9 +501,6 @@
                     // Lọc các lớp học thuộc ngày này
                     const slots = data.filter(item => item.thu === day);
                     
-                    // Sắp xếp các lớp theo giờ (Sắp xếp cơ bản dựa trên chuỗi thời gian)
-                    slots.sort((a, b) => a.gio.localeCompare(b.gio));
-
                     html += `
                     <div class="day-column" data-aos="fade-up">
                         <div class="day-header">${day}</div>
@@ -533,14 +536,12 @@
                     </div>`;
                 });
 
-                document.getElementById('schedule-grid').innerHTML = html;
+                container.innerHTML = html;
             } catch (err) {
                 console.error("Lỗi tải lịch:", err);
-                document.getElementById('schedule-grid').innerHTML = "<p>Không thể kết nối dữ liệu lịch học.</p>";
+                container.innerHTML = "<p>Không thể kết nối dữ liệu lịch học.</p>";
             }
         }
-
-        loadSchedule();
 
         function formatDate(dateStr) {
             if (!dateStr) return "Liên hệ";
@@ -557,29 +558,8 @@
             // Nếu là chữ bình thường thì trả về nguyên văn
             return dateStr;
         }
-
-
-        /*function createSnowflake(container) {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.innerHTML = '❄'; 
-            const size = Math.random() * 15 + 10 + 'px';
-            snowflake.style.fontSize = size;
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            const duration = Math.random() * 10 + 5 + 's';
-            snowflake.style.animationDuration = duration;
-            snowflake.style.animationDelay = Math.random() * 5 + 's';
-            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-            container.appendChild(snowflake);
-            snowflake.addEventListener('animationiteration', function() {
-                snowflake.remove();
-                createSnowflake(container);
-            });
-            snowflake.addEventListener('animationend', function() {
-                snowflake.remove();
-                createSnowflake(container);
-            });
-        }*/
+        
+        loadSchedule();
     </script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

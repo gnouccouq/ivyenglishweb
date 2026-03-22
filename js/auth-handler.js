@@ -1,4 +1,4 @@
-import { auth, onAuthStateChanged, signOut, db, doc, getDoc } from './firebase-config.js';
+import { auth, onAuthStateChanged, signOut, db, doc, getDoc, setDoc, serverTimestamp } from './firebase-config.js';
 
 // !!! QUAN TRỌNG: Export danh sách này để dùng bên admin.html
 export const ADMIN_EMAILS = ['cuongnguyenc.n1612@gmail.com'];
@@ -91,19 +91,38 @@ onAuthStateChanged(auth, async (user) => {
     });
 
     if (user) {
-        // Kiểm tra xem tài khoản có bị khóa không
+        // Kiểm tra/Tạo tài khoản người dùng trong Firestore
         try {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
-            if (userSnap.exists() && userSnap.data().isBanned) {
-                const reason = userSnap.data().banReason || "Vi phạm quy định.";
-                sessionStorage.setItem('ivy_banned_reason', reason);
-                await signOut(auth);
-                window.location.href = 'index.html';
-                return;
+
+            if (userSnap.exists()) {
+                // User đã tồn tại, kiểm tra trạng thái khóa
+                if (userSnap.data().isBanned) {
+                    const reason = userSnap.data().banReason || "Vi phạm quy định.";
+                    sessionStorage.setItem('ivy_banned_reason', reason);
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                    return; // Dừng thực thi tiếp
+                }
+            } else {
+                // User chưa tồn tại (lần đầu đăng nhập), tự động tạo document
+                const newUserPayload = {
+                    ID: user.uid,
+                    "Họ Tên": user.displayName || user.email.split('@')[0],
+                    Email: user.email,
+                    Avatar: user.photoURL || 'images/avatar-profile.png',
+                    "Số Điện Thoại": "",
+                    "Giới Tính": "",
+                    "Ngày Sinh": "",
+                    isBanned: false,
+                    "Thời Gian": serverTimestamp() // Dùng timestamp của server cho đồng bộ
+                };
+                await setDoc(userRef, newUserPayload);
+                console.log("Tài khoản mới được tạo tự động trong Firestore:", user.email);
             }
         } catch (error) {
-            console.log("Lỗi kiểm tra trạng thái tài khoản:", error);
+            console.error("Lỗi kiểm tra hoặc tạo tài khoản người dùng:", error);
         }
 
         // Nếu có user: Hiện avatar, ẩn nút login

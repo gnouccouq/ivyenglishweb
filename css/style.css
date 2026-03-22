@@ -1862,7 +1862,7 @@ header {
 }
 
 /* Khi Hover vào vùng Avatar thì hiện Menu */
-#user-profile-nav:hover .user-dropdown {
+#user-profile-nav:hover .user-dropdown, #user-profile-nav.active .user-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
