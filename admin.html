@@ -266,6 +266,45 @@
         td { padding: 15px; font-size: 0.9rem; color: #334155; border-bottom: 1px solid #f1f5f9; }
         tr:last-child td { border-bottom: none; }
 
+        /* CHAT ADMIN UI */
+        .chat-admin-container { display: flex; height: 600px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.07); overflow: hidden; }
+        .chat-user-list { width: 300px; border-right: 1px solid #eee; overflow-y: auto; background: #f8fafc; }
+        .chat-user-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #eee; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .chat-user-item:hover { background: #eef2ff; }
+        .chat-user-item.active { background: #e0e7ff; border-left: 4px solid var(--primary-color); }
+        .chat-user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .chat-user-info h4 { margin: 0; font-size: 0.9rem; color: #333; }
+        .chat-user-info p { margin: 0; font-size: 0.75rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+        .unread-dot { width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; margin-left: auto; }
+
+        .chat-window { flex: 1; display: flex; flex-direction: column; background: white; }
+        .chat-window-header { padding: 15px; border-bottom: 1px solid #eee; font-weight: bold; background: #fff; color: var(--dark-bg); }
+        .chat-window-body { flex: 1; padding: 20px; overflow-y: auto; background: #fdfdfd; display: flex; flex-direction: column; gap: 15px; }
+        .chat-window-footer { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: #fff; }
+        
+        .admin-msg-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .admin-msg-bubble.sent {
+            align-self: flex-end;
+            background: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+        .admin-msg-bubble.received {
+            align-self: flex-start;
+            background: #f1f5f9;
+            color: #333;
+            border-bottom-left-radius: 2px;
+        }
+        .msg-time { font-size: 0.65rem; opacity: 0.7; margin-top: 4px; display: block; text-align: right; }
+        .chat-input { flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; outline: none; }
+
+
         .form-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.07); }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
@@ -291,6 +330,9 @@
             <div class="menu-item" onclick="switchTab('tab-posts', this)">
                 <span>Quản lý bài viết</span>
             </div>
+            <div class="menu-item" onclick="switchTab('tab-forum-posts', this)">
+                <span>Quản lý diễn đàn</span>
+            </div>
             <div class="menu-item" onclick="switchTab('tab-QuizResults', this)">
                 <span>Quản lý kết quả test</span>
             </div>
@@ -302,6 +344,9 @@
             </div>
             <div class="menu-item" onclick="switchTab('tab-reviews', this)">
                 <span>Quản lý đánh giá</span>
+            </div>
+            <div class="menu-item" onclick="switchTab('tab-chat', this)">
+                <span><i class="fas fa-comments"></i> Tư vấn trực tuyến</span>
             </div>
             <div class="menu-item" onclick="switchTab('tab-users', this)">
                 <span>Quản lý người dùng</span>
@@ -428,6 +473,36 @@
                     </thead>
                     <tbody id="admin-post-list">
                         </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-forum-posts" class="tab-content">
+            <div class="section-header">
+                <h2>Quản lý diễn đàn</h2>
+                <div class="actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchForumInput" placeholder="Tìm nội dung, tác giả...">
+                    </div>
+                    <button onclick="window.loadForumPosts()" class="btn btn-secondary"><i class="fas fa-sync"></i> Làm mới</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Tác giả</th>
+                            <th>Nội dung</th>
+                            <th>Thống kê</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-forum-list">
+                        <tr><td colspan="5">Đang tải dữ liệu...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -561,6 +636,29 @@
                         <tr><td colspan="4">Đang tải đánh giá...</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="tab-chat" class="tab-content">
+            <div class="section-header">
+                <h2>Tư Vấn Trực Tuyến</h2>
+                <button onclick="window.loadChatUsers()" class="btn btn-secondary"><i class="fas fa-sync"></i> Làm mới danh sách</button>
+            </div>
+            <div class="chat-admin-container">
+                <div class="chat-user-list" id="chat-user-list">
+                    <!-- User items will go here -->
+                    <div style="padding:20px; text-align:center; color:#888;">Đang tải...</div>
+                </div>
+                <div class="chat-window">
+                    <div class="chat-window-header" id="chat-active-user">Chưa chọn người dùng</div>
+                    <div class="chat-window-body" id="admin-chat-messages">
+                        <div style="text-align:center; margin-top:50px; color:#ccc;">Chọn một người dùng để bắt đầu chat</div>
+                    </div>
+                    <div class="chat-window-footer">
+                        <input type="text" id="admin-chat-input" class="chat-input" placeholder="Nhập tin nhắn..." disabled>
+                        <button id="admin-chat-send" class="btn btn-primary" disabled><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -787,11 +885,17 @@
             if (tabId === 'tab-posts') {
                 if(window.loadAdminPosts) window.loadAdminPosts();
             }
+            if (tabId === 'tab-forum-posts') {
+                if(window.loadForumPosts) window.loadForumPosts();
+            }
             if (tabId === 'tab-schedule') {
                 if(window.loadAdminSchedule) window.loadAdminSchedule();
             }
             if (tabId === 'tab-ads') {
                 if(window.loadAdSettings) window.loadAdSettings();
+            }
+            if (tabId === 'tab-chat') {
+                if(window.loadChatUsers) window.loadChatUsers();
             }
         }
 
@@ -898,7 +1002,7 @@
     <script type="module">
         import { auth, onAuthStateChanged } from './js/firebase-config.js';
         import { ADMIN_EMAILS } from './js/auth-handler.js';
-        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc, deleteField, setDoc, getDoc, addDoc, limit, serverTimestamp } from './js/firebase-config.js';
+        import { db, collection, getDocs, query, orderBy, doc, deleteDoc, onSnapshot, updateDoc, deleteField, setDoc, getDoc, addDoc, limit, serverTimestamp, where } from './js/firebase-config.js';
 
         // --- HỆ THỐNG THÔNG BÁO REALTIME (TOAST) ---
         function showAdminToast(message, icon = 'fa-bell', color = '#5b8cff') {
@@ -1378,6 +1482,102 @@
             } catch (e) { alert("Lỗi lưu: " + e.message); }
         };
 
+        // --- 10. HỆ THỐNG CHAT ADMIN ---
+        let currentChatUnsubscribe = null;
+        let activeChatUserId = null;
+        let chatUsersUnsubscribe = null;
+
+        window.loadChatUsers = function() {
+            if (chatUsersUnsubscribe) return; // Đã load rồi
+            
+            const listContainer = document.getElementById('chat-user-list');
+            // Lấy danh sách các cuộc trò chuyện, sắp xếp theo tin nhắn cuối cùng
+            const q = query(collection(db, "chats"), orderBy("lastMessageTime", "desc"));
+            
+            chatUsersUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    listContainer.innerHTML = '<div style="padding:20px; text-align:center;">Chưa có tin nhắn nào.</div>';
+                    return;
+                }
+                
+                let html = '';
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const activeClass = data.userId === activeChatUserId ? 'active' : '';
+                    const unreadHtml = data.hasUnread ? '<div class="unread-dot"></div>' : '';
+                    const time = data.lastMessageTime ? new Date(data.lastMessageTime.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+                    html += `
+                        <div class="chat-user-item ${activeClass}" onclick="window.openChat('${data.userId}', '${data.userName}')">
+                            <img src="${data.userAvatar}" class="chat-user-avatar">
+                            <div class="chat-user-info">
+                                <h4>${data.userName}</h4>
+                                <p>${data.lastMessage || 'Hình ảnh/File'}</p>
+                            </div>
+                            <div style="margin-left:auto; display:flex; flex-direction:column; align-items:flex-end;">
+                                <span style="font-size:0.65rem; color:#999;">${time}</span>
+                                ${unreadHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = html;
+            });
+        };
+
+        window.openChat = function(userId, userName) {
+            activeChatUserId = userId;
+            document.getElementById('chat-active-user').innerText = `Chat với: ${userName}`;
+            document.getElementById('admin-chat-input').disabled = false;
+            document.getElementById('admin-chat-send').disabled = false;
+
+            // Highlight user bên trái
+            document.querySelectorAll('.chat-user-item').forEach(el => el.classList.remove('active'));
+            // (Thực tế UI sẽ tự update nhờ onSnapshot ở trên, nhưng để nhanh thì làm vậy)
+            
+            // Đánh dấu đã đọc
+            updateDoc(doc(db, "chats", userId), { hasUnread: false }).catch(() => {});
+
+            // Load messages
+            const msgArea = document.getElementById('admin-chat-messages');
+            if (currentChatUnsubscribe) currentChatUnsubscribe();
+
+            const q = query(collection(db, "chats", userId, "messages"), orderBy("timestamp", "asc"));
+            currentChatUnsubscribe = onSnapshot(q, (snapshot) => {
+                msgArea.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const msg = docSnap.data();
+                    const isSent = msg.isAdmin; // True nếu admin gửi
+                    const bubbleHtml = `
+                        <div class="admin-msg-bubble ${isSent ? 'sent' : 'received'}">
+                            ${msg.text}
+                            <span class="msg-time">${new Date(msg.timestamp?.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                        </div>
+                    `;
+                    msgArea.innerHTML += bubbleHtml;
+                });
+                msgArea.scrollTop = msgArea.scrollHeight;
+            });
+        };
+
+        // Gửi tin nhắn từ Admin
+        document.getElementById('admin-chat-send').addEventListener('click', async () => {
+            const input = document.getElementById('admin-chat-input');
+            const text = input.value.trim();
+            if (!text || !activeChatUserId) return;
+
+            input.value = '';
+            await addDoc(collection(db, "chats", activeChatUserId, "messages"), {
+                text: text, senderId: 'admin', timestamp: serverTimestamp(), isAdmin: true
+            });
+            // Cập nhật lastMessage cho list bên trái
+            await updateDoc(doc(db, "chats", activeChatUserId), { lastMessage: "Bạn: " + text, lastMessageTime: serverTimestamp() });
+        });
+
+        document.getElementById('admin-chat-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') document.getElementById('admin-chat-send').click();
+        });
+
         // --- 8. QUẢN LÝ BÀI VIẾT (POSTS) - FIRESTORE ---
         function createSlug(str) {
             if (!str) return "";
@@ -1452,6 +1652,94 @@
                 await deleteDoc(doc(db, "posts", id));
                 showAdminToast("Đã xóa bài viết!", "fa-trash", "#e74c3c");
             } catch (e) { alert("Lỗi xóa bài viết: " + e.message); }
+        };
+
+        // --- QUẢN LÝ DIỄN ĐÀN (FORUM) ---
+        let forumUnsubscribe = null;
+
+        window.loadForumPosts = function() {
+            if (forumUnsubscribe) return;
+
+            const tbody = document.getElementById('admin-forum-list');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Đang tải...</td></tr>';
+
+            const q = query(collection(db, "forum_posts"), orderBy("timestamp", "desc"));
+            
+            forumUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Chưa có bài đăng nào.</td></tr>';
+                    return;
+                }
+
+                window.forumPostsData = [];
+                snapshot.forEach(doc => {
+                    let p = doc.data();
+                    p.id = doc.id;
+                    window.forumPostsData.push(p);
+                });
+                
+                window.renderForumTable(window.forumPostsData);
+            }, (error) => {
+                console.error(error);
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Lỗi: ${error.message}</td></tr>`;
+            });
+        };
+
+        window.renderForumTable = function(data) {
+            const tbody = document.getElementById('admin-forum-list');
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Không tìm thấy kết quả.</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            data.forEach(p => {
+                const time = p.timestamp ? new Date(p.timestamp.seconds * 1000).toLocaleString('vi-VN') : '---';
+                const contentShort = (p.content || '').substring(0, 80) + (p.content && p.content.length > 80 ? '...' : '');
+                
+                html += `
+                    <tr>
+                        <td style="white-space:nowrap; font-size:0.85rem;">${time}</td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <img src="${p.authorAvatar || 'images/avatar-profile.png'}" style="width:30px; height:30px; border-radius:50%;">
+                                <strong>${p.authorName || 'Ẩn danh'}</strong>
+                            </div>
+                        </td>
+                        <td>${contentShort}</td>
+                        <td style="font-size:0.85rem;">
+                            <span style="margin-right:10px;"><i class="fas fa-thumbs-up" style="color:#5b8cff;"></i> ${p.likesCount || 0}</span>
+                            <span><i class="fas fa-comment" style="color:#f39c12;"></i> ${p.commentsCount || 0}</span>
+                        </td>
+                        <td>
+                            <button onclick="window.deleteForumPost('${p.id}')" class="btn btn-icon btn-delete" title="Xóa"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        const searchForumInput = document.getElementById('searchForumInput');
+        if(searchForumInput) {
+            searchForumInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = window.forumPostsData.filter(p => 
+                    (p.content || "").toLowerCase().includes(term) || 
+                    (p.authorName || "").toLowerCase().includes(term)
+                );
+                window.renderForumTable(filtered);
+            });
+        }
+
+        window.deleteForumPost = async function(id) {
+            if(!confirm("Bạn có chắc chắn muốn xóa bài viết này?")) return;
+            try {
+                await deleteDoc(doc(db, "forum_posts", id));
+                showAdminToast("Đã xóa bài viết diễn đàn!", "fa-trash", "#e74c3c");
+            } catch (e) {
+                alert("Lỗi khi xóa: " + e.message);
+            }
         };
 
         document.getElementById('postForm').addEventListener('submit', async function(e) {

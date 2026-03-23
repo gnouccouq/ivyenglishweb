@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ivyForums - Cộng đồng học tiếng Anh</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Logo" class="loader-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <div class="blog-hero">
+        <div class="container" data-aos="zoom-in">
+            <h1>ivyForums - Cộng Đồng</h1>
+            <p>Chia sẻ kiến thức, hỏi đáp và cùng nhau tiến bộ mỗi ngày.</p>
+        </div>
+    </div>
+
+    <main class="forum-layout">
+        <!-- Main Feed -->
+        <div class="feed-column">
+            <!-- Create Post Section -->
+            <div class="create-post-box" data-aos="fade-up">
+                <div class="cp-header">
+                    <img id="user-avatar-post" src="images/avatar-profile.png" class="cp-avatar">
+                    <textarea id="post-input" class="cp-input" placeholder="Bạn đang nghĩ gì?"></textarea>
+                </div>
+                
+                <!-- Media Preview -->
+                <div id="media-preview" class="media-preview"></div>
+                
+                <div class="cp-actions">
+                    <div class="cp-tools">
+                        <button class="cp-tool-btn" onclick="document.getElementById('post-media-input').click()">
+                            <i class="fas fa-images" style="color:#2ecc71"></i> Ảnh/Video
+                        </button>
+                        <button class="cp-tool-btn" id="btn-add-topic">
+                            <i class="fas fa-hashtag" style="color:var(--s-gold)"></i> Thêm chủ đề
+                        </button>
+                    </div>
+                    <input type="file" id="post-media-input" accept="image/*,video/*" multiple style="display:none">
+                    <button id="btn-post" class="cp-btn" disabled>Đăng bài</button>
+                </div>
+            </div>
+
+            <!-- Feed Section -->
+            <div id="feed-container">
+                <!-- Skeleton Loading -->
+                <div class="post-card">
+                    <div style="padding:25px;">
+                        <div style="display:flex; gap:15px; margin-bottom:20px;">
+                            <div style="width:50px; height:50px; background:#f1f5f9; border-radius:50%;"></div>
+                            <div style="flex:1;">
+                                <div style="width:30%; height:18px; background:#f1f5f9; margin-bottom:8px; border-radius:4px;"></div>
+                                <div style="width:20%; height:12px; background:#f1f5f9; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                        <div style="width:100%; height:80px; background:#f1f5f9; border-radius:8px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="forum-sidebar">
+            <div class="sidebar-card" data-aos="fade-left">
+                <div class="sidebar-title"><i class="fas fa-fire"></i> Chủ đề nổi bật</div>
+                <div class="tag-cloud">
+                    <a href="#" class="tag-item">#IELTS</a>
+                    <a href="#" class="tag-item">#TOEIC</a>
+                    <a href="#" class="tag-item">#GiaoTiep</a>
+                    <a href="#" class="tag-item">#TuVung</a>
+                    <a href="#" class="tag-item">#NguPhap</a>
+                    <a href="#" class="tag-item">#HoiDap</a>
+                </div>
+            </div>
+            
+            <div class="sidebar-card" data-aos="fade-left" data-aos-delay="100">
+                <div class="sidebar-title"><i class="fas fa-users"></i> Thành viên tích cực</div>
+                <div id="active-users-list">
+                    <!-- Mock users -->
+                    <div class="active-user-item">
+                        <img src="images/avatar-profile.png">
+                        <div class="active-user-info">
+                            <h5>Minh Anh</h5>
+                            <span>15 bài viết</span>
+                        </div>
+                    </div>
+                    <div class="active-user-item">
+                        <img src="images/avatar-profile.png">
+                        <div class="active-user-info">
+                            <h5>Tuấn Kiệt</h5>
+                            <span>12 bài viết</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Lightbox Modal -->
+    <div id="media-lightbox" class="full-image-modal" onclick="closeLightbox()">
+        <span class="close-modal">&times;</span>
+        <div id="lightbox-content" class="modal-content-wrapper"></div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 800, once: true });</script>
+    <script src="js/menu-scrolltop.js"></script>
+    <script>if(window.includeHTML) window.includeHTML();</script>
+    
+    <!-- Module Script chính -->
+    <script type="module">
+        import { db, auth, onAuthStateChanged, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, increment, deleteDoc, getDoc, serverTimestamp, setDoc, deleteField } from './js/firebase-config.js';
+        
+        let currentUser = null;
+        let feedUnsubscribe = null; // Biến để lưu function hủy lắng nghe feed cũ
+        let postListeners = []; // Lưu các listener con (like/comment) để dọn dẹp
+        let mediaFiles = []; // Lưu file tạm để upload
+
+        // 1. Quản lý trạng thái Auth (Chạy đầu tiên)
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const btnPost = document.getElementById('btn-post');
+            const input = document.getElementById('post-input');
+            const userAvatar = document.getElementById('user-avatar-post');
+
+            if (user) {
+                userAvatar.src = user.photoURL || 'images/avatar-profile.png';
+                input.placeholder = `Chào ${user.displayName || 'bạn'}, hôm nay bạn học được gì?`;
+                btnPost.disabled = false;
+                btnPost.innerText = "Đăng bài";
+                btnPost.onclick = handlePostSubmit; // Gán lại sự kiện click
+            } else {
+                userAvatar.src = 'images/avatar-profile.png';
+                input.placeholder = "Vui lòng đăng nhập để đăng bài...";
+                btnPost.disabled = true;
+                btnPost.innerText = "Đăng nhập";
+                btnPost.onclick = () => window.location.href = "login.html";
+            }
+
+            // [QUAN TRỌNG] Tải lại feed mỗi khi trạng thái đăng nhập thay đổi
+            // để đảm bảo nút Like/Comment hoạt động đúng với user hiện tại
+            loadFeed();
+        });
+
+        // --- Media Upload Logic (Sử dụng Cloudinary) ---
+        async function uploadMedia(file) {
+            const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
+            const PRESET = 'ivyenglish_upload';
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', PRESET);
+            
+            try {
+                const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                const data = await res.json();
+                return { url: data.secure_url, type: data.resource_type };
+            } catch (e) {
+                console.error("Upload error", e);
+                return null;
+            }
+        }
+
+        // Handle File Input Change
+        document.getElementById('post-media-input').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            mediaFiles = [...mediaFiles, ...files];
+            renderMediaPreview();
+        });
+
+        function renderMediaPreview() {
+            const container = document.getElementById('media-preview');
+            container.innerHTML = '';
+            mediaFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'media-preview-item';
+                const url = URL.createObjectURL(file);
+                if(file.type.startsWith('video')) {
+                    div.innerHTML = `<video src="${url}"></video><div class="media-remove" onclick="removeMedia(${index})">×</div>`;
+                } else {
+                    div.innerHTML = `<img src="${url}"><div class="media-remove" onclick="removeMedia(${index})">×</div>`;
+                }
+                container.appendChild(div);
+            });
+        }
+        
+        window.removeMedia = (index) => {
+            mediaFiles.splice(index, 1);
+            renderMediaPreview();
+        };
+        
+        // Handle Hashtag Click
+        document.getElementById('btn-add-topic').addEventListener('click', () => {
+            const input = document.getElementById('post-input');
+            input.value += " #";
+            input.focus();
+        });
+
+        // 2. Logic Đăng bài (Tách ra function riêng)
+        document.getElementById('post-input').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        async function handlePostSubmit() {
+            const content = document.getElementById('post-input').value; // Cho phép rỗng nếu có ảnh
+            if (!content.trim() && mediaFiles.length === 0) return;
+
+            const btn = document.getElementById('btn-post');
+            btn.disabled = true;
+            btn.innerText = "Đang đăng...";
+
+            try {
+                // Upload files first
+                let mediaLinks = [];
+                if (mediaFiles.length > 0) {
+                    btn.innerText = `Đang tải ảnh (0/${mediaFiles.length})...`;
+                    for (let i = 0; i < mediaFiles.length; i++) {
+                        const res = await uploadMedia(mediaFiles[i]);
+                        if (res) mediaLinks.push(res);
+                    }
+                }
+
+                await addDoc(collection(db, "forum_posts"), {
+                    content: content,
+                    media: mediaLinks,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.displayName || "Người dùng",
+                    authorAvatar: currentUser.photoURL || "images/avatar-profile.png",
+                    timestamp: serverTimestamp(),
+                    commentsCount: 0
+                });
+                document.getElementById('post-input').value = '';
+                mediaFiles = [];
+                renderMediaPreview();
+                document.getElementById('post-input').style.height = '55px';
+            } catch (e) {
+                console.error(e);
+                alert("Lỗi khi đăng bài: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Đăng bài";
+            }
+        };
+
+        // 3. Load Feed (Realtime) - Đã sửa lỗi logic
+        function loadFeed() {
+            // Hủy listener cũ nếu có (để tránh nhận dữ liệu 2 lần khi login/logout)
+            if (feedUnsubscribe && typeof feedUnsubscribe === 'function') feedUnsubscribe();
+            // Hủy các listener con (like/comment) cũ
+            postListeners.forEach(unsub => unsub());
+            postListeners = [];
+
+            const feedContainer = document.getElementById('feed-container');
+            const q = query(collection(db, "forum_posts"), orderBy("timestamp", "desc"));
+
+            // Gán listener mới vào biến feedUnsubscribe
+            feedUnsubscribe = onSnapshot(q, (snapshot) => {
+                // Xóa thông báo "chưa có bài viết" nếu có dữ liệu mới
+                const emptyMsg = document.getElementById('empty-feed-msg');
+                if (!snapshot.empty && emptyMsg) emptyMsg.remove();
+                
+                if (snapshot.empty && feedContainer.children.length === 0) {
+                    feedContainer.innerHTML = '<div id="empty-feed-msg" style="text-align:center; padding:40px; color:#888;">Chưa có bài viết nào. Hãy là người đầu tiên!</div>';
+                }
+
+                snapshot.docChanges().forEach((change) => {
+                    const post = change.doc.data();
+                    post.id = change.doc.id;
+
+                    if (change.type === "added") {
+                        const el = createPostElement(post);
+                        // Chèn đúng vị trí dựa trên newIndex (Firestore trả về thứ tự đúng)
+                        if (change.newIndex === 0) {
+                            feedContainer.prepend(el);
+                        } else {
+                            feedContainer.insertBefore(el, feedContainer.children[change.newIndex]);
+                        }
+                    }
+                    if (change.type === "modified") {
+                        // Thay thế node cũ bằng node mới để cập nhật dữ liệu (như số like, comment)
+                        const oldEl = document.getElementById(`post-${post.id}`);
+                        if (oldEl) feedContainer.replaceChild(createPostElement(post), oldEl);
+                    }
+                    if (change.type === "removed") {
+                        const oldEl = document.getElementById(`post-${post.id}`);
+                        if (oldEl) oldEl.remove();
+                    }
+                });
+            }, (error) => {
+                console.error("Lỗi tải feed:", error);
+                feedContainer.innerHTML = '<div style="text-align:center; padding:20px; color:red;">Không thể tải bài viết. Vui lòng thử lại sau.</div>';
+            });
+        }
+
+        // 4. Helper: Tạo HTML cho bài viết
+        function createPostElement(post) {
+            const div = document.createElement('div');
+            div.className = 'post-card';
+            div.id = `post-${post.id}`; // Gán ID để tìm kiếm khi update/delete
+            
+            // Xử lý Hashtag trong nội dung
+            const contentHtml = post.content ? post.content.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>') : "";
+            
+            // Format thời gian
+            const timeStr = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString('vi-VN') : 'Đang xử lý...';
+            
+            // Delete Menu for Author
+            let deleteBtn = '';
+            if (currentUser && post.authorId === currentUser.uid) {
+                deleteBtn = `<i class="fas fa-ellipsis-h post-menu-btn" onclick="deletePost('${post.id}')" title="Xóa bài viết"></i>`;
+            }
+
+            // Media Grid
+            let mediaHtml = '';
+            if (post.media && post.media.length > 0) {
+                let gridClass = post.media.length === 1 ? 'grid-1' : (post.media.length === 2 ? 'grid-2' : 'grid-3');
+                mediaHtml = `<div class="post-media-grid ${gridClass}">`;
+                post.media.slice(0,3).forEach(m => {
+                    if(m.type === 'video') mediaHtml += `<video controls src="${m.url}"></video>`;
+                    else mediaHtml += `<img src="${m.url}" onclick="openLightbox('${m.url}', 'image')">`;
+                });
+                mediaHtml += `</div>`;
+            }
+
+            div.innerHTML = `
+                <div class="post-header">
+                    <img src="${post.authorAvatar || 'images/avatar-profile.png'}" class="post-avatar">
+                    <div class="post-meta">
+                        <h4>${post.authorName}</h4>
+                        <span>${timeStr}</span>
+                    </div>
+                    ${deleteBtn}
+                </div>
+                <div class="post-content">${contentHtml}</div>
+                ${mediaHtml}
+                <div class="post-stats">
+                    <span id="reaction-display-${post.id}">0 cảm xúc</span>
+                    <span style="cursor:pointer" onclick="document.getElementById('comment-sec-${post.id}').classList.toggle('active')">${post.commentsCount || 0} bình luận</span>
+                </div>
+                <div class="post-actions">
+                    <div class="action-btn" id="btn-like-${post.id}">
+                        <i class="far fa-thumbs-up"></i> <span>Thích</span>
+                    </div>
+                    <button class="action-btn" onclick="document.getElementById('comment-sec-${post.id}').classList.toggle('active')"><i class="far fa-comment-alt"></i> <span>Bình luận</span></button>
+                    <button class="action-btn" onclick="sharePost('${post.id}')"><i class="fas fa-share"></i> <span>Chia sẻ</span></button>
+                </div>
+                
+                <!-- Comment Section -->
+                <div class="comment-section" id="comment-sec-${post.id}">
+                    <div class="comment-list" id="cmt-list-${post.id}"></div>
+                    <div class="cmt-input-wrapper">
+                        <img src="${currentUser?.photoURL || 'images/avatar-profile.png'}" class="cmt-avatar">
+                        <input type="text" class="cmt-input" id="cmt-input-${post.id}" placeholder="Viết bình luận...">
+                        <button class="cmt-submit" id="btn-send-cmt-${post.id}"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `;
+
+            // Logic Like (Gắn event listener)
+            setupLikeButton(post.id, post.authorId, div);
+            
+            // Logic Comment (Load comment realtime)
+            setupComments(post.id, post.authorId, div);
+
+            return div;
+        }
+
+        // 5. Logic Like - Đã sửa lỗi
+        function setupLikeButton(postId, postAuthorId, container) {
+            const btn = container.querySelector(`#btn-like-${postId}`);
+            const reactionDisplay = container.querySelector(`#reaction-display-${postId}`);
+            
+            // Add Reaction Popup
+            btn.innerHTML += `
+                <div class="reactions-box">
+                    <span class="reaction-icon react-like" onclick="submitReaction('${postId}', 'like')">👍</span>
+                    <span class="reaction-icon react-love" onclick="submitReaction('${postId}', 'love')">❤️</span>
+                    <span class="reaction-icon react-haha" onclick="submitReaction('${postId}', 'haha')">😂</span>
+                    <span class="reaction-icon react-sad" onclick="submitReaction('${postId}', 'sad')">😢</span>
+                    <span class="reaction-icon react-angry" onclick="submitReaction('${postId}', 'angry')">😡</span>
+                </div>
+            `;
+
+            if (!currentUser) {
+                btn.onclick = () => alert("Vui lòng đăng nhập để thích bài viết!");
+                return;
+            }
+
+            // Listener for My Reaction
+            const myReactRef = doc(db, "forum_posts", postId, "reactions", currentUser.uid);
+            const unsubMyReact = onSnapshot(myReactRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const type = docSnap.data().type;
+                    const icons = { like: '👍', love: '❤️', haha: '😂', sad: '😢', angry: '😡' };
+                    btn.classList.add('active');
+                    // Update icon without removing popup
+                    const iconEl = btn.querySelector('i');
+                    iconEl.className = '';
+                    iconEl.innerHTML = icons[type] || '👍';
+                    btn.querySelector('span').innerText = type.charAt(0).toUpperCase() + type.slice(1);
+                } else {
+                    btn.classList.remove('active');
+                    btn.querySelector('i').className = 'far fa-thumbs-up';
+                    btn.querySelector('i').innerHTML = '';
+                    btn.querySelector('span').innerText = 'Thích';
+                }
+            });
+            postListeners.push(unsubMyReact);
+
+            // [FIX] Listener for Total Reactions
+            const reactsColl = collection(db, "forum_posts", postId, "reactions");
+            const unsubTotalReacts = onSnapshot(reactsColl, (snapshot) => {
+                const total = snapshot.size;
+                if (total > 0) {
+                    // Đếm số lượng mỗi loại reaction
+                    const counts = {};
+                    snapshot.forEach(doc => {
+                        const type = doc.data().type;
+                        counts[type] = (counts[type] || 0) + 1;
+                    });
+                    
+                    // Sắp xếp các reaction theo số lượng giảm dần
+                    const sortedReactions = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+                    
+                    // Lấy 2 icon phổ biến nhất
+                    const topIcons = sortedReactions.slice(0, 2).map(type => {
+                        const icons = { like: '👍', love: '❤️', haha: '😂', sad: '😢', angry: '😡' };
+                        return `<span class="reaction-icon" style="font-size:0.8rem;">${icons[type]}</span>`;
+                    }).join('');
+
+                    reactionDisplay.innerHTML = `${topIcons} ${total}`;
+                } else {
+                    reactionDisplay.innerHTML = `0 cảm xúc`;
+                }
+            });
+            postListeners.push(unsubTotalReacts);
+            
+            // Global function to handle reaction click
+            window.submitReaction = async (pid, type) => {
+                if (!currentUser) return;
+                event.stopPropagation();
+                const ref = doc(db, "forum_posts", pid, "reactions", currentUser.uid);
+                const currentSnap = await getDoc(ref);
+                
+                if (currentSnap.exists() && currentSnap.data().type === type) {
+                    // Click same reaction -> Remove
+                    await deleteDoc(ref);
+                } else {
+                    // New or Update
+                    await setDoc(ref, { 
+                        type: type, 
+                        timestamp: serverTimestamp(),
+                        userName: currentUser.displayName 
+                    });
+                    if (!currentSnap.exists()) {
+                        // Gửi thông báo (Trừ khi tự like bài mình)
+                        if (postAuthorId !== currentUser.uid) {
+                            sendNotification(postAuthorId, "like", postId);
+                        }
+                    }
+                }
+            };
+        }
+
+        // 6. Logic Comment - Đã sửa lỗi
+        function setupComments(postId, postAuthorId, container) {
+            const list = container.querySelector(`#cmt-list-${postId}`);
+            const input = container.querySelector(`#cmt-input-${postId}`);
+            const btn = container.querySelector(`#btn-send-cmt-${postId}`);
+
+            // Load comments
+            const q = query(collection(db, "forum_posts", postId, "comments"), orderBy("timestamp", "asc"));
+            
+            const unsubCmt = onSnapshot(q, (snapshot) => {
+                list.innerHTML = '';
+                // Simple Flat List for now (Nested requires recursive structure logic which is complex for this snippet)
+                // We can render replies by checking parentId if we implement nested.
+                // For this request: "trong comment có thể trả lời bình luận người khác" -> We will add a Reply button that mentions user
+                snapshot.forEach(docSnap => {
+                    const cmt = docSnap.data();
+                    const item = document.createElement('div');
+                    item.className = 'comment-item';
+                    item.innerHTML = `
+                        <img src="${cmt.authorAvatar || 'images/avatar-profile.png'}" class="cmt-avatar">
+                        <div style="flex:1">
+                            <div class="cmt-bubble">
+                                <span class="cmt-name">${cmt.authorName}</span>
+                                <p class="cmt-text">${cmt.content}</p>
+                            </div>
+                            <div class="cmt-actions">
+                                <span class="cmt-act-btn" onclick="replyTo('${cmt.authorName}', '${postId}')">Phản hồi</span>
+                                <span class="cmt-act-btn" style="color:${cmt.likes ? 'var(--primary-color)' : ''}">Thích</span>
+                                <span>${cmt.timestamp ? new Date(cmt.timestamp.seconds*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : ''}</span>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+                // Only scroll if new comment added by me (skipped for simplicity)
+            });
+            postListeners.push(unsubCmt);
+
+            // Helper for Reply
+            window.replyTo = (name, pid) => {
+                const inp = document.getElementById(`cmt-input-${pid}`);
+                inp.value = `@${name} `;
+                inp.focus();
+            };
+
+            // Post comment
+            btn.onclick = async () => {
+                if (!currentUser) return alert("Vui lòng đăng nhập!");
+                const content = input.value.trim();
+                if (!content) return;
+
+                input.value = '';
+                try {
+                    await addDoc(collection(db, "forum_posts", postId, "comments"), {
+                        content: content,
+                        authorId: currentUser.uid,
+                        authorName: currentUser.displayName || "Người dùng",
+                        authorAvatar: currentUser.photoURL || "images/avatar-profile.png",
+                        timestamp: serverTimestamp()
+                    });
+
+                    const postRef = doc(db, "forum_posts", postId);
+                    await updateDoc(postRef, { commentsCount: increment(1) });
+
+                    // Gửi thông báo
+                    if (postAuthorId !== currentUser.uid) {
+                        sendNotification(postAuthorId, "comment", postId, content);
+                    }
+                } catch (e) {
+                    console.error("Lỗi comment:", e);
+                    alert("Không thể gửi bình luận.");
+                }
+            };
+            
+            input.onkeypress = (e) => { if(e.key === 'Enter') btn.click(); };
+        }
+
+        // 7. Delete Post
+        window.deletePost = async (postId) => {
+            if (!confirm("Bạn có chắc muốn xóa bài viết này?")) return;
+            try {
+                await deleteDoc(doc(db, "forum_posts", postId));
+                // UI automatically updates via onSnapshot
+            } catch (e) {
+                alert("Lỗi xóa bài: " + e.message);
+            }
+        };
+
+        // 7. Logic Share
+        window.sharePost = function(postId) {
+            const url = window.location.origin + window.location.pathname + "?id=" + postId;
+            navigator.clipboard.writeText(url).then(() => {
+                alert("Đã sao chép liên kết bài viết!");
+            }).catch(() => alert("Lỗi sao chép"));
+        }
+
+        // 8. Logic Gửi Thông Báo (Client-side trigger)
+        async function sendNotification(receiverId, type, postId, extraData = "") {
+            try {
+                let message = "";
+                if (type === "like") message = `<strong>${currentUser.displayName}</strong> đã bày tỏ cảm xúc về bài viết của bạn.`;
+                if (type === "comment") message = `<strong>${currentUser.displayName}</strong> đã bình luận: "${extraData.substring(0, 20)}..."`;
+
+                await addDoc(collection(db, "notifications"), {
+                    receiverId: receiverId,
+                    senderId: currentUser.uid,
+                    senderName: currentUser.displayName,
+                    senderAvatar: currentUser.photoURL,
+                    type: type,
+                    postId: postId,
+                    message: message,
+                    isRead: false,
+                    timestamp: serverTimestamp()
+                });
+            } catch (e) { console.warn("Lỗi gửi thông báo:", e); }
+        }
+
+        // 9. Lightbox Functions (Global)
+        window.openLightbox = (url, type) => {
+            const modal = document.getElementById('media-lightbox');
+            const content = document.getElementById('lightbox-content');
+            modal.style.display = 'flex';
+            if (type === 'video') content.innerHTML = `<video controls src="${url}" style="max-width:90%; max-height:90vh;"></video>`;
+            else content.innerHTML = `<img src="${url}" style="max-width:90%; max-height:90vh; border-radius:8px;">`;
+        }
+        
+        window.closeLightbox = () => {
+            document.getElementById('media-lightbox').style.display = 'none';
+            document.getElementById('lightbox-content').innerHTML = '';
+        }
+    </script>
+    <script type="module" src="./js/auth-handler.js"></script>
+</body>
+</html>

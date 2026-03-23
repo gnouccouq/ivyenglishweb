@@ -9,7 +9,7 @@
                     <a class="dropdown-toggle">Về chúng tôi<i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="index.html#why-choose-us">Về chúng tôi</a></li>
-                        <li><a href="ivyenglish-teacher.html">Giáo Viên</a></li>
+                        <li><a href="teacher.html">Giáo Viên</a></li>
                         <li><a href="ivyenglish-gioi-thieu-khoa-hoc.html">Giới thiệu khoá học</a></li>
                         <li><a href="index.html#danhgia">Đánh giá từ học viên</a></li>
                     </ul>
@@ -25,7 +25,7 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    <a class="dropdown-toggle">Từ Điển & Học Thử<i class="fas fa-chevron-down"></i></a>
+                    <a class="dropdown-toggle">Học cùng ivy<i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a class="logo-text-header" href="ivyenglish-dictionary.html">ivyDictionary<span class="beta-badge-header">Beta</span></a></li>
                         <li><a href="ivyenglish-hoc-thu.html">Đăng kí học thử</a></li>
@@ -33,18 +33,39 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    <a href="ivyenglish-blog.html" class="dropdown-toggle">Tin Tức<i class="fas fa-chevron-down"></i></a>
+                    <a class="dropdown-toggle">Tin Tức<i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="ivyenglish-blog.html">Tất cả bài viết</a></li>
                         <li><a href="ivyenglish-blog.html?category=Tuyển Sinh">Tuyển Sinh</a></li>
                         <li><a href="ivyenglish-blog.html?category=Tài liệu">Tài Liệu</a></li>
                         <li><a href="ivyenglish-blog.html?category=Tin tức - Sự kiện">Tin Tức - Sự kiện</a></li>
-                        <li><a href="ivyenglish-blog.html?category=Kinh nghiệm học tập">Kinh Nghiệm</a></li>
+                        <li><a href="ivyenglish-blog.html?category=Kinh nghiệm học tập">Kinh Nghiệm Học Tập</a></li>
                     </ul>
                 </div>
-                <a href="index.html#faq">Hỏi Đáp</a>
+                <div class="dropdown">
+                    <a class="dropdown-toggle">Diễn đàn<i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="forums.html">Diễn đàn</a></li>
+                        <li><a href="index.html#faq">Hỏi đáp</a></li>
+                        
+                    </ul>
+                </div>
                 
                 <div id="auth-section" style="margin-left: 15px; display: flex; align-items: center;">
+                    <!-- Notification Bell (New) -->
+                    <div style="position: relative;" id="notif-wrapper">
+                        <div class="nav-icon-btn" id="notif-btn" title="Thông báo">
+                            <i class="fas fa-bell"></i>
+                            <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+                        </div>
+                        <div class="notif-dropdown" id="notif-dropdown">
+                            <div class="notif-header">Thông báo <span id="mark-all-read" style="font-size:0.8rem; color:#5b8cff; cursor:pointer;">Đánh dấu đã đọc</span></div>
+                            <div class="notif-list" id="notif-list">
+                                <div style="padding:20px; text-align:center; color:#999; font-size:0.9rem;">Không có thông báo mới</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="login.html" id="login-nav-btn" class="cta-nav">Đăng Nhập</a>
 
                     <div id="user-profile-nav" style="display: none;">

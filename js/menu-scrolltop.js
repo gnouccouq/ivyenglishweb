@@ -48,14 +48,17 @@ window.initMenuLogic = function() {
     if (!menuToggle || !nav) return;
 
     // Toggle Menu Mobile
-    menuToggle.addEventListener('click', function() {
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài gây đóng menu ngay lập tức
         nav.classList.toggle('nav-open'); 
         menuToggle.classList.toggle('menu-active'); 
         
         if (menuToggle.classList.contains('menu-active')) {
-            menuToggle.classList.replace('fa-bars', 'fa-times');
+            menuToggle.classList.remove('fa-bars');
+            menuToggle.classList.add('fa-times');
         } else {
-            menuToggle.classList.replace('fa-times', 'fa-bars');
+            menuToggle.classList.remove('fa-times');
+            menuToggle.classList.add('fa-bars');
         }
         document.body.classList.toggle('no-scroll');
     });

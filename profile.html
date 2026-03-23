@@ -77,7 +77,7 @@
         .tab-content-profile { display: none; animation: fadeIn 0.3s ease; }
         .tab-content-profile.active { display: block; }
         
-        .history-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; transition: 0.2s; }
+        .history-item {min-width: max-content; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; transition: 0.2s; }
         .history-item:hover { transform: translateX(5px); border-color: var(--accent); }
         .history-info h4 { margin: 0 0 5px; color: var(--p-blue); font-size: 1rem; }
         .history-info p { margin: 0; color: #64748b; font-size: 0.85rem; }
@@ -229,27 +229,10 @@
         </div>
     </div>
 
-    <div class="floating-contact">
-        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
-            <i class="fas fa-arrow-up"></i>
-        </a>
-        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
-            <i class="fas fa-phone-alt"></i>
-        </a>
-        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
-        </a>
-        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
-            <i class="fab fa-facebook-messenger"></i>
-        </a>
-    </div>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script type="module">
-        import { auth, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, doc, getDoc, setDoc, collection, query, where, getDocs, orderBy } from './js/firebase-config.js';
+        import { auth, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, doc, getDoc, setDoc, collection, query, where, getDocs, orderBy, updateDoc } from './js/firebase-config.js';
         
-        const IMGUR_CLIENT_ID = 'd70305e7c3ac5c6';
-
         window.tempAvatarUrl = null;
         
         // --- TAB LOGIC ---
@@ -345,7 +328,7 @@
         document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
         // --- END POPUP LOGIC ---
 
-        // 1. UPLOAD ẢNH LÊN IMGUR
+        // 1. UPLOAD ẢNH LÊN CLOUDINARY
         document.getElementById('avatar-input').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -354,27 +337,30 @@
             const originalSrc = avatarImg.src;
             avatarImg.style.opacity = "0.4";
 
+            const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnt6j6wyo/upload';
+            const CLOUDINARY_UPLOAD_PRESET = 'ivyenglish_upload';
+
             const formData = new FormData();
-            formData.append('image', file);
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
             try {
-                const response = await fetch('https://api.imgur.com/3/image', {
+                const response = await fetch(CLOUDINARY_URL, {
                     method: 'POST',
-                    headers: { Authorization: `Client-ID ${IMGUR_CLIENT_ID}` },
                     body: formData
                 });
 
                 const result = await response.json();
-                if (result.success) {
-                    window.tempAvatarUrl = result.data.link;
+                if (result.secure_url) {
+                    window.tempAvatarUrl = result.secure_url;
                     avatarImg.src = window.tempAvatarUrl;
                     showPopup('success', 'Thành công', 'Ảnh đại diện đã được tải lên. Nhấn "Cập nhật" để lưu thay đổi.');
                 } else {
-                    showPopup('error', 'Lỗi Imgur', 'Không thể tải ảnh lên lúc này. Vui lòng thử lại sau.');
+                    showPopup('error', 'Lỗi tải ảnh', 'Không thể tải ảnh lên lúc này. Vui lòng thử lại sau.');
                     avatarImg.src = originalSrc;
                 }
             } catch (err) {
-                showPopup('error', 'Lỗi kết nối', 'Không thể kết nối đến máy chủ Imgur.');
+                showPopup('error', 'Lỗi kết nối', 'Không thể kết nối đến máy chủ lưu trữ.');
                 avatarImg.src = originalSrc;
             } finally {
                 avatarImg.style.opacity = "1";
@@ -457,7 +443,21 @@
                 localStorage.setItem('ivy_user_name', payload["Họ Tên"]); // Lưu tên mới vào bộ nhớ trình duyệt
 
                 // Cập nhật tên vào Firebase Profile để đồng bộ cho các lần đăng nhập sau
-                updateProfile(user, { displayName: payload["Họ Tên"] }).catch(console.error);
+                await updateProfile(user, { displayName: payload["Họ Tên"], photoURL: payload["Avatar"] });
+
+                // Cập nhật Avatar và Tên mới vào các bài đánh giá (Reviews) đã đăng để đồng bộ
+                const reviewsRef = collection(db, "reviews");
+                const qReviews = query(reviewsRef, where("userId", "==", user.uid));
+                const querySnapshot = await getDocs(qReviews);
+                const updatePromises = [];
+                querySnapshot.forEach((docSnap) => {
+                    const p = updateDoc(doc(db, "reviews", docSnap.id), {
+                        userName: payload["Họ Tên"],
+                        userAvatar: payload["Avatar"]
+                    });
+                    updatePromises.push(p);
+                });
+                await Promise.all(updatePromises);
             } catch (err) { 
                 showPopup('error', 'Lỗi hệ thống', 'Không thể lưu thông tin. Vui lòng thử lại sau.');
             }
@@ -494,323 +494,6 @@
             if (window.AOS) AOS.init({ duration: 800, once: true });
             
             // Sửa lỗi: Kích hoạt logic cho Menu Mobile và nút ScrollTop sau khi tải Header/Footer
-            if (window.initMenuLogic) window.initMenuLogic();
-            if (window.initScrollToTop) window.initScrollToTop();
-        }
-        includeHTML();
-    </script>
-    <script type="module" src="./js/auth-handler.js"></script>
-    <script type="module" src="./js/firebase-config.js"></script>
-    <script src="js/menu-scrolltop.js"></script>
-    <script src="js/daily-word.js"></script>
-</body>
-</html>
-                                </div>
-                            </div>
-
-                            <div class="section-title" style="margin-top: 30px;">BẢO MẬT</div>
-                            <div class="info-group">
-                                <label>Mật khẩu</label>
-                                <div style="position: relative;">
-                                    <input type="password" value="********" disabled>
-                                    <small id="change-pass-btn" style="color: var(--accent); cursor: pointer; position: absolute; right: 15px; top: 12px; font-weight: 700;">ĐỔI MẬT KHẨU</small>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn-update" id="submit-btn">
-                                <i class="fas fa-check-circle"></i> CẬP NHẬT THÔNG TIN
-                            </button>
-                        </form>
-                    </div>
-
-                    <div id="tab-history" class="tab-content-profile">
-                        <div class="section-title">KẾT QUẢ KIỂM TRA</div>
-                        <div id="history-list-container">
-                            <p style="text-align:center; color:#64748b;">Đang tải dữ liệu...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="footer-placeholder"></div>
-
-    <!-- Custom Popup -->
-    <div id="custom-popup" class="popup-overlay">
-        <div class="popup-content">
-            <span id="popup-icon" class="popup-icon"></span>
-            <h3 id="popup-title"></h3>
-            <p id="popup-message"></p>
-            <button id="popup-close-btn" class="btn-close-popup">Đóng</button>
-        </div>
-    </div>
-
-    <div class="floating-contact">
-        <a href="#" class="float-btn scroll-to-top" title="Lên đầu trang">
-            <i class="fas fa-arrow-up"></i>
-        </a>
-        <a href="tel:0969730433" class="float-btn hotline" title="Hotline">
-            <i class="fas fa-phone-alt"></i>
-        </a>
-        <a href="https://zalo.me/0969730433" target="_blank" class="float-btn zalo" title="Chat Zalo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
-        </a>
-        <a href="https://www.facebook.com/profile.php?id=61576482823082" target="_blank" class="float-btn facebook-messenger" title="Nhắn tin Messenger">
-            <i class="fab fa-facebook-messenger"></i>
-        </a>
-    </div>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="module">
-        import { auth, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, doc, getDoc, setDoc, collection, query, where, getDocs, orderBy } from './js/firebase-config.js';
-        
-        const IMGUR_CLIENT_ID = 'd70305e7c3ac5c6';
-
-        window.tempAvatarUrl = null;
-        
-        // --- TAB LOGIC ---
-        window.openTab = function(tabName, btn) {
-            document.querySelectorAll('.tab-content-profile').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
-            if(btn) btn.classList.add('active');
-        };
-
-        // --- LOAD HISTORY ---
-        async function loadTestHistory(userId) {
-            const container = document.getElementById('history-list-container');
-            try {
-                // Lấy kết quả bài test của user này
-                // Bỏ orderBy trong query để tránh lỗi "requires an index" và sort ở client
-                const q = query(
-                    collection(db, "quiz_results"), 
-                    where("userId", "==", userId)
-                );
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    container.innerHTML = '<p style="text-align:center; color:#64748b;">Bạn chưa làm bài kiểm tra nào.</p><div style="text-align:center; margin-top:15px;"><a href="ivyenglish-level-test.html" class="btn-update" style="display:inline-block; width:auto; text-decoration:none;">LÀM BÀI TEST NGAY</a></div>';
-                    return;
-                }
-
-                // Sắp xếp dữ liệu tại Client (Mới nhất lên đầu)
-                const historyData = [];
-                querySnapshot.forEach(doc => historyData.push(doc.data()));
-                
-                historyData.sort((a, b) => {
-                    const tA = a.timestamp && a.timestamp.seconds ? a.timestamp.seconds : 0;
-                    const tB = b.timestamp && b.timestamp.seconds ? b.timestamp.seconds : 0;
-                    return tB - tA; 
-                });
-
-                let html = '';
-                historyData.forEach(data => {
-                    html += `
-                        <div class="history-item">
-                            <div class="history-info">
-                                <h4>${data.TrinhDo || 'Chưa xếp hạng'}</h4>
-                                <p><i class="far fa-clock"></i> ${data.ThoiGian || '---'}</p>
-                            </div>
-                            <div class="history-score">
-                                ${data.DiemSo || '0/15'}
-                                <span>Điểm số</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (err) {
-                console.error("Lỗi tải lịch sử:", err);
-                container.innerHTML = `<p style="text-align:center; color:red;">Lỗi tải dữ liệu: ${err.message}</p>`;
-            }
-        }
-
-        // --- POPUP LOGIC ---
-        function showPopup(type, title, message) {
-            const popup = document.getElementById('custom-popup');
-            const iconEl = document.getElementById('popup-icon');
-            const titleEl = document.getElementById('popup-title');
-            const messageEl = document.getElementById('popup-message');
-
-            if (!popup || !iconEl || !titleEl || !messageEl) return;
-
-            titleEl.innerText = title;
-            messageEl.innerHTML = message;
-
-            let iconClass = 'fas fa-info-circle';
-            let iconColor = '#3498db';
-            if (type === 'success') {
-                iconClass = 'fas fa-check-circle';
-                iconColor = '#2ECC71';
-            } else if (type === 'error') {
-                iconClass = 'fas fa-times-circle';
-                iconColor = '#e74c3c';
-            }
-            iconEl.innerHTML = `<i class="${iconClass}"></i>`;
-            iconEl.style.color = iconColor;
-            
-            popup.style.display = 'flex';
-        }
-
-        function closePopup() {
-            const popup = document.getElementById('custom-popup');
-            if (popup) popup.style.display = 'none';
-        }
-        document.getElementById('popup-close-btn').addEventListener('click', closePopup);
-        document.getElementById('custom-popup').addEventListener('click', (e) => { if(e.target.id === 'custom-popup') closePopup(); });
-        // --- END POPUP LOGIC ---
-
-        // 1. UPLOAD ẢNH LÊN IMGUR
-        document.getElementById('avatar-input').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const avatarImg = document.getElementById('display-avatar');
-            const originalSrc = avatarImg.src;
-            avatarImg.style.opacity = "0.4";
-
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await fetch('https://api.imgur.com/3/image', {
-                    method: 'POST',
-                    headers: { Authorization: `Client-ID ${IMGUR_CLIENT_ID}` },
-                    body: formData
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    window.tempAvatarUrl = result.data.link;
-                    avatarImg.src = window.tempAvatarUrl;
-                    showPopup('success', 'Thành công', 'Ảnh đại diện đã được tải lên. Nhấn "Cập nhật" để lưu thay đổi.');
-                } else {
-                    showPopup('error', 'Lỗi Imgur', 'Không thể tải ảnh lên lúc này. Vui lòng thử lại sau.');
-                    avatarImg.src = originalSrc;
-                }
-            } catch (err) {
-                showPopup('error', 'Lỗi kết nối', 'Không thể kết nối đến máy chủ Imgur.');
-                avatarImg.src = originalSrc;
-            } finally {
-                avatarImg.style.opacity = "1";
-            }
-        });
-
-        // 2. LOAD DATA
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('display-email').innerText = user.email;
-                document.getElementById('input-email').value = user.email;
-
-                try {
-                    if (user.photoURL) document.getElementById('display-avatar').src = user.photoURL;
-                    
-                    // Mặc định lấy tên từ Google nếu có (hiển thị trước khi load Sheet để không bị trống)
-                    if(user.displayName) {
-                        document.getElementById('display-name').innerText = user.displayName;
-                        document.getElementById('input-name').value = user.displayName;
-                    }
-
-                    const docRef = doc(db, "users", user.uid);
-                    const docSnap = await getDoc(docRef);
-                    
-                    if (docSnap.exists()) {
-                        const row = docSnap.data();
-                        if (row["Họ Tên"]) {
-                            document.getElementById('display-name').innerText = row["Họ Tên"];
-                            document.getElementById('input-name').value = row["Họ Tên"];
-                            
-                            // Cập nhật luôn tên trên header nếu đang ở trang Profile
-                            const headerName = document.getElementById('nav-user-name');
-                            if (headerName) headerName.innerText = row["Họ Tên"];
-                            localStorage.setItem('ivy_user_name', row["Họ Tên"]); // Lưu tên vào bộ nhớ trình duyệt
-                        }
-                        document.getElementById('input-phone').value = row["Số Điện Thoại"] || "";
-                        document.getElementById('input-dob').value = row["Ngày Sinh"] || "";
-                        document.getElementById('input-gender').value = row["Giới Tính"] || "";
-                        if (row["Avatar"]) document.getElementById('display-avatar').src = row["Avatar"];
-                    }
-                } catch (err) { console.error("Lỗi load data:", err); }
-                
-                // Load lịch sử bài test
-                loadTestHistory(user.uid);
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
-
-        // 3. SAVE DATA
-        document.getElementById('profile-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const user = auth.currentUser;
-            if (!user) return;
-
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-            btn.innerText = "ĐANG LƯU...";
-
-            const payload = {
-                "ID": user.uid,
-                "Họ Tên": document.getElementById('input-name').value.trim(),
-                "Email": user.email,
-                "Số Điện Thoại": document.getElementById('input-phone').value.trim(),
-                "Giới Tính": document.getElementById('input-gender').value,
-                "Ngày Sinh": document.getElementById('input-dob').value,
-                "Avatar": window.tempAvatarUrl || document.getElementById('display-avatar').src,
-                "Thời Gian": new Date().toLocaleString('vi-VN')
-            };
-
-            try {
-                await setDoc(doc(db, "users", user.uid), payload, { merge: true });
-
-                showPopup('success', 'Thành công', 'Thông tin cá nhân của bạn đã được cập nhật.');
-                document.getElementById('display-name').innerText = payload["Họ Tên"];
-                
-                // Cập nhật tên trên Header ngay lập tức
-                const headerName = document.getElementById('nav-user-name');
-                if(headerName) headerName.innerText = payload["Họ Tên"];
-                localStorage.setItem('ivy_user_name', payload["Họ Tên"]); // Lưu tên mới vào bộ nhớ trình duyệt
-
-                // Cập nhật tên vào Firebase Profile để đồng bộ cho các lần đăng nhập sau
-                updateProfile(user, { displayName: payload["Họ Tên"] }).catch(console.error);
-            } catch (err) { 
-                showPopup('error', 'Lỗi hệ thống', 'Không thể lưu thông tin. Vui lòng thử lại sau.');
-            }
-            finally {
-                btn.disabled = false;
-                btn.innerText = "CẬP NHẬT NGAY";
-            }
-        });
-
-        // 4. ĐỔI MẬT KHẨU
-        document.getElementById('change-pass-btn').addEventListener('click', async () => {
-            const user = auth.currentUser;
-            if (user && user.email) {
-                if (confirm(`Bạn có muốn gửi email đặt lại mật khẩu tới ${user.email} không?`)) {
-                    try {
-                        await sendPasswordResetEmail(auth, user.email);
-                        showPopup('success', 'Đã gửi Email', 'Một email hướng dẫn đã được gửi tới hòm thư của bạn. Vui lòng kiểm tra và làm theo hướng dẫn.');
-                    } catch (error) {
-                        showPopup('error', 'Lỗi', 'Không thể gửi email đặt lại mật khẩu lúc này. Vui lòng thử lại sau.');
-                    }
-                }
-            }
-        });
-
-        async function includeHTML() {
-            const comps = [{ id: 'header-placeholder', file: 'header.html' }, { id: 'footer-placeholder', file: 'footer.html' }];
-            for (const c of comps) {
-                const el = document.getElementById(c.id);
-                if (el) {
-                    const res = await fetch(c.file);
-                    if (res.ok) el.innerHTML = await res.text();
-                }
-            }
-            if (window.AOS) AOS.init({ duration: 800, once: true });
-            
-            // Kích hoạt logic Menu Mobile và ScrollTop
             if (window.initMenuLogic) window.initMenuLogic();
             if (window.initScrollToTop) window.initScrollToTop();
         }
