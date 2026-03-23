@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ivyForums - Cộng đồng học tiếng Anh</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="canonical" href="https://ivyenglish.io.vn/forums.html" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="https://ivyenglish.io.vn/images/favicon.png" sizes="any">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -92,21 +93,7 @@
             <div class="sidebar-card" data-aos="fade-left" data-aos-delay="100">
                 <div class="sidebar-title"><i class="fas fa-users"></i> Thành viên tích cực</div>
                 <div id="active-users-list">
-                    <!-- Mock users -->
-                    <div class="active-user-item">
-                        <img src="images/avatar-profile.png">
-                        <div class="active-user-info">
-                            <h5>Minh Anh</h5>
-                            <span>15 bài viết</span>
-                        </div>
-                    </div>
-                    <div class="active-user-item">
-                        <img src="images/avatar-profile.png">
-                        <div class="active-user-info">
-                            <h5>Tuấn Kiệt</h5>
-                            <span>12 bài viết</span>
-                        </div>
-                    </div>
+                    <!-- Realtime data will be loaded here -->
                 </div>
             </div>
         </div>
@@ -158,6 +145,8 @@
             // [QUAN TRỌNG] Tải lại feed mỗi khi trạng thái đăng nhập thay đổi
             // để đảm bảo nút Like/Comment hoạt động đúng với user hiện tại
             loadFeed();
+            // Tải danh sách thành viên tích cực
+            loadActiveUsers();
         });
 
         // --- Media Upload Logic (Sử dụng Cloudinary) ---
@@ -609,6 +598,65 @@
         window.closeLightbox = () => {
             document.getElementById('media-lightbox').style.display = 'none';
             document.getElementById('lightbox-content').innerHTML = '';
+        }
+
+        // 10. Load Active Users
+        async function loadActiveUsers() {
+            const listContainer = document.getElementById('active-users-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '<p style="font-size:0.8rem; color:#999;">Đang tải...</p>';
+
+            try {
+                const postsSnapshot = await getDocs(collection(db, "forum_posts"));
+                if (postsSnapshot.empty) {
+                    listContainer.innerHTML = '<p style="font-size:0.8rem; color:#999;">Chưa có ai hoạt động.</p>';
+                    return;
+                }
+
+                const postCounts = {};
+                postsSnapshot.forEach(doc => {
+                    const authorId = doc.data().authorId;
+                    if (authorId) {
+                        postCounts[authorId] = (postCounts[authorId] || 0) + 1;
+                    }
+                });
+
+                const sortedAuthors = Object.entries(postCounts)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5); // Lấy top 5 thành viên
+
+                if (sortedAuthors.length === 0) {
+                    listContainer.innerHTML = '<p style="font-size:0.8rem; color:#999;">Chưa có ai hoạt động.</p>';
+                    return;
+                }
+
+                const userPromises = sortedAuthors.map(([authorId, count]) => 
+                    getDoc(doc(db, "users", authorId)).then(userSnap => ({
+                        user: userSnap.exists() ? userSnap.data() : null,
+                        count: count
+                    }))
+                );
+
+                const usersWithCount = await Promise.all(userPromises);
+
+                let html = '';
+                usersWithCount.forEach(({ user, count }) => {
+                    if (user) {
+                        html += `
+                            <div class="active-user-item">
+                                <img src="${user.Avatar || 'images/avatar-profile.png'}">
+                                <div class="active-user-info">
+                                    <h5>${user["Họ Tên"] || 'Người dùng'}</h5>
+                                    <span>${count} bài viết</span>
+                                </div>
+                            </div>`;
+                    }
+                });
+                listContainer.innerHTML = html || '<p style="font-size:0.8rem; color:#999;">Chưa có ai hoạt động.</p>';
+            } catch (e) {
+                console.error("Lỗi tải thành viên tích cực:", e);
+                listContainer.innerHTML = '<p style="font-size:0.8rem; color:red;">Lỗi tải dữ liệu.</p>';
+            }
         }
     </script>
     <script type="module" src="./js/auth-handler.js"></script>

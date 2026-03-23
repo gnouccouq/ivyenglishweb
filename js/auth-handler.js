@@ -14,11 +14,11 @@ function injectFloatingWidgets() {
             <div class="chat-header">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <div style="position:relative;">
-                        <img src="images/logo.png" style="width:30px; height:30px; border-radius:50%; background:white; padding:2px;">
+                        <img src="images/favicon.png" style="width:30px; height:30px; border-radius:50%; background:white; padding:2px;">
                         <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#2ecc71; border-radius:50%; border:1px solid white;"></span>
                     </div>
                     <div>
-                        <h4 style="margin:0;">Tư vấn ivyEnglish</h4>
+                        <h4 style="margin:0;">Tư vấn viên</h4>
                         <small style="font-size:0.7rem; opacity:0.9;">Thường trả lời ngay</small>
                     </div>
                 </div>
