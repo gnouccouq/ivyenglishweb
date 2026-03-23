@@ -9,7 +9,8 @@ service cloud.firestore {
 
     // 1. Users: Người dùng đọc/sửa profile chính mình. Admin được quyền tất cả.
     match /users/{userId} {
-      allow read, write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow read: if true; // Cho phép mọi người xem thông tin cơ bản (Avatar, Tên) để hiển thị danh sách thành viên tích cực
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
     }
 
     // 2. Registrations (Đơn đăng ký): Khách vãng lai được gửi đơn (create). Chỉ Admin được xem/xóa.

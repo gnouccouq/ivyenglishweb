@@ -114,7 +114,7 @@
     
     <!-- Module Script chính -->
     <script type="module">
-        import { db, auth, onAuthStateChanged, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, increment, deleteDoc, getDoc, serverTimestamp, setDoc, deleteField } from './js/firebase-config.js';
+        import { db, auth, onAuthStateChanged, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, increment, deleteDoc, getDoc, serverTimestamp, setDoc, deleteField, getDocs } from './js/firebase-config.js';
         
         let currentUser = null;
         let feedUnsubscribe = null; // Biến để lưu function hủy lắng nghe feed cũ
